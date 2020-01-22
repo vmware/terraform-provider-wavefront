@@ -503,6 +503,17 @@ func resourceDashboard() *schema.Resource {
 				Required: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
+			"can_view": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"can_modify": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Computed: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
 		},
 	}
 }
@@ -1067,6 +1078,9 @@ func resourceDashboardRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("parameter_details", parameterDetails)
 	d.Set("tags", dash.Tags)
 
+	d.Set("can_view", dash.ACL.CanView)
+	d.Set("can_modify", dash.ACL.CanModify)
+
 	return nil
 }
 
@@ -1082,6 +1096,17 @@ func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
 	err = dashboards.Update(a)
 	if err != nil {
 		return fmt.Errorf("error Updating Dashboard %s. %s", d.Get("name"), err)
+	}
+
+	if d.HasChange("can_view") || d.HasChange("can_modify") {
+		canView, canModify := decodeAccessControlList(d)
+
+		err = dashboards.SetACL(d.Id(), canView, canModify)
+		if err != nil {
+			d.SetPartial("can_view")
+			d.SetPartial("can_modify")
+			return fmt.Errorf("error updating ACLs for Wavefront Dashboards")
+		}
 	}
 	return resourceDashboardRead(d, m)
 }

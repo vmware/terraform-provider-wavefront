@@ -80,6 +80,17 @@ func resourceAlert() *schema.Resource {
 				Required: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
+			"can_view": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"can_modify": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+				Computed: true,
+			},
 		},
 	}
 }
@@ -87,10 +98,12 @@ func resourceAlert() *schema.Resource {
 func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 	alerts := m.(*wavefrontClient).client.Alerts()
 
-	var tags []string
-	for _, tag := range d.Get("tags").(*schema.Set).List() {
-		tags = append(tags, tag.(string))
-	}
+	tags := decodeTags(d)
+	canView, canModify := decodeAccessControlList(d)
+
+	acl := wavefront.AccessControlList{}
+	acl.CanView = canView
+	acl.CanModify = canModify
 
 	a := &wavefront.Alert{
 		Name:                               d.Get("name").(string),
@@ -100,6 +113,7 @@ func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 		ResolveAfterMinutes:                d.Get("resolve_after_minutes").(int),
 		NotificationResendFrequencyMinutes: d.Get("notification_resend_frequency_minutes").(int),
 		Tags:                               tags,
+		ACL:                                acl,
 	}
 
 	err := validateAlertConditions(a, d)
@@ -148,6 +162,8 @@ func resourceAlertRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("alert_type", tmpAlert.AlertType)
 	d.Set("threshold_conditions", tmpAlert.Conditions)
 	d.Set("threshold_targets", tmpAlert.Targets)
+	d.Set("can_view", tmpAlert.ACL.CanView)
+	d.Set("can_modify", tmpAlert.ACL.CanModify)
 
 	return nil
 }
@@ -164,10 +180,8 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 		return nil
 	}
 
-	var tags []string
-	for _, tag := range d.Get("tags").(*schema.Set).List() {
-		tags = append(tags, tag.(string))
-	}
+	tags := decodeTags(d)
+	canView, canModify := decodeAccessControlList(d)
 
 	a := tmpAlert
 	a.Name = d.Get("name").(string)
@@ -188,6 +202,17 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return fmt.Errorf("Error Updating Alert %s. %s", d.Get("name"), err)
 	}
+
+	// Update the ACLs on the alert in Wavefront
+	if d.HasChange("can_view") || d.HasChange("can_modify") {
+		err = alerts.SetACL(*a.ID, canView, canModify)
+		if err != nil {
+			d.SetPartial("can_view")
+			d.SetPartial("can_modify")
+			return fmt.Errorf("Error updating ACLs on Alert %s. %s", d.Get("name"), err)
+		}
+	}
+
 	return nil
 }
 
