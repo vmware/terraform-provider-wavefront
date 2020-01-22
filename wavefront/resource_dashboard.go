@@ -1023,6 +1023,16 @@ func resourceDashboardCreate(d *schema.ResourceData, m interface{}) error {
 	}
 	d.SetId(dashboard.ID)
 
+	canView, canModify := decodeAccessControlList(d)
+	if d.HasChange("can_view") || d.HasChange("can_modify") {
+		err = dashboards.SetACL(dashboard.ID, canView, canModify)
+		if err != nil {
+			d.SetPartial("can_view")
+			d.SetPartial("can_modify")
+			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
+		}
+	}
+
 	return resourceDashboardRead(d, m)
 }
 

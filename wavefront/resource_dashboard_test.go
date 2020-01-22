@@ -988,12 +988,23 @@ func testAccCheckWavefrontDashboardExists(n string, dashboard *wavefront.Dashboa
 
 func testAccCheckWavefrontDashboard_basic() string {
 	return fmt.Sprintf(`
+resource "wavefront_user" "basic" {
+	email  = "test+tftesting@example.com"
+	groups = [
+		"agent_management",
+		"alerts_management",
+	]
+}
+
 resource "wavefront_dashboard" "test_dashboard" {
   name = "Terraform Test Dashboard"
   description = "testing, testing"
   url = "tftestcreate"
   display_section_table_of_contents = true
   display_query_parameters = true
+  can_view = [
+    wavefront_user.basic.id
+  ]
 
   section{
     name = "section 1"

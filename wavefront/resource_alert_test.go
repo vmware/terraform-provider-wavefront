@@ -409,6 +409,14 @@ func testAccCheckWavefrontAlertExists(n string, alert *wavefront.Alert) resource
 
 func testAccCheckWavefrontAlert_basic() string {
 	return fmt.Sprintf(`
+resource "wavefront_user" "basic" {
+	email  = "test+tftesting@example.com"
+	groups = [
+		"agent_management",
+		"alerts_management",
+	]
+}
+
 resource "wavefront_alert" "test_alert" {
   name = "Terraform Test Alert"
   target = "test@example.com"
@@ -424,6 +432,9 @@ resource "wavefront_alert" "test_alert" {
     "c",
     "test",
     "a"
+  ]
+  can_view = [
+    wavefront_user.basic.id,
   ]
 }
 `)

@@ -99,11 +99,6 @@ func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 	alerts := m.(*wavefrontClient).client.Alerts()
 
 	tags := decodeTags(d)
-	canView, canModify := decodeAccessControlList(d)
-
-	acl := wavefront.AccessControlList{}
-	acl.CanView = canView
-	acl.CanModify = canModify
 
 	a := &wavefront.Alert{
 		Name:                               d.Get("name").(string),
@@ -113,7 +108,6 @@ func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 		ResolveAfterMinutes:                d.Get("resolve_after_minutes").(int),
 		NotificationResendFrequencyMinutes: d.Get("notification_resend_frequency_minutes").(int),
 		Tags:                               tags,
-		ACL:                                acl,
 	}
 
 	err := validateAlertConditions(a, d)
@@ -128,6 +122,16 @@ func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.SetId(*a.ID)
+
+	canView, canModify := decodeAccessControlList(d)
+	if d.HasChange("can_view") || d.HasChange("can_modify") {
+		err = alerts.SetACL(*a.ID, canView, canModify)
+		if err != nil {
+			d.SetPartial("can_view")
+			d.SetPartial("can_modify")
+			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
+		}
+	}
 
 	return nil
 }
