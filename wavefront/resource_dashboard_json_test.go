@@ -102,10 +102,10 @@ func testAccCheckWavefrontDashboardJsonDestroy(s *terraform.State) error {
 				},
 			})
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront Dashboard. %s", err)
+			return fmt.Errorf("error finding Wavefront Dashboard. %s", err)
 		}
 		if len(results) > 0 {
-			return fmt.Errorf("Dashboard still exists")
+			return fmt.Errorf("dashboard still exists")
 		}
 	}
 
@@ -116,7 +116,7 @@ func testAccCheckWavefrontDashboardJsonAttributes(dashboard *wavefront.Dashboard
 	return func(s *terraform.State) error {
 
 		if dashboard.Name != "Terraform Test Dashboard Json" {
-			return fmt.Errorf("Bad value: %s", dashboard.Name)
+			return fmt.Errorf("bad value: %s", dashboard.Name)
 		}
 
 		return nil
@@ -127,7 +127,7 @@ func testAccCheckWavefrontDashboardJsonAttributesUpdated(dashboard *wavefront.Da
 	return func(s *terraform.State) error {
 
 		if dashboard.Name != "Terraform Test Dashboard Json Updated" {
-			return fmt.Errorf("Bad value: %s", dashboard.Name)
+			return fmt.Errorf("bad value: %s", dashboard.Name)
 		}
 
 		return nil
@@ -138,11 +138,11 @@ func testAccCheckWavefrontDashboardJsonExists(n string, dashboard *wavefront.Das
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 		if !ok {
-			return fmt.Errorf("Not found: %s", n)
+			return fmt.Errorf("not found: %s", n)
 		}
 
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return fmt.Errorf("no Record ID is set")
 		}
 
 		dash := wavefront.Dashboard{
@@ -152,7 +152,7 @@ func testAccCheckWavefrontDashboardJsonExists(n string, dashboard *wavefront.Das
 		dashboards := testAccProvider.Meta().(*wavefrontClient).client.Dashboards()
 		err := dashboards.Get(&dash)
 		if err != nil {
-			return fmt.Errorf("Did not find Dashboard with id %s, %s", rs.Primary.ID, err)
+			return fmt.Errorf("did not find Dashboard with id %s, %s", rs.Primary.ID, err)
 		}
 		*dashboard = dash
 		return nil

@@ -315,7 +315,7 @@ func testAccCheckWavefrontAlertDestroy(s *terraform.State) error {
 
 		err := alerts.Get(&tmpAlert)
 		if err == nil {
-			return fmt.Errorf("Alert still exists")
+			return fmt.Errorf("alert still exists")
 		}
 	}
 
@@ -326,7 +326,7 @@ func testAccCheckWavefrontAlertAttributes(alert *wavefront.Alert) resource.TestC
 	return func(s *terraform.State) error {
 
 		if alert.Target != "test@example.com" {
-			return fmt.Errorf("Bad value: %s", alert.Target)
+			return fmt.Errorf("bad value: %s", alert.Target)
 		}
 
 		return nil
@@ -386,11 +386,11 @@ func testAccCheckWavefrontAlertExists(n string, alert *wavefront.Alert) resource
 		rs, ok := s.RootModule().Resources[n]
 
 		if !ok {
-			return fmt.Errorf("Not found: %s", n)
+			return fmt.Errorf("not found: %s", n)
 		}
 
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return fmt.Errorf("no Record ID is set")
 		}
 
 		alerts := testAccProvider.Meta().(*wavefrontClient).client.Alerts()
@@ -398,7 +398,7 @@ func testAccCheckWavefrontAlertExists(n string, alert *wavefront.Alert) resource
 
 		err := alerts.Get(&tmpAlert)
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront Alert %s", err)
+			return fmt.Errorf("error finding Wavefront Alert %s", err)
 		}
 
 		*alert = tmpAlert

@@ -45,7 +45,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	}
 	wFClient, err := wavefront.NewClient(config)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to configure Wavefront Client %s", err)
+		return nil, fmt.Errorf("failed to configure Wavefront Client %s", err)
 	}
 	return &wavefrontClient{
 		client: *wFClient,

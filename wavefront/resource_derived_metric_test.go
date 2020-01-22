@@ -144,11 +144,11 @@ func testAccCheckWavefrontDerivedMetricExists(n string, dm *wavefront.DerivedMet
 		rs, ok := s.RootModule().Resources[n]
 
 		if !ok {
-			return fmt.Errorf("Not found: %s", n)
+			return fmt.Errorf("not found: %s", n)
 		}
 
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return fmt.Errorf("no Record ID is set")
 		}
 
 		alerts := testAccProvider.Meta().(*wavefrontClient).client.DerivedMetrics()
@@ -156,7 +156,7 @@ func testAccCheckWavefrontDerivedMetricExists(n string, dm *wavefront.DerivedMet
 
 		err := alerts.Get(&tmp)
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront DerivedMetric %s", err)
+			return fmt.Errorf("error finding Wavefront DerivedMetric %s", err)
 		}
 
 		*dm = tmp
@@ -178,7 +178,7 @@ func testAccCheckWavefrontDerivedMetricDestroy(s *terraform.State) error {
 
 		err := derivedMetrics.Get(&tmpDM)
 		if err == nil {
-			return fmt.Errorf("DerivedMetric still exists")
+			return fmt.Errorf("derivedMetric still exists")
 		}
 	}
 

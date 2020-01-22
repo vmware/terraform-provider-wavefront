@@ -119,7 +119,7 @@ func resourceTargetCreate(d *schema.ResourceData, m interface{}) error {
 	// Create the Target on Wavefront
 	err := targets.Create(t)
 	if err != nil {
-		return fmt.Errorf("Error Creating Target %s. %s", d.Get("name"), err)
+		return fmt.Errorf("error Creating Target %s. %s", d.Get("name"), err)
 	}
 
 	d.SetId(*t.ID)
@@ -206,7 +206,7 @@ func resourceTargetUpdate(d *schema.ResourceData, m interface{}) error {
 	// Update the Target on Wavefront
 	err = targets.Update(t)
 	if err != nil {
-		return fmt.Errorf("Error Updating Target %s. %s", d.Get("name"), err)
+		return fmt.Errorf("error Updating Target %s. %s", d.Get("name"), err)
 	}
 	return nil
 }
@@ -223,14 +223,14 @@ func resourceTargetDelete(d *schema.ResourceData, m interface{}) error {
 			},
 		})
 	if err != nil {
-		return fmt.Errorf("Error finding Wavefront Target %s. %s", d.Id(), err)
+		return fmt.Errorf("error finding Wavefront Target %s. %s", d.Id(), err)
 	}
 	t := results[0]
 
 	// Delete the Target
 	err = targets.Delete(t)
 	if err != nil {
-		return fmt.Errorf("Failed to delete Target %s. %s", d.Id(), err)
+		return fmt.Errorf("failed to delete Target %s. %s", d.Id(), err)
 	}
 	d.SetId("")
 	return nil

@@ -274,7 +274,7 @@ func testAccCheckWavefrontTargetDestroy(s *terraform.State) error {
 				},
 			})
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront Target. %s", err)
+			return fmt.Errorf("error finding Wavefront Target. %s", err)
 		}
 		if len(results) > 0 {
 			return fmt.Errorf("target still exists")
@@ -288,7 +288,7 @@ func testAccCheckWavefrontTargetAttributes(target *wavefront.Target) resource.Te
 	return func(s *terraform.State) error {
 
 		if target.Description != "Test target" {
-			return fmt.Errorf("Bad value: %s", target.Description)
+			return fmt.Errorf("bad value: %s", target.Description)
 		}
 
 		return nil
@@ -299,12 +299,12 @@ func testAccCheckWavefrontTargetRouteAttributes(target *wavefront.Target, routeT
 	return func(s *terraform.State) error {
 		for _, route := range target.Routes {
 			if route.Method != "WEBHOOK" {
-				return fmt.Errorf("Bad value: %s", route.Method)
+				return fmt.Errorf("bad value: %s", route.Method)
 			}
 
 			filter := strings.Split(route.Filter, " ")
 			if len(filter) != 2 {
-				return fmt.Errorf("Bad value: %s", route.Filter)
+				return fmt.Errorf("bad value: %s", route.Filter)
 			}
 
 			matchedRoute := false
@@ -316,7 +316,7 @@ func testAccCheckWavefrontTargetRouteAttributes(target *wavefront.Target, routeT
 			}
 
 			if !matchedRoute {
-				return fmt.Errorf("Bad value: %s", route.Target)
+				return fmt.Errorf("bad value: %s", route.Target)
 			}
 		}
 		return nil
@@ -327,7 +327,7 @@ func testAccCheckWavefrontTargetAttributesUpdated(target *wavefront.Target) reso
 	return func(s *terraform.State) error {
 
 		if target.Title != "Terraform Test Updated" {
-			return fmt.Errorf("Bad value: %s", target.Title)
+			return fmt.Errorf("bad value: %s", target.Title)
 		}
 
 		return nil
@@ -339,11 +339,11 @@ func testAccCheckWavefrontTargetExists(n string, target *wavefront.Target) resou
 		rs, ok := s.RootModule().Resources[n]
 
 		if !ok {
-			return fmt.Errorf("Not found: %s", n)
+			return fmt.Errorf("not found: %s", n)
 		}
 
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return fmt.Errorf("no Record ID is set")
 		}
 
 		targets := testAccProvider.Meta().(*wavefrontClient).client.Targets()
@@ -357,14 +357,14 @@ func testAccCheckWavefrontTargetExists(n string, target *wavefront.Target) resou
 				},
 			})
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront Target %s", err)
+			return fmt.Errorf("error finding Wavefront Target %s", err)
 		}
 		// resource has been deleted out of band. So unset ID
 		if len(results) != 1 {
-			return fmt.Errorf("No Targets Found")
+			return fmt.Errorf("no Targets Found")
 		}
 		if *results[0].ID != rs.Primary.ID {
-			return fmt.Errorf("Target not found")
+			return fmt.Errorf("target not found")
 		}
 
 		*target = *results[0]

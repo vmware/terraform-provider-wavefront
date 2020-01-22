@@ -54,11 +54,11 @@ func testAccCheckWavefrontUserGroupExists(n string, userGroup *wavefront.UserGro
 		rs, ok := s.RootModule().Resources[n]
 
 		if !ok {
-			return fmt.Errorf("Not found: %s", n)
+			return fmt.Errorf("not found: %s", n)
 		}
 
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return fmt.Errorf("no Record ID is set")
 		}
 
 		userGroups := testAccProvider.Meta().(*wavefrontClient).client.UserGroups()
@@ -72,14 +72,14 @@ func testAccCheckWavefrontUserGroupExists(n string, userGroup *wavefront.UserGro
 				},
 			})
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront User Group %s", err)
+			return fmt.Errorf("error finding Wavefront User Group %s", err)
 		}
 		// resource has been deleted out of band. So unset ID
 		if len(results) != 1 {
-			return fmt.Errorf("No User Groups Found")
+			return fmt.Errorf("no User Groups Found")
 		}
 		if *results[0].ID != rs.Primary.ID {
-			return fmt.Errorf("User Group not found")
+			return fmt.Errorf("user Group not found")
 		}
 
 		*userGroup = *results[0]

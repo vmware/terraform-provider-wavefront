@@ -200,7 +200,7 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 	// Update the alert on Wavefront
 	err = alerts.Update(&a)
 	if err != nil {
-		return fmt.Errorf("Error Updating Alert %s. %s", d.Get("name"), err)
+		return fmt.Errorf("error Updating Alert %s. %s", d.Get("name"), err)
 	}
 
 	// Update the ACLs on the alert in Wavefront
@@ -209,7 +209,7 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 		if err != nil {
 			d.SetPartial("can_view")
 			d.SetPartial("can_modify")
-			return fmt.Errorf("Error updating ACLs on Alert %s. %s", d.Get("name"), err)
+			return fmt.Errorf("error updating ACLs on Alert %s. %s", d.Get("name"), err)
 		}
 	}
 
@@ -223,14 +223,14 @@ func resourceAlertDelete(d *schema.ResourceData, m interface{}) error {
 	tmpAlert := wavefront.Alert{ID: &alertID}
 	err := alerts.Get(&tmpAlert)
 	if err != nil {
-		return fmt.Errorf("Error finding Wavefront Alert %s. %s", d.Id(), err)
+		return fmt.Errorf("error finding Wavefront Alert %s. %s", d.Id(), err)
 	}
 	a := tmpAlert
 
 	// Delete the Alert
 	err = alerts.Delete(&a)
 	if err != nil {
-		return fmt.Errorf("Failed to delete Alert %s. %s", d.Id(), err)
+		return fmt.Errorf("failed to delete Alert %s. %s", d.Id(), err)
 	}
 	d.SetId("")
 	return nil

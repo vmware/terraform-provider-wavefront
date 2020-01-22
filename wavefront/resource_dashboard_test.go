@@ -40,7 +40,7 @@ func TestBuildTerraformSection(t *testing.T) {
 		t.Errorf("expected test, got %s", result["name"])
 	}
 	if len(result["row"].([]map[string]interface{})) != 0 {
-		t.Errorf("Expected empty array, got Array of lenth %d", len(result["rows"].([]map[string]interface{})))
+		t.Errorf("expected empty array, got Array of lenth %d", len(result["rows"].([]map[string]interface{})))
 	}
 
 	sectionWithRows := wavefront.Section{
@@ -56,7 +56,7 @@ func TestBuildTerraformSection(t *testing.T) {
 
 	resultWithRows := buildTerraformSection(sectionWithRows)
 	if len(resultWithRows["row"].([]map[string]interface{})) != 2 {
-		t.Errorf("Expected 2 rows, got %d", len(resultWithRows["row"].([]map[string]interface{})))
+		t.Errorf("expected 2 rows, got %d", len(resultWithRows["row"].([]map[string]interface{})))
 	}
 }
 
@@ -68,7 +68,7 @@ func TestBuildTerraformRow(t *testing.T) {
 	result := buildTerraformRow(row)
 
 	if len(result["chart"].([]map[string]interface{})) != 0 {
-		t.Errorf("Expected empty array, got Array of lenth %d", len(result["chart"].([]map[string]interface{})))
+		t.Errorf("expected empty array, got Array of lenth %d", len(result["chart"].([]map[string]interface{})))
 	}
 
 	rowWithCharts := wavefront.Row{
@@ -86,7 +86,7 @@ func TestBuildTerraformRow(t *testing.T) {
 
 	resultWithCharts := buildTerraformRow(rowWithCharts)
 	if len(resultWithCharts["chart"].([]map[string]interface{})) != 2 {
-		t.Errorf("Expected array of length 2, got Array of lenth %d", len(result["chart"].([]map[string]interface{})))
+		t.Errorf("expected array of length 2, got Array of lenth %d", len(result["chart"].([]map[string]interface{})))
 	}
 }
 
@@ -103,7 +103,7 @@ func TestBuildTerraformChart(t *testing.T) {
 		t.Errorf("expected test_chart, got %s", result["name"])
 	}
 	if len(result["source"].([]map[string]interface{})) != 0 {
-		t.Errorf("Expected empty array, got Array of lenth %d", len(result["source"].([]map[string]interface{})))
+		t.Errorf("expected empty array, got Array of lenth %d", len(result["source"].([]map[string]interface{})))
 	}
 	if result["description"] != "A chart" {
 		t.Errorf("expected test_chart, got %s", result["description"])
@@ -128,10 +128,10 @@ func TestBuildTerraformChart(t *testing.T) {
 
 	resultWithCharts := buildTerraformChart(chartWithSources)
 	if resultWithCharts["name"] != "I have sources" {
-		t.Errorf("Expected \"I have sources\", got %s", resultWithCharts["name"])
+		t.Errorf("expected \"I have sources\", got %s", resultWithCharts["name"])
 	}
 	if len(resultWithCharts["source"].([]map[string]interface{})) != 2 {
-		t.Errorf("Expected empty array, got Array of lenth %d", len(result["source"].([]map[string]interface{})))
+		t.Errorf("expected empty array, got Array of lenth %d", len(result["source"].([]map[string]interface{})))
 	}
 }
 
@@ -142,10 +142,10 @@ func TestBuildTerraformChartSettings(t *testing.T) {
 	}
 	result := buildTerraformChartSettings(chartSettings)
 	if result["type"] != chartSettings.Type {
-		t.Errorf("Expected %s, got %s", chartSettings.Type, result["type"])
+		t.Errorf("expected %s, got %s", chartSettings.Type, result["type"])
 	}
 	if result["line_type"] != chartSettings.LineType {
-		t.Errorf("Expected %s, got %s", chartSettings.LineType, result["line_type"])
+		t.Errorf("expected %s, got %s", chartSettings.LineType, result["line_type"])
 	}
 }
 
@@ -160,15 +160,15 @@ func TestBuildChartSettings(t *testing.T) {
 	result := buildChartSettings(&settings)
 
 	if result == nil {
-		t.Errorf("Expected chart settings for %v", settings)
+		t.Errorf("expected chart settings for %v", settings)
 	}
 
 	if result.Type != settings0["type"] {
-		t.Errorf("Expected chart type %s, got %v", settings0["type"], result.Type)
+		t.Errorf("expected chart type %s, got %v", settings0["type"], result.Type)
 	}
 
 	if result.LineType != settings0["line_type"] {
-		t.Errorf("Expected line type %s, got %v", settings0["line_type"], result.LineType)
+		t.Errorf("expected line type %s, got %v", settings0["line_type"], result.LineType)
 	}
 }
 
@@ -188,7 +188,7 @@ func TestBuildSections(t *testing.T) {
 
 	result := buildSections(&sections)
 	if len(*result) != 2 {
-		t.Errorf("Expected 2 sections for %d", len(*result))
+		t.Errorf("expected 2 sections for %d", len(*result))
 	}
 }
 
@@ -206,7 +206,7 @@ func TestBuildRows(t *testing.T) {
 
 	result := buildRows(&rows)
 	if len(*result) != 2 {
-		t.Errorf("Expected 2 rows for %d", len(*result))
+		t.Errorf("expected 2 rows for %d", len(*result))
 	}
 }
 
@@ -242,11 +242,11 @@ func TestBuildCharts(t *testing.T) {
 
 	result := buildCharts(&charts)
 	if len(*result) != 2 {
-		t.Errorf("Expected 2 charts for %d", len(*result))
+		t.Errorf("expected 2 charts for %d", len(*result))
 	}
 	for i, r := range *result {
 		if r.Name != fmt.Sprintf("chart %d", i) {
-			t.Errorf("Expected chart %d for %s", i, r.Name)
+			t.Errorf("expected chart %d for %s", i, r.Name)
 		}
 	}
 }
@@ -267,11 +267,11 @@ func TestBuildSources(t *testing.T) {
 
 	result := buildSources(&sources)
 	if len(*result) != 2 {
-		t.Errorf("Expected 2 sources for %d", len(*result))
+		t.Errorf("expected 2 sources for %d", len(*result))
 	}
 	for i, r := range *result {
 		if r.Name != fmt.Sprintf("source %d", i) {
-			t.Errorf("Expected source %d for %s", i, r.Name)
+			t.Errorf("expected source %d for %s", i, r.Name)
 		}
 	}
 }
@@ -294,10 +294,10 @@ func TestBuildParameterDetails(t *testing.T) {
 	result := buildParameterDetails(&params)
 	for k, v := range *result {
 		if k != "source 0" {
-			t.Errorf("Expected k 'source 0' got %s", k)
+			t.Errorf("expected k 'source 0' got %s", k)
 		}
 		if v.Label != "source 0" {
-			t.Errorf("Expected label 'source 0' got %s", k)
+			t.Errorf("expected label 'source 0' got %s", k)
 		}
 	}
 
@@ -929,10 +929,10 @@ func testAccCheckWavefrontDashboardDestroy(s *terraform.State) error {
 				},
 			})
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront Dashboard. %s", err)
+			return fmt.Errorf("error finding Wavefront Dashboard. %s", err)
 		}
 		if len(results) > 0 {
-			return fmt.Errorf("Dashboard still exists")
+			return fmt.Errorf("dashboard still exists")
 		}
 	}
 
@@ -943,7 +943,7 @@ func testAccCheckWavefrontDashboardAttributes(dashboard *wavefront.Dashboard) re
 	return func(s *terraform.State) error {
 
 		if dashboard.Name != "Terraform Test Dashboard" {
-			return fmt.Errorf("Bad value: %s", dashboard.Name)
+			return fmt.Errorf("bad value: %s", dashboard.Name)
 		}
 
 		return nil
@@ -954,7 +954,7 @@ func testAccCheckWavefrontDashboardAttributesUpdated(dashboard *wavefront.Dashbo
 	return func(s *terraform.State) error {
 
 		if dashboard.Name != "Terraform Test Dashboard Updated" {
-			return fmt.Errorf("Bad value: %s", dashboard.Name)
+			return fmt.Errorf("bad value: %s", dashboard.Name)
 		}
 
 		return nil
@@ -965,11 +965,11 @@ func testAccCheckWavefrontDashboardExists(n string, dashboard *wavefront.Dashboa
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 		if !ok {
-			return fmt.Errorf("Not found: %s", n)
+			return fmt.Errorf("not found: %s", n)
 		}
 
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return fmt.Errorf("no Record ID is set")
 		}
 
 		dash := wavefront.Dashboard{
@@ -979,7 +979,7 @@ func testAccCheckWavefrontDashboardExists(n string, dashboard *wavefront.Dashboa
 		dashboards := testAccProvider.Meta().(*wavefrontClient).client.Dashboards()
 		err := dashboards.Get(&dash)
 		if err != nil {
-			return fmt.Errorf("Did not find Dashboard with id %s, %s", rs.Primary.ID, err)
+			return fmt.Errorf("did not find Dashboard with id %s, %s", rs.Primary.ID, err)
 		}
 		*dashboard = dash
 		return nil

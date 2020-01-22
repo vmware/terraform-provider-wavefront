@@ -143,11 +143,11 @@ func testAccCheckWavefrontUserExists(n string, user *wavefront.User) resource.Te
 		rs, ok := s.RootModule().Resources[n]
 
 		if !ok {
-			return fmt.Errorf("Not found: %s", n)
+			return fmt.Errorf("not found: %s", n)
 		}
 
 		if rs.Primary.ID == "" {
-			return fmt.Errorf("No Record ID is set")
+			return fmt.Errorf("no Record ID is set")
 		}
 
 		users := testAccProvider.Meta().(*wavefrontClient).client.Users()
@@ -161,14 +161,14 @@ func testAccCheckWavefrontUserExists(n string, user *wavefront.User) resource.Te
 				},
 			})
 		if err != nil {
-			return fmt.Errorf("Error finding Wavefront User %s", err)
+			return fmt.Errorf("error finding Wavefront User %s", err)
 		}
 		// resource has been deleted out of band. So unset ID
 		if len(results) != 1 {
-			return fmt.Errorf("No Users Found")
+			return fmt.Errorf("no Users Found")
 		}
 		if *results[0].ID != rs.Primary.ID {
-			return fmt.Errorf("User not found")
+			return fmt.Errorf("user not found")
 		}
 
 		*user = *results[0]
