@@ -30,7 +30,6 @@ func resourceUserGroup() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Required: true,
 			},
-			// TODO - this should be more than computed
 			"members": {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
