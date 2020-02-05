@@ -30,12 +30,6 @@ func resourceUserGroup() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Required: true,
 			},
-			"members": {
-				Type:     schema.TypeSet,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
-				Computed: true,
-			},
 		},
 	}
 }
@@ -55,11 +49,6 @@ func resourceUserGroupCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(*ug.ID)
 
-	// Get the created user group now to populate the members
-	if err := userGroups.Get(ug); err == nil {
-		d.Set("members", ug.Users)
-	}
-
 	return nil
 }
 
@@ -77,7 +66,6 @@ func resourceUserGroupRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("name", ug.Name)
 	d.Set("description", ug.Description)
 	d.Set("permissions", ug.Permissions)
-	d.Set("members", ug.Users)
 
 	return nil
 }
