@@ -1,3 +1,14 @@
+## [v2.1.3] - 2020-02-10
+
+*Added Support for ACLs*
+
+- Alert ACLs
+- Dashboard ACLs
+
+*Added data resource for default `Everyone` user group*
+
+*Consistent error messages casing across all errors*
+
 ## [v2.1.2] - 2020-01-13
 
 *Added Support for User Groups*
