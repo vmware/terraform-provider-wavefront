@@ -26,6 +26,9 @@ type Dashboard struct {
 	// Sections is an array of Section that split up the dashboard
 	Sections []Section `json:"sections"`
 
+	// Access Control Lists for who can view or modify (user or group IDs)
+	ACL AccessControlList `json:"acl"`
+
 	// Additional dashboard settings
 	ChartTitleBgColor             string `json:"chartTitleBgColor,omitempty"`
 	ChartTitleColor               string `json:"chartTitleColor,omitempty"`
@@ -319,7 +322,7 @@ func (a Dashboards) Create(dashboard *Dashboard) error {
 // The ID field of the Dashboard must be populated
 func (a Dashboards) Update(dashboard *Dashboard) error {
 	if dashboard.ID == "" {
-		return fmt.Errorf("Dashboard id field not set")
+		return fmt.Errorf("dashboard id field not set")
 	}
 
 	return a.crudDashboard("PUT", fmt.Sprintf("%s/%s", baseDashboardPath, dashboard.ID), dashboard)
@@ -330,7 +333,7 @@ func (a Dashboards) Update(dashboard *Dashboard) error {
 // The ID field must be provided
 func (a Dashboards) Get(dashboard *Dashboard) error {
 	if dashboard.ID == "" {
-		return fmt.Errorf("Dashboard id field is not set")
+		return fmt.Errorf("dashboard id field is not set")
 	}
 
 	return a.crudDashboard("GET", fmt.Sprintf("%s/%s", baseDashboardPath, dashboard.ID), dashboard)
@@ -340,7 +343,7 @@ func (a Dashboards) Get(dashboard *Dashboard) error {
 // The ID field of the Dashboard must be populated
 func (a Dashboards) Delete(dashboard *Dashboard) error {
 	if dashboard.ID == "" {
-		return fmt.Errorf("Dashboard id field not set")
+		return fmt.Errorf("dashboard id field not set")
 	}
 
 	err := a.crudDashboard("DELETE", fmt.Sprintf("%s/%s", baseDashboardPath, dashboard.ID), dashboard)
@@ -351,7 +354,13 @@ func (a Dashboards) Delete(dashboard *Dashboard) error {
 	//reset the ID field so deletion is not attempted again
 	dashboard.ID = ""
 	return nil
+}
 
+// Sets the ACL on the dashboard with the supplied list of IDs for canView and canModify
+// an empty []string on canView will remove all values set
+// an empty []string on canModify will set the value to the owner of the token issuing the API call
+func (a Dashboards) SetACL(id string, canView, canModify []string) error {
+	return putEntityACL(id, canView, canModify, baseDashboardPath, a.client)
 }
 
 func (a Dashboards) crudDashboard(method, path string, dashboard *Dashboard) error {
