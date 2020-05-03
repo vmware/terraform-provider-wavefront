@@ -112,7 +112,7 @@ func resourceDashboardJsonDelete(d *schema.ResourceData, m interface{}) error {
 	}
 
 	// Delete the Dashboard
-	err = dashboards.Delete(&dash)
+	err = dashboards.Delete(&dash, true)
 	if err != nil {
 		return fmt.Errorf("failed to delete Dashboard %s. %s", d.Id(), err)
 	}

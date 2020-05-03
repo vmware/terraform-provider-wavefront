@@ -10,14 +10,14 @@ import (
 
 func TestAccWavefrontDashboardJson_Basic(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJson_basic(),
+				ExpectNonEmptyPlan: true,
+				Config:             testAccCheckWavefrontDashboardJson_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
 					testAccCheckWavefrontDashboardJsonAttributes(&record),
@@ -32,14 +32,14 @@ func TestAccWavefrontDashboardJson_Basic(t *testing.T) {
 
 func TestAccWavefrontDashboardJson_Updated(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJson_basic(),
+				ExpectNonEmptyPlan: true,
+				Config:             testAccCheckWavefrontDashboardJson_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
 					testAccCheckWavefrontDashboardJsonAttributes(&record),
@@ -48,7 +48,8 @@ func TestAccWavefrontDashboardJson_Updated(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontDashboardJson_new_value(),
+				ExpectNonEmptyPlan: true,
+				Config:             testAccCheckWavefrontDashboardJson_new_value(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
 					testAccCheckWavefrontDashboardJsonAttributesUpdated(&record),
@@ -69,7 +70,8 @@ func TestAccWavefrontDashboardJson_Multiple(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJson_multiple(),
+				ExpectNonEmptyPlan: true,
+				Config:             testAccCheckWavefrontDashboardJson_multiple(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_1", &record),
 					resource.TestCheckResourceAttr(

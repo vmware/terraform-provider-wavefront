@@ -1,17 +1,16 @@
-[![Build Status](https://travis-ci.com/spaceapegames/terraform-provider-wavefront.svg?token=bQMpYkjkzKf94BWWKiAA&branch=master)](https://travis-ci.com/spaceapegames/terraform-provider-wavefront)
 
 # Wavefront Terraform Provider
 
 A Terraform Provider to manage resources in Wavefront. Currently supports Alerts, Alert Targets and Dashboards.
 
 ## Requirements
-* Go version 1.8 or higher
+* Go version 1.13 or higher
 * Terraform 0.10.0 or higher (Custom providers were released at 0.10.0)
 * [govendor](https://github.com/kardianos/govendor) for dependency management
 
 ## Installing the Plugin
 
-We release darwin and linux amd64 packages on the [releases page](https://github.com/spaceapegames/terraform-provider-wavefront/releases). If you require a different architecture you will need to build the plugin from source, see below for more details:
+We release darwin and linux amd64 packages on the [releases page](https://github.com/WavefrontHQ/terraform-provider-wavefront/releases). If you require a different architecture you will need to build the plugin from source, see below for more details:
 
 Once you have the plugin you should remove the `_os_arch` from the end of the file name and place it in `~/.terraform.d/plugins` which is where `terraform init` will look for plugins.
 
@@ -42,7 +41,7 @@ Use a main.tf to create some test config, such as
 
 ```
  provider "wavefront" {
-   address = "spaceape.wavefront.com"
+   address = "cluster.wavefront.com"
  }
 
  resource "wavefront_alert" "test_alert" {

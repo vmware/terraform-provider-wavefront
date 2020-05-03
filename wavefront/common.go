@@ -55,8 +55,30 @@ func decodeTags(d *schema.ResourceData) (tags []string) {
 	for _, tag := range d.Get("tags").(*schema.Set).List() {
 		tags = append(tags, tag.(string))
 	}
-
 	return tags
+}
+
+// Decodes a TypeList of []interface{} to []string
+func decodeTypeListToString(d *schema.ResourceData, field string) []string {
+	var decoded []string
+	encoded := d.Get(field).([]interface{})
+
+	for _, v := range encoded {
+		decoded = append(decoded, fmt.Sprint(v))
+	}
+
+	return decoded
+}
+
+// Decodes a TypeMap of map[string]interface{} into map[string]string for binding to the API
+func decodeTypeMapToStringMap(d *schema.ResourceData, field string) map[string]string {
+	decoded := map[string]string{}
+	if encoded, ok := d.GetOk(field); ok {
+		for k, v := range encoded.(map[string]interface{}) {
+			decoded[k] = fmt.Sprint(v)
+		}
+	}
+	return decoded
 }
 
 // Given a GroupID will check if this group is the Everyone group

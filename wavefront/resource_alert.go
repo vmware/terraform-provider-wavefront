@@ -232,7 +232,7 @@ func resourceAlertDelete(d *schema.ResourceData, m interface{}) error {
 	a := tmpAlert
 
 	// Delete the Alert
-	err = alerts.Delete(&a)
+	err = alerts.Delete(&a, true)
 	if err != nil {
 		return fmt.Errorf("failed to delete Alert %s. %s", d.Id(), err)
 	}
