@@ -2,7 +2,7 @@
 
 We welcome contributors to this Terraform Provider and we'll do our best to review and merge all requests. Generally adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes will be welcomed, functional changes may probably require some discussion first.
 
-We make use of [go-wavefront](https://github.com/spaceapegames/go-wavefront) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront
+We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront
 
 Steps
 
@@ -20,7 +20,7 @@ Steps
 
 Ensure you have Go [installed and correctly setup](https://golang.org/doc/install).
 
-Fetch your fork of the - [repository](github.com/spaceapegames/terraform-provider-wavefront)
+Fetch your fork of the - [repository](github.com/WavefrontHQ/terraform-provider-wavefront)
 `go get github.com/<your_account>/terraform-provider-wavefront`
 
 Build the current version to ensure you're correctly setup `make build`. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64, if you're using a different operating system or architecture then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).

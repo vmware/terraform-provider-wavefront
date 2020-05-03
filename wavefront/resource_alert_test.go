@@ -560,7 +560,7 @@ func testAccCheckWavefrontAlert_threshold() string {
 	return fmt.Sprintf(`
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
-  description = "Test target"a
+  description = "Test target"
   method = "EMAIL"
   recipient = "test@example.com"
   email_subject = "This is a test"

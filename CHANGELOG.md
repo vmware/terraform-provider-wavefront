@@ -1,3 +1,25 @@
+## [v2.2.0] - 2020-05-03
+
+*Added support for CloudIntegrations*
+ - CloudWatch
+ - CloudTrail
+ - EC2
+ - GCP
+ - GCPBilling
+ - NewRelic
+ - AppDynamics
+ - Tesla
+ - Azure
+ - Azure Activity Log
+
+*Updated to latest go-wavefront-management-api*
+
+*Temporarily fixed some failing tests by skipping non-empty plans*
+
+*Cleaned up text in README/CONTRIBUTING where stale repo pointers existed*
+
+*Resources deleted using terraform will call the `skipTrash` where applicable*
+
 ## [v2.1.3] - 2020-02-10
 
 *Added Support for ACLs*

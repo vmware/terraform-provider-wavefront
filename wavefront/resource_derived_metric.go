@@ -143,7 +143,7 @@ func resourceDerivedMetricDelete(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	err = derivedMetrics.Delete(tmpDM)
+	err = derivedMetrics.Delete(tmpDM, true)
 	if err != nil {
 		return fmt.Errorf("error trying to delete Wavefront Derived Metric %s. %s", d.Id(), err)
 	}

@@ -2,6 +2,7 @@ package wavefront_plugin
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/mutexkv"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -26,13 +27,24 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"wavefront_alert":          resourceAlert(),
-			"wavefront_dashboard":      resourceDashboard(),
-			"wavefront_dashboard_json": resourceDashboardJson(),
-			"wavefront_derived_metric": resourceDerivedMetric(),
-			"wavefront_alert_target":   resourceTarget(),
-			"wavefront_user":           resourceUser(),
-			"wavefront_user_group":     resourceUserGroup(),
+			"wavefront_alert":                                resourceAlert(),
+			"wavefront_dashboard":                            resourceDashboard(),
+			"wavefront_dashboard_json":                       resourceDashboardJson(),
+			"wavefront_derived_metric":                       resourceDerivedMetric(),
+			"wavefront_alert_target":                         resourceTarget(),
+			"wavefront_user":                                 resourceUser(),
+			"wavefront_user_group":                           resourceUserGroup(),
+			"wavefront_cloud_integration_cloudwatch":         resourceCloudIntegrationCloudWatch(),
+			"wavefront_cloud_integration_cloudtrail":         resourceCloudIntegrationCloudTrail(),
+			"wavefront_cloud_integration_ec2":                resourceCloudIntegrationEc2(),
+			"wavefront_cloud_integration_gcp":                resourceCloudIntegrationGcp(),
+			"wavefront_cloud_integration_gcp_billing":        resourceCloudIntegrationGcpBilling(),
+			"wavefront_cloud_integration_newrelic":           resourceCloudIntegrationNewRelic(),
+			"wavefront_cloud_integration_app_dynamics":       resourceCloudIntegrationAppDynamics(),
+			"wavefront_cloud_integration_tesla":              resourceCloudIntegrationTesla(),
+			"wavefront_cloud_integration_azure":              resourceCloudIntegrationAzure(),
+			"wavefront_cloud_integration_azure_activity_log": resourceCloudIntegrationAzureActivityLog(),
+			"wavefront_cloud_integration_aws_external_id":    resourceCloudIntegrationAwsExternalId(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"wavefront_default_user_group": dataSourceDefaultUserGroup(),
@@ -55,3 +67,18 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	}, nil
 
 }
+
+var wfMutexKV = mutexkv.NewMutexKV()
+
+const (
+	wfAppDynamics      string = "APPDYNAMICS"
+	wfAzure            string = "AZURE"
+	wfAzureActivityLog string = "AZUREACTIVITYLOG"
+	wfCloudTrail       string = "CLOUDTRAIL"
+	wfCloudWatch       string = "CLOUDWATCH"
+	wfEc2              string = "EC2"
+	wfGcp              string = "GCP"
+	wfGcpBilling       string = "GCPBILLING"
+	wfNewRelic         string = "NEWRELIC"
+	wfTesla            string = "TESLA"
+)
