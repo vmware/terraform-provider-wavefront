@@ -40,7 +40,7 @@ func resourceAlert() *schema.Resource {
 				StateFunc:        trimSpaces,
 				DiffSuppressFunc: suppressSpaces,
 			},
-			"threshold_conditions": {
+			"conditions": {
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
@@ -164,7 +164,7 @@ func resourceAlertRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("severity", tmpAlert.Severity)
 	d.Set("tags", tmpAlert.Tags)
 	d.Set("alert_type", tmpAlert.AlertType)
-	d.Set("threshold_conditions", tmpAlert.Conditions)
+	d.Set("conditions", tmpAlert.Conditions)
 	d.Set("threshold_targets", tmpAlert.Targets)
 	d.Set("can_view", tmpAlert.ACL.CanView)
 	d.Set("can_modify", tmpAlert.ACL.CanModify)
@@ -244,14 +244,14 @@ func validateAlertConditions(a *wavefront.Alert, d *schema.ResourceData) error {
 	alertType := strings.ToUpper(d.Get("alert_type").(string))
 	if alertType == wavefront.AlertTypeThreshold {
 		a.AlertType = wavefront.AlertTypeThreshold
-		if conditions, ok := d.GetOk("threshold_conditions"); ok {
+		if conditions, ok := d.GetOk("conditions"); ok {
 			a.Conditions = trimSpacesMap(conditions.(map[string]interface{}))
 			err := validateThresholdLevels(a.Conditions)
 			if err != nil {
 				return err
 			}
 		} else {
-			return fmt.Errorf("threshold_conditions must be supplied for threshold alerts")
+			return fmt.Errorf("conditions must be supplied for threshold alerts")
 		}
 
 		if targets, ok := d.GetOk("threshold_targets"); ok {

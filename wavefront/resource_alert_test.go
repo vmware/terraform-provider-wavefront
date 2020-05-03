@@ -185,7 +185,7 @@ func TestAccWavefrontAlert_Threshold(t *testing.T) {
 
 					//Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_threshold_alert", "threshold_conditions.%", "3"),
+						"wavefront_alert.test_threshold_alert", "conditions.%", "3"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_threshold_alert", "threshold_targets.%", "1"),
 				),
@@ -248,14 +248,14 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 				d.Set("alert_type", "THRESHOLD")
 				return d
 			}(),
-			"threshold_conditions must be supplied for threshold alerts",
+			"conditions must be supplied for threshold alerts",
 		},
 		{
 			"threshold alert",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
 				d.Set("alert_type", "THRESHOLD")
-				d.Set("threshold_conditions", map[string]interface{}{"severe": "ts()"})
+				d.Set("conditions", map[string]interface{}{"severe": "ts()"})
 				return d
 			}(),
 			"",
@@ -265,7 +265,7 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
 				d.Set("alert_type", "THRESHOLD")
-				d.Set("threshold_conditions", map[string]interface{}{"banana": "ts()"})
+				d.Set("conditions", map[string]interface{}{"banana": "ts()"})
 				return d
 			}(),
 			"invalid severity: banana",
@@ -275,7 +275,7 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
 				d.Set("alert_type", "THRESHOLD")
-				d.Set("threshold_conditions", map[string]interface{}{"severe": "ts()"})
+				d.Set("conditions", map[string]interface{}{"severe": "ts()"})
 				d.Set("threshold_targets", map[string]interface{}{"banana": "ts()"})
 
 				return d
@@ -581,7 +581,7 @@ resource "wavefront_alert" "test_threshold_alert" {
   minutes = 5
   resolve_after_minutes = 5
 
-  threshold_conditions = {
+  conditions = {
     "severe" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
     "warn" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 60"
     "info" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 50"

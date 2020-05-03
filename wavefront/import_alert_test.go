@@ -99,7 +99,7 @@ resource "wavefront_alert" "test_threshold_alert" {
   minutes = 5
   resolve_after_minutes = 5
 
-  threshold_conditions = {
+  conditions = {
     "severe" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
     "warn" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 60"
     "info" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 50"
