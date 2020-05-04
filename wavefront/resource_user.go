@@ -12,7 +12,6 @@ func resourceUser() *schema.Resource {
 		Read:   resourceUserRead,
 		Update: resourceUserUpdate,
 		Delete: resourceUserDelete,
-		Exists: resourceUserExists,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -66,7 +65,7 @@ func resourceUserCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(*user.ID)
 
-	return nil
+	return resourceUserRead(d, m)
 }
 
 func resourceUserRead(d *schema.ResourceData, m interface{}) error {
@@ -136,7 +135,7 @@ func resourceUserUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("error updating Wavefront User %s. %s", d.Id(), err)
 	}
 
-	return nil
+	return resourceUserRead(d, m)
 }
 
 func resourceUserDelete(d *schema.ResourceData, m interface{}) error {
@@ -162,28 +161,6 @@ func resourceUserDelete(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId("")
 	return nil
-}
-
-func resourceUserExists(d *schema.ResourceData, m interface{}) (bool, error) {
-	users := m.(*wavefrontClient).client.Users()
-	results, err := users.Find(
-		[]*wavefront.SearchCondition{
-			{
-				Key:            "id",
-				Value:          d.Id(),
-				MatchingMethod: "EXACT",
-			},
-		})
-
-	if err != nil {
-		return false, fmt.Errorf("error finding Wavefront User %s. %s", d.Id(), err)
-	}
-
-	if len(results) == 0 {
-		return false, nil
-	}
-
-	return true, nil
 }
 
 // Decodes the user groups from the state and assigns them to the User

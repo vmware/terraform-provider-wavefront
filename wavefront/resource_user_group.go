@@ -12,7 +12,6 @@ func resourceUserGroup() *schema.Resource {
 		Read:   resourceUserGroupRead,
 		Update: resourceUserGroupUpdate,
 		Delete: resourceUserGroupDelete,
-		Exists: resourceUserGroupExists,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -49,7 +48,7 @@ func resourceUserGroupCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(*ug.ID)
 
-	return nil
+	return resourceUserGroupRead(d, m)
 }
 
 func resourceUserGroupRead(d *schema.ResourceData, m interface{}) error {
@@ -86,7 +85,7 @@ func resourceUserGroupUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("unable to update user group %s, %s", id, err)
 	}
 
-	return nil
+	return resourceUserGroupRead(d, m)
 }
 
 func resourceUserGroupDelete(d *schema.ResourceData, m interface{}) error {
@@ -103,29 +102,6 @@ func resourceUserGroupDelete(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId("")
 	return nil
-}
-
-func resourceUserGroupExists(d *schema.ResourceData, m interface{}) (bool, error) {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
-	results, err := userGroups.Find(
-		[]*wavefront.SearchCondition{
-			{
-				Key:            "id",
-				Value:          d.Id(),
-				MatchingMethod: "EXACT",
-			},
-		},
-	)
-
-	if err != nil {
-		return false, fmt.Errorf("error while searching for user group %s, %s", d.Id(), err)
-	}
-
-	if len(results) == 0 {
-		return false, nil
-	}
-
-	return true, nil
 }
 
 // Decodes the permissions from the state file and returns a []string of permissions
