@@ -971,12 +971,7 @@ func buildParameterDetails(terraformParams *[]interface{}) *map[string]wavefront
 
 // Construct a Wavefront Dashboard
 func buildDashboard(d *schema.ResourceData) (*wavefront.Dashboard, error) {
-
-	var tags []string
-	for _, tag := range d.Get("tags").(*schema.Set).List() {
-		tags = append(tags, tag.(string))
-	}
-
+	tags := decodeTags(d)
 	terraformSections := d.Get("section").([]interface{})
 	terraformParams := d.Get("parameter_details").([]interface{})
 	eventFilterType := "BYCHART"
@@ -1076,18 +1071,8 @@ func resourceDashboardRead(d *schema.ResourceData, m interface{}) error {
 		sections = append(sections, buildTerraformSection(wavefrontSection))
 	}
 	d.Set("section", sections)
-
-	parameterDetails := []map[string]interface{}{}
-
-	for k, v := range dash.ParameterDetails {
-		parameterDetails = append(parameterDetails, buildTerraformParameterDetail(v, k))
-	}
-
-	sort.Sort(Params(parameterDetails))
-
-	d.Set("parameter_details", parameterDetails)
+	d.Set("parameter_details", dash.ParameterDetails)
 	d.Set("tags", dash.Tags)
-
 	d.Set("can_view", dash.ACL.CanView)
 	d.Set("can_modify", dash.ACL.CanModify)
 
@@ -1106,6 +1091,15 @@ func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
 	err = dashboards.Update(a)
 	if err != nil {
 		return fmt.Errorf("error Updating Dashboard %s. %s", d.Get("name"), err)
+	}
+
+	if d.HasChange("tags") {
+		tags := decodeTags(d)
+		err = dashboards.SetTags(a.ID, tags)
+		if err != nil {
+			d.SetPartial("tags")
+			return fmt.Errorf("unable to update the tags for the Wavefront Dashboard")
+		}
 	}
 
 	if d.HasChange("can_view") || d.HasChange("can_modify") {
