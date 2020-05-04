@@ -2,6 +2,7 @@ package wavefront_plugin
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strings"
 
@@ -1066,17 +1067,65 @@ func resourceDashboardRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("display_section_table_of_contents", dash.DisplaySectionTableOfContents)
 	d.Set("display_query_parameters", dash.DisplayQueryParameters)
 
-	sections := []map[string]interface{}{}
+	parameterDetails := extractTerraformParameterDetails(d, dash)
+
+	var sections []map[string]interface{}
 	for _, wavefrontSection := range dash.Sections {
 		sections = append(sections, buildTerraformSection(wavefrontSection))
 	}
 	d.Set("section", sections)
-	d.Set("parameter_details", dash.ParameterDetails)
+	d.Set("parameter_details", parameterDetails)
 	d.Set("tags", dash.Tags)
 	d.Set("can_view", dash.ACL.CanView)
 	d.Set("can_modify", dash.ACL.CanModify)
 
 	return nil
+}
+
+func extractTerraformParameterDetails(d *schema.ResourceData, dash wavefront.Dashboard) []map[string]interface{} {
+	var parameterDetails []map[string]interface{}
+	var keys []string
+	for k := range dash.ParameterDetails {
+		keys = append(keys, k)
+	}
+
+	// This next block is going to attempt to maintain the state order of the list
+	// If it has been set before (which is important to keep plans from always showing changes)
+	if paramDetails, ok := d.GetOk("parameter_details"); ok {
+		var eKeys []string
+		for _, k := range paramDetails.([]interface{}) {
+			name := k.(map[string]interface{})["name"].(string)
+			eKeys = append(eKeys, name)
+		}
+
+		for _, k := range eKeys {
+			// Only attempt to bind it in from the remote if it exists in remote
+			if loc := inSlice(k, keys); loc >= 0 {
+				// Remove the key from the list of keys that came from remote
+				keys = append(keys[:loc], keys[loc+1:]...)
+				if v, ok := dash.ParameterDetails[k]; ok {
+					details := buildTerraformParameterDetail(v, k)
+					parameterDetails = append(parameterDetails, details)
+				}
+			}
+		}
+	}
+	// Process any remaining keys that might be new from remote state
+	for _, k := range keys {
+		log.Printf("processing remaining keys %s", k)
+		details := buildTerraformParameterDetail(dash.ParameterDetails[k], k)
+		parameterDetails = append(parameterDetails, details)
+	}
+	return parameterDetails
+}
+
+func inSlice(needle string, haystack []string) int {
+	for i, h := range haystack {
+		if needle == h {
+			return i
+		}
+	}
+	return -1
 }
 
 func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
