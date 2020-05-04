@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAccDashboardJson_importBasic(t *testing.T) {
+func TestAccDashboardJson_Basic(t *testing.T) {
 	resourceName := "wavefront_dashboard_json.json_foobar"
 	var record wavefront.Dashboard
 

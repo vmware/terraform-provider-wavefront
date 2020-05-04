@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
-func TestAccAlert_importBasic(t *testing.T) {
+func TestAccAlert_Basic(t *testing.T) {
 	resourceName := "wavefront_alert.foobar"
 	var record wavefront.Alert
 
@@ -32,7 +32,7 @@ func TestAccAlert_importBasic(t *testing.T) {
 	})
 }
 
-func TestAccAlert_importThreshold(t *testing.T) {
+func TestAccAlert_Threshold(t *testing.T) {
 	resourceName := "wavefront_alert.test_threshold_alert"
 	var record wavefront.Alert
 

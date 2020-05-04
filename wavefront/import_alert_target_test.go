@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
-func TestAccTarget_importBasic(t *testing.T) {
+func TestAccTarget_Basic(t *testing.T) {
 	resourceName := "wavefront_alert_target.foobar"
 	var record wavefront.Target
 

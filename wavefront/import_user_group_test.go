@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAccUserGroup_importBasic(t *testing.T) {
+func TestAccUserGroup_Basic(t *testing.T) {
 	resourceName := "wavefront_user_group.basic"
 	var record wavefront.UserGroup
 
