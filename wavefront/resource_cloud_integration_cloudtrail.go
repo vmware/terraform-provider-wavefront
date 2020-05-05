@@ -28,7 +28,6 @@ func resourceCloudIntegrationCloudTrail() *schema.Resource {
 			"region": {
 				Type:     schema.TypeString,
 				Required: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"prefix": {
 				Type:     schema.TypeString,
