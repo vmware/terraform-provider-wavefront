@@ -1,0 +1,30 @@
+<% wrap_layout :inner do %>
+    <% content_for :sidebar do %>
+        <div class="docs-sidebar hidden-print affix-top" role="complementary">
+            <a href="#" class="subnav-toggle">(Expand/collapse all)</a>
+            <ul class="nav docs-sidebar">
+                <li>
+                    <a href="/docs/providers/index.html">All Providers</a>
+                </li>
+                <li>
+                    <a href="/docs/providers/wavefront/index.html">Wavefront Provider</a>
+                </li>
+                <li>
+                    <a href="#">Data Sources</a>
+                    <ul class="nav">
+                        <li>
+                            <a href="/docs/providers/wavefront/d/default_user_group.html">wavefront_default_user_group</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Resources</a>
+                    <ul class="nav">
+                    
+                    </ul>
+            </ul>
+        </div>
+    <% end %>
+
+    <%= yield %>
+<% end %>

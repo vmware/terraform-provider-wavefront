@@ -218,7 +218,7 @@ func resourceTargetDelete(d *schema.ResourceData, meta interface{}) error {
 
 	results, err := targets.Find(
 		[]*wavefront.SearchCondition{
-			&wavefront.SearchCondition{
+			{
 				Key:            "id",
 				Value:          d.Id(),
 				MatchingMethod: "EXACT",

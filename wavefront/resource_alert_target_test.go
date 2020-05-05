@@ -92,7 +92,7 @@ func TestAccWavefrontTarget_BasicEmail(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontTargetDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccCheckWavefrontTarget_email(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
@@ -133,7 +133,7 @@ func TestAccWavefrontTarget_BasicPagerduty(t *testing.T) {
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontTargetDestroy,
 		Steps: []resource.TestStep{
-			resource.TestStep{
+			{
 				Config: testAccCheckWavefrontTarget_pagerduty(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
@@ -350,7 +350,7 @@ func testAccCheckWavefrontTargetExists(n string, target *wavefront.Target) resou
 
 		results, err := targets.Find(
 			[]*wavefront.SearchCondition{
-				&wavefront.SearchCondition{
+				{
 					Key:            "id",
 					Value:          rs.Primary.ID,
 					MatchingMethod: "EXACT",
