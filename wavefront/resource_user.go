@@ -167,7 +167,7 @@ func resourceUserDelete(d *schema.ResourceData, m interface{}) error {
 func resourceDecodeUserGroups(d *schema.ResourceData, user interface{}) error {
 	var userGroups *schema.Set
 	if d.HasChange("user_groups") {
-		_, n := d.GetChange("user_groups")
+		n := d.Get("user_groups")
 
 		// Largely fine if new is nil, likely means we're removing the user from all groups
 		// Which default puts them back into the everyone group

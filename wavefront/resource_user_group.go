@@ -109,7 +109,7 @@ func resourceDecodeUserGroupPermissions(d *schema.ResourceData, userGroup *wavef
 	var existingPermissions *schema.Set
 	var permissions []string
 	if d.HasChange("permissions") {
-		_, n := d.GetChange("permissions")
+		n := d.Get("permissions")
 
 		// Largely fine if new is nil, likely means we're removing the user from all explicit permissions
 		if n == nil {
