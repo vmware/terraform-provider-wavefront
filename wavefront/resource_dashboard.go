@@ -446,6 +446,7 @@ func resourceDashboard() *schema.Resource {
 					Type:        schema.TypeMap,
 					Required:    true,
 					Description: "Map of [string]string. At least one of the keys must match the value of default_value.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
 				},
 				"query_value": {
 					Type:     schema.TypeString,

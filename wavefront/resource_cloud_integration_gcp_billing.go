@@ -19,6 +19,7 @@ func resourceCloudIntegrationGcpBilling() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,

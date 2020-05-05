@@ -43,10 +43,12 @@ func resourceAlert() *schema.Resource {
 			"conditions": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"threshold_targets": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"additional_information": {
 				Type:             schema.TypeString,

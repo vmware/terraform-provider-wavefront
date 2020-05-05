@@ -59,6 +59,7 @@ func resourceTarget() *schema.Resource {
 						"filter": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Elem:     &schema.Schema{Type: schema.TypeString},
 						},
 					},
 				},
@@ -82,6 +83,7 @@ func resourceTarget() *schema.Resource {
 			"custom_headers": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 		},
 	}

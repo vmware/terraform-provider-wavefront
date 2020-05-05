@@ -18,6 +18,7 @@ func resourceCloudIntegrationCloudWatch() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,
@@ -36,10 +37,12 @@ func resourceCloudIntegrationCloudWatch() *schema.Resource {
 			"instance_selection_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"volume_selection_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"point_tag_filter_regex": {
 				Type:     schema.TypeString,
