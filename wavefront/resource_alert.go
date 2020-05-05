@@ -95,8 +95,8 @@ func resourceAlert() *schema.Resource {
 	}
 }
 
-func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	tags := decodeTags(d)
 
@@ -133,8 +133,8 @@ func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceAlertRead(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	alertID := d.Id()
 	tmpAlert := wavefront.Alert{ID: &alertID}
@@ -169,8 +169,8 @@ func resourceAlertRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	alertID := d.Id()
 	tmpAlert := wavefront.Alert{ID: &alertID}
@@ -215,8 +215,8 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceAlertDelete(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertDelete(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	alertID := d.Id()
 	tmpAlert := wavefront.Alert{ID: &alertID}

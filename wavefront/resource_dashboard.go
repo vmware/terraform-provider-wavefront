@@ -1005,8 +1005,8 @@ func buildDashboard(d *schema.ResourceData) (*wavefront.Dashboard, error) {
 }
 
 // Create a Terraform Dashboard
-func resourceDashboardCreate(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardCreate(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dashboard, err := buildDashboard(d)
 
 	if err != nil {
@@ -1027,7 +1027,7 @@ func resourceDashboardCreate(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	return resourceDashboardRead(d, m)
+	return resourceDashboardRead(d, meta)
 }
 
 type Params []map[string]interface{}
@@ -1039,8 +1039,8 @@ func (p Params) Less(i, j int) bool {
 }
 
 // Read a Wavefront Dashboard
-func resourceDashboardRead(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardRead(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
 	}
@@ -1126,8 +1126,8 @@ func inSlice(needle string, haystack []string) int {
 	return -1
 }
 
-func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardUpdate(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 
 	a, err := buildDashboard(d)
 	if err != nil {
@@ -1156,11 +1156,11 @@ func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
 			return fmt.Errorf("error updating ACLs for Wavefront Dashboards")
 		}
 	}
-	return resourceDashboardRead(d, m)
+	return resourceDashboardRead(d, meta)
 }
 
-func resourceDashboardDelete(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardDelete(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
 	}

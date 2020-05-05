@@ -18,8 +18,8 @@ func resourceCloudIntegrationAwsExternalId() *schema.Resource {
 	}
 }
 
-func resourceCloudIntegrationAwsExternalIdCreate(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationAwsExternalIdCreate(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 
 	extId, err := cloudIntegrations.CreateAwsExternalID()
 	if err != nil {
@@ -30,8 +30,8 @@ func resourceCloudIntegrationAwsExternalIdCreate(d *schema.ResourceData, m inter
 	return nil
 }
 
-func resourceCloudIntegrationAwsExternalIdRead(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationAwsExternalIdRead(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	extId := d.Id()
 	err := cloudIntegrations.VerifyAwsExternalID(extId)
 	if err != nil {
@@ -47,8 +47,8 @@ func resourceCloudIntegrationAwsExternalIdRead(d *schema.ResourceData, m interfa
 	return nil
 }
 
-func resourceCloudIntegrationAwsExternalIdDelete(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationAwsExternalIdDelete(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	extId := d.Id()
 	err := cloudIntegrations.DeleteAwsExternalID(&extId)
 	if err != nil {

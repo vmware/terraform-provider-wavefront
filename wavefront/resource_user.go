@@ -41,8 +41,8 @@ func resourceUser() *schema.Resource {
 	}
 }
 
-func resourceUserCreate(d *schema.ResourceData, m interface{}) error {
-	users := m.(*wavefrontClient).client.Users()
+func resourceUserCreate(d *schema.ResourceData, meta interface{}) error {
+	users := meta.(*wavefrontClient).client.Users()
 
 	newUserRequest := &wavefront.NewUserRequest{
 		EmailAddress: d.Get("email").(string),
@@ -53,7 +53,7 @@ func resourceUserCreate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("error extracting permisisons from terraform state. %s", err)
 	}
 
-	err = resourceDecodeUserGroups(d, newUserRequest)
+	err = decodeUserGroups(d, newUserRequest)
 	if err != nil {
 		return fmt.Errorf("error extracting user groups from terraform state. %s", err)
 	}
@@ -65,11 +65,11 @@ func resourceUserCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(*user.ID)
 
-	return resourceUserRead(d, m)
+	return resourceUserRead(d, meta)
 }
 
-func resourceUserRead(d *schema.ResourceData, m interface{}) error {
-	users := m.(*wavefrontClient).client.Users()
+func resourceUserRead(d *schema.ResourceData, meta interface{}) error {
+	users := meta.(*wavefrontClient).client.Users()
 
 	results, err := users.Find(
 		[]*wavefront.SearchCondition{
@@ -93,13 +93,13 @@ func resourceUserRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("email", user.ID)
 	d.Set("customer", user.Customer)
 	d.Set("groups", user.Permissions)
-	resourceEncodeUserGroups(d, user)
+	encodeUserGroups(d, user)
 
 	return nil
 }
 
-func resourceUserUpdate(d *schema.ResourceData, m interface{}) error {
-	users := m.(*wavefrontClient).client.Users()
+func resourceUserUpdate(d *schema.ResourceData, meta interface{}) error {
+	users := meta.(*wavefrontClient).client.Users()
 	results, err := users.Find(
 		[]*wavefront.SearchCondition{
 			{
@@ -125,7 +125,7 @@ func resourceUserUpdate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return fmt.Errorf("error decoding permissions from state into the user %s. %s", d.Id(), err)
 	}
-	err = resourceDecodeUserGroups(d, u)
+	err = decodeUserGroups(d, u)
 	if err != nil {
 		return fmt.Errorf("error decoding user groups from state into the user %s. %s", d.Id(), err)
 	}
@@ -135,11 +135,11 @@ func resourceUserUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("error updating Wavefront User %s. %s", d.Id(), err)
 	}
 
-	return resourceUserRead(d, m)
+	return resourceUserRead(d, meta)
 }
 
-func resourceUserDelete(d *schema.ResourceData, m interface{}) error {
-	users := m.(*wavefrontClient).client.Users()
+func resourceUserDelete(d *schema.ResourceData, meta interface{}) error {
+	users := meta.(*wavefrontClient).client.Users()
 	results, err := users.Find(
 		[]*wavefront.SearchCondition{
 			{
@@ -164,7 +164,7 @@ func resourceUserDelete(d *schema.ResourceData, m interface{}) error {
 }
 
 // Decodes the user groups from the state and assigns them to the User
-func resourceDecodeUserGroups(d *schema.ResourceData, user interface{}) error {
+func decodeUserGroups(d *schema.ResourceData, user interface{}) error {
 	var userGroups *schema.Set
 	if d.HasChange("user_groups") {
 		n := d.Get("user_groups")
@@ -207,7 +207,7 @@ func resourceDecodeUserGroups(d *schema.ResourceData, user interface{}) error {
 }
 
 // Encodes user groups from the User and assign them to the TF State
-func resourceEncodeUserGroups(d *schema.ResourceData, user *wavefront.User) {
+func encodeUserGroups(d *schema.ResourceData, user *wavefront.User) {
 	var userGroups []string
 	if len(user.Groups.UserGroups) > 0 {
 		for _, g := range user.Groups.UserGroups {

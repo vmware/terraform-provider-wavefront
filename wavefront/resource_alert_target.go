@@ -87,8 +87,8 @@ func resourceTarget() *schema.Resource {
 	}
 }
 
-func resourceTargetCreate(d *schema.ResourceData, m interface{}) error {
-	targets := m.(*wavefrontClient).client.Targets()
+func resourceTargetCreate(d *schema.ResourceData, meta interface{}) error {
+	targets := meta.(*wavefrontClient).client.Targets()
 
 	var triggers []string
 	for _, trigger := range d.Get("triggers").([]interface{}) {
@@ -127,8 +127,8 @@ func resourceTargetCreate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceTargetRead(d *schema.ResourceData, m interface{}) error {
-	targets := m.(*wavefrontClient).client.Targets()
+func resourceTargetRead(d *schema.ResourceData, meta interface{}) error {
+	targets := meta.(*wavefrontClient).client.Targets()
 
 	targetID := d.Id()
 	tmpTarget := wavefront.Target{ID: &targetID}
@@ -161,8 +161,8 @@ func resourceTargetRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceTargetUpdate(d *schema.ResourceData, m interface{}) error {
-	targets := m.(*wavefrontClient).client.Targets()
+func resourceTargetUpdate(d *schema.ResourceData, meta interface{}) error {
+	targets := meta.(*wavefrontClient).client.Targets()
 
 	results, err := targets.Find(
 		[]*wavefront.SearchCondition{
@@ -211,8 +211,8 @@ func resourceTargetUpdate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceTargetDelete(d *schema.ResourceData, m interface{}) error {
-	targets := m.(*wavefrontClient).client.Targets()
+func resourceTargetDelete(d *schema.ResourceData, meta interface{}) error {
+	targets := meta.(*wavefrontClient).client.Targets()
 
 	results, err := targets.Find(
 		[]*wavefront.SearchCondition{

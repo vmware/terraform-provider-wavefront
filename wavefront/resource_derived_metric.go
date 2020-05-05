@@ -43,8 +43,8 @@ func resourceDerivedMetric() *schema.Resource {
 	}
 }
 
-func resourceDerivedMetricCreate(d *schema.ResourceData, m interface{}) error {
-	derivedMetrics := m.(*wavefrontClient).client.DerivedMetrics()
+func resourceDerivedMetricCreate(d *schema.ResourceData, meta interface{}) error {
+	derivedMetrics := meta.(*wavefrontClient).client.DerivedMetrics()
 
 	var tags []string
 	for _, tag := range d.Get("tags").(*schema.Set).List() {
@@ -66,11 +66,11 @@ func resourceDerivedMetricCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(*dm.ID)
 
-	return nil
+	return resourceDerivedMetricRead(d, meta)
 }
 
-func resourceDerivedMetricUpdate(d *schema.ResourceData, m interface{}) error {
-	derivedMetrics := m.(*wavefrontClient).client.DerivedMetrics()
+func resourceDerivedMetricUpdate(d *schema.ResourceData, meta interface{}) error {
+	derivedMetrics := meta.(*wavefrontClient).client.DerivedMetrics()
 
 	derivedMetricId := d.Id()
 	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricId}
@@ -98,11 +98,11 @@ func resourceDerivedMetricUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("unable to update Wavefront Derived Metric %s, %s", derivedMetricId, err)
 	}
 
-	return nil
+	return resourceDerivedMetricRead(d, meta)
 }
 
-func resourceDerivedMetricRead(d *schema.ResourceData, m interface{}) error {
-	derivedMetrics := m.(*wavefrontClient).client.DerivedMetrics()
+func resourceDerivedMetricRead(d *schema.ResourceData, meta interface{}) error {
+	derivedMetrics := meta.(*wavefrontClient).client.DerivedMetrics()
 
 	derivedMetricId := d.Id()
 	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricId}
@@ -127,8 +127,8 @@ func resourceDerivedMetricRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceDerivedMetricDelete(d *schema.ResourceData, m interface{}) error {
-	derivedMetrics := m.(*wavefrontClient).client.DerivedMetrics()
+func resourceDerivedMetricDelete(d *schema.ResourceData, meta interface{}) error {
+	derivedMetrics := meta.(*wavefrontClient).client.DerivedMetrics()
 
 	derivedMetricId := d.Id()
 	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricId}

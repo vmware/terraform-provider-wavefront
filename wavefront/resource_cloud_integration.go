@@ -341,8 +341,8 @@ func encodeCloudIntegration(integration *wavefront.CloudIntegration, d *schema.R
 	return fmt.Errorf("invalid service \"%s\" specified", service)
 }
 
-func resourceCloudIntegrationCreate(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationCreate(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 
 	pointTags := decodeTypeMapToStringMap(d, "additional_tags")
 	integration := &wavefront.CloudIntegration{
@@ -368,11 +368,11 @@ func resourceCloudIntegrationCreate(d *schema.ResourceData, m interface{}) error
 	}
 
 	d.SetId(integration.Id)
-	return resourceCloudIntegrationRead(d, m)
+	return resourceCloudIntegrationRead(d, meta)
 }
 
-func resourceCloudIntegrationUpdate(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationUpdate(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	integrations, err := cloudIntegrations.Find([]*wavefront.SearchCondition{
 		{
 			Key:            "id",
@@ -414,11 +414,11 @@ func resourceCloudIntegrationUpdate(d *schema.ResourceData, m interface{}) error
 		return fmt.Errorf("unable to update CloudIntegration with id %s", d.Id())
 	}
 
-	return resourceCloudIntegrationRead(d, m)
+	return resourceCloudIntegrationRead(d, meta)
 }
 
-func resourceCloudIntegrationRead(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationRead(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	integrations, err := cloudIntegrations.Find([]*wavefront.SearchCondition{
 		{
 			Key:            "id",
@@ -447,8 +447,8 @@ func resourceCloudIntegrationRead(d *schema.ResourceData, m interface{}) error {
 	return encodeCloudIntegration(integration, d)
 }
 
-func resourceCloudIntegrationDelete(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationDelete(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	integrations, err := cloudIntegrations.Find([]*wavefront.SearchCondition{
 		{
 			Key:            "id",

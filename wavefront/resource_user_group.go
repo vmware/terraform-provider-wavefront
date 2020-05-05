@@ -33,8 +33,8 @@ func resourceUserGroup() *schema.Resource {
 	}
 }
 
-func resourceUserGroupCreate(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupCreate(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 
 	ug := &wavefront.UserGroup{
 		Name:        d.Get("name").(string),
@@ -48,11 +48,11 @@ func resourceUserGroupCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(*ug.ID)
 
-	return resourceUserGroupRead(d, m)
+	return resourceUserGroupRead(d, meta)
 }
 
-func resourceUserGroupRead(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupRead(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 	id := d.Id()
 	ug := &wavefront.UserGroup{
 		ID: &id,
@@ -69,8 +69,8 @@ func resourceUserGroupRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceUserGroupUpdate(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupUpdate(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 
 	id := d.Id()
 	ug := &wavefront.UserGroup{
@@ -85,11 +85,11 @@ func resourceUserGroupUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("unable to update user group %s, %s", id, err)
 	}
 
-	return resourceUserGroupRead(d, m)
+	return resourceUserGroupRead(d, meta)
 }
 
-func resourceUserGroupDelete(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupDelete(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 
 	id := d.Id()
 	ug := &wavefront.UserGroup{
