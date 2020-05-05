@@ -1020,11 +1020,9 @@ func resourceDashboardCreate(d *schema.ResourceData, m interface{}) error {
 	d.SetId(dashboard.ID)
 
 	canView, canModify := decodeAccessControlList(d)
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		err = dashboards.SetACL(dashboard.ID, canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
 		}
 	}
@@ -1146,18 +1144,15 @@ func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
 		tags := decodeTags(d)
 		err = dashboards.SetTags(a.ID, tags)
 		if err != nil {
-			d.SetPartial("tags")
 			return fmt.Errorf("unable to update the tags for the Wavefront Dashboard")
 		}
 	}
 
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		canView, canModify := decodeAccessControlList(d)
 
 		err = dashboards.SetACL(d.Id(), canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error updating ACLs for Wavefront Dashboards")
 		}
 	}

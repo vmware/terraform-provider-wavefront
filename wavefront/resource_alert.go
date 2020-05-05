@@ -124,15 +124,12 @@ func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 	d.SetId(*a.ID)
 
 	canView, canModify := decodeAccessControlList(d)
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		err = alerts.SetACL(*a.ID, canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
 		}
 	}
-
 	return nil
 }
 
@@ -208,11 +205,9 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	// Update the ACLs on the alert in Wavefront
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		err = alerts.SetACL(*a.ID, canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error updating ACLs on Alert %s. %s", d.Get("name"), err)
 		}
 	}
