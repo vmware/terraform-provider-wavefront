@@ -1,6 +1,6 @@
 ---
 layout: "wavefront"
-page_title: "Wavefront: "
+page_title: "Wavefront: Alert"
 description: |-
   Provides a Wavefront Alert resource.  This allows alerts to be created, updated, and deleted.
 ---
@@ -32,8 +32,11 @@ resource "wavefront_alert" "foobar" {
 The following arguments are supported:
 
 * `name` - (Required) The name of the alert as it is displayed in Wavefront.
+* `tags` - (Required) A set of tags to assign to this resource.
 * `alert_type` - (Optional) The type of alert in Wavefront.  Either `CLASSIC` (default) 
 or `THRESHOLD`
+* `minutes` - (Required) The number of consecutive minutes that a series matching the condition query must 
+evaluate to "true" (non-zero value) before the alert fires.
 * `target` - (Optional) The email address or integration endpoint 
 (such as PagerDuty or web hook) to notify when the alert status changes.
 * `condition` - (Optional) A Wavefront query that is evaluated at regular intervals (default 1m).
@@ -47,15 +50,12 @@ Useful for linking runbooks, migrations...etc
 * `display_expression` - (Optional) A second query whose results are displayed in the alert user
 interface instead of the condition query.  This field is often used to display a version
 of the condition query with Boolean operators removed so that numerical values are plotted.
-* `minutes` - (Optional) The number of consecutive minutes that a series matching the condition query must 
-evaluate to "true" (non-zero value) before the alert fires.
 * `resolve_after_minutes` - (Optional) The number of consecutive minutes that a firing series matching the condition
 query must evaluate to "false" (zero value) before the alert resolves.  When unset, this default sto
 the same value as `minutes`.
 * `notification_resend_frequency_minutes` - (Optional) How often to re-trigger a continually failing alert. 
 If absent or <= 0, no re-triggering occur.  
 * `severity` - (Optional) - Severity of the alert, valid values are `INFO`, `SMOKE`, `WARN`, `SEVERE`.
-* `tags` - (Optional) A set of tags to assign to this resource.
 * `can_view` - (Optional) A list of users or groups that can view this resource.
 * `can_modify` - (Optional) A list of users or groups that can modify this resource.
 
@@ -118,4 +118,12 @@ resource "wavefront_alert" "test_threshold_alert" {
     "terraform"
   ]
 }
+```
+
+## Import
+
+Alerts can be imported using the `id`, e.g.
+
+```
+$ terraform import wavefront_alert_target.alert_target 1479868728473
 ```
