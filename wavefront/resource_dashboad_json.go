@@ -50,6 +50,7 @@ func resourceDashboardJsonRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
+			return nil
 		} else {
 			return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 		}
@@ -108,6 +109,11 @@ func resourceDashboardJsonDelete(d *schema.ResourceData, meta interface{}) error
 
 	err := dashboards.Get(&dash)
 	if err != nil {
+		// Dashboard has already been deleted, so we'll mark it as such...
+		if strings.Contains(err.Error(), "404") {
+			d.SetId("")
+			return nil
+		}
 		return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 	}
 
