@@ -25,6 +25,11 @@ func resourceCloudIntegrationEc2() *schema.Resource {
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfEc2),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"hostname_tags": {
 				Type:     schema.TypeSet,
 				Optional: true,

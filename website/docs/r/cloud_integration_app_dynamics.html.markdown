@@ -29,8 +29,9 @@ The following arguments are supported:
 * `service` - (Required) A value denoting which cloud service this service integrates with
 * `name` - (Required) The human-readable name of this integration
 * `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present.
-* `user_name` - (Required) Username is a combination of userName and the account name.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
+* `user_name` - (Required) Username is a combination of userName and the account name
 * `controller_name` - (Required) Name of the SaaS controller
 * `encrypted_password` - (Required) Password for AppDynamics user
 * `app_filter_regex` - (Optional)  List of regular expressions that a application name must match (case-insensitively) 

@@ -27,6 +27,11 @@ func resourceCloudIntegrationTesla() *schema.Resource {
 				ForceNew: true,
 			},
 			"service": serviceSchemaDefinition(wfTesla),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"email": {
 				Type:     schema.TypeString,
 				Required: true,

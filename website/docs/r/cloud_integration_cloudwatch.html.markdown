@@ -32,7 +32,8 @@ The following arguments are supported:
 * `service` - (Required) A value denoting which cloud service this service integrates with
 * `name` - (Required) The human-readable name of this integration
 * `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
 * `role_arn` - (Required) The external id corresponding to the Role ARN
 * `external_id` - (Required) The Role ARN that the customer has created in AWS IAM to allow access to Wavefront
 * `point_tag_filter_regex` - (Optional) A regular expression that AWS tag key name must match (case-insensitively)
@@ -71,6 +72,7 @@ resource "wavefront_cloud_integration_cloudwatch" "cloudwatch" {
   }
   point_tag_filter_regex = "^dev"
   metric_filter_regex    = "^.*?\\.cpu.*$"
+  service_refresh_rate_in_minutes = 10
 }
 ```
 

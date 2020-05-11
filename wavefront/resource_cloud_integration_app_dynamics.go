@@ -28,6 +28,11 @@ func resourceCloudIntegrationAppDynamics() *schema.Resource {
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfAppDynamics),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"user_name": {
 				Type:     schema.TypeString,
 				Required: true,

@@ -27,7 +27,8 @@ The following arguments are supported:
 * `service` - (Required) A value denoting which cloud service this service integrates with
 * `name` - (Required) The human-readable name of this integration
 * `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
 * `api_key` - (Required) NewRelic REST api key
 * `app_filter_regex` - (Optional) A regular expression that an application name must match (case-insensitively) iun order to collect metrics
 * `host_filter_regex` - (Optional) A regular expression that a host name must match (case-insensitively) in order to collect metrics 
@@ -61,6 +62,7 @@ resource "wavefront_cloud_integration_newrelic" "newrelic" {
     app_name            = "app2"
     metric_filter_regex = "^mem.*?"
   }
+  service_refresh_rate_in_minutes = 10
 }
 ```
 

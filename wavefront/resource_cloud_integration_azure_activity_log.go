@@ -28,6 +28,11 @@ func resourceCloudIntegrationAzureActivityLog() *schema.Resource {
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfAzureActivityLog),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"category_filter": {
 				Type:     schema.TypeList,
 				Optional: true,

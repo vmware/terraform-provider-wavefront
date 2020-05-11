@@ -31,7 +31,8 @@ The following arguments are supported:
 * `service` - (Required) A value denoting which cloud service this service integrates with
 * `name` - (Required) The human-readable name of this integration
 * `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
 * `project_id` - (Required) The Google Cloud Platform (GCP) Project Id
 * `api_key` - (Required) API key for Google Cloud Platform (GCP)
 * `json_key` - (Required) Private key for a Google Cloud Platform (GCP) service account within your project.
@@ -52,6 +53,7 @@ resource "wavefront_cloud_integration_gcp_billing" "gcp_billing" {
   json_key            = <<EOF
 {...your gcp key ...}
 EOF
+  service_refresh_rate_in_minutes = 10
 }
 ```
 

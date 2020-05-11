@@ -25,6 +25,11 @@ func resourceCloudIntegrationCloudTrail() *schema.Resource {
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfCloudTrail),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"region": {
 				Type:     schema.TypeString,
 				Required: true,

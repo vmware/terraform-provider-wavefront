@@ -113,7 +113,7 @@ func decodeAppDynamicsConfiguration(d *schema.ResourceData, integration *wavefro
 	if integration.Service != "APPDYNAMICS" {
 		return fmt.Errorf("invalid service, expected APPDYNAMICS. got %s", integration.Service)
 	}
-	var appFilterRegex []string
+	appFilterRegex := make([]string, 0)
 	if encodedAppFilterRegex, ok := d.GetOk("app_filter_regex"); ok {
 		for _, v := range encodedAppFilterRegex.([]interface{}) {
 			appFilterRegex = append(appFilterRegex, v.(string))
@@ -346,10 +346,11 @@ func resourceCloudIntegrationCreate(d *schema.ResourceData, meta interface{}) er
 
 	pointTags := decodeTypeMapToStringMap(d, "additional_tags")
 	integration := &wavefront.CloudIntegration{
-		Name:           d.Get("name").(string),
-		ForceSave:      d.Get("force_save").(bool),
-		Service:        d.Get("service").(string),
-		AdditionalTags: pointTags,
+		Name:                     d.Get("name").(string),
+		ForceSave:                d.Get("force_save").(bool),
+		Service:                  d.Get("service").(string),
+		ServiceRefreshRateInMins: d.Get("service_refresh_rate_in_minutes").(int),
+		AdditionalTags:           pointTags,
 	}
 
 	// configure the integration based on the service
@@ -393,6 +394,7 @@ func resourceCloudIntegrationUpdate(d *schema.ResourceData, meta interface{}) er
 	integration.Name = d.Get("name").(string)
 	integration.ForceSave = d.Get("force_save").(bool)
 	integration.Service = d.Get("service").(string)
+	integration.ServiceRefreshRateInMins = d.Get("service_refresh_rate_in_minutes").(int)
 	if additionalTags := decodeTypeMapToStringMap(d, "additional_tags"); additionalTags != nil {
 		integration.AdditionalTags = additionalTags
 	}
@@ -444,6 +446,8 @@ func resourceCloudIntegrationRead(d *schema.ResourceData, meta interface{}) erro
 	d.Set("name", integration.Name)
 	d.Set("service", integration.Service)
 	d.Set("additional_tags", integration.AdditionalTags)
+	d.Set("service_refresh_rate_in_minutes", integration.ServiceRefreshRateInMins)
+
 	return encodeCloudIntegration(integration, d)
 }
 

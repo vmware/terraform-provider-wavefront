@@ -43,6 +43,11 @@ func resourceCloudIntegrationNewRelic() *schema.Resource {
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfNewRelic),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"api_key": {
 				Sensitive: true,
 				Type:      schema.TypeString,

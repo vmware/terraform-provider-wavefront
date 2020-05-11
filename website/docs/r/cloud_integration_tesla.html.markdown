@@ -28,7 +28,8 @@ The following arguments are supported:
 * `service` - (Required) A value denoting which cloud service this service integrates with
 * `name` - (Required) The human-readable name of this integration
 * `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
 * `email` - (Required) Email address for the Tesla account login
 * `password` - (Required) Password for the Tesla account login 
 
@@ -44,6 +45,7 @@ resource "wavefront_cloud_integration_tesla" "tesla" {
   }
   email    = "email@example.com"
   password = "password"
+  service_refresh_rate_in_minutes = 10
 }
 ```
 

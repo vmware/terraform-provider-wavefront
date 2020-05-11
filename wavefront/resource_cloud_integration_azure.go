@@ -28,6 +28,11 @@ func resourceCloudIntegrationAzure() *schema.Resource {
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfAzure),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"metric_filter_regex": {
 				Type:     schema.TypeString,
 				Optional: true,
