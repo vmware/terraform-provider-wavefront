@@ -364,7 +364,6 @@ func resourceCloudIntegrationCreate(d *schema.ResourceData, meta interface{}) er
 	wfMutexKV.Unlock("cloud_integration_create")
 
 	if err != nil {
-		wfMutexKV.Unlock("cloud_integration_create")
 		return fmt.Errorf("error creating Cloud Integration for service %s. got %s", d.Get("service"), err)
 	}
 
