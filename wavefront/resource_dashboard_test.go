@@ -990,7 +990,7 @@ func testAccCheckWavefrontDashboard_basic() string {
 	return fmt.Sprintf(`
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"
-	groups = [
+	permissions = [
 		"agent_management",
 		"alerts_management",
 	]

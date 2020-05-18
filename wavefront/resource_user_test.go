@@ -27,7 +27,7 @@ func TestAccWavefrontUser_BasicUser(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "id", "test+tftesting@example.com"),
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "groups.#", "2"),
+						"wavefront_user.basic", "permissions.#", "2"),
 				),
 			},
 		},
@@ -52,7 +52,7 @@ func TestAccWavefrontUser_BasicUserChangeGroups(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "id", "test+tftesting@example.com"),
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "groups.#", "2"),
+						"wavefront_user.basic", "permissions.#", "2"),
 				),
 			},
 			{
@@ -65,7 +65,7 @@ func TestAccWavefrontUser_BasicUserChangeGroups(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "id", "test+tftesting@example.com"),
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "groups.#", "2"),
+						"wavefront_user.basic", "permissions.#", "2"),
 				),
 			},
 		},
@@ -90,7 +90,7 @@ func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "id", "test+tftesting@example.com"),
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "groups.#", "2"),
+						"wavefront_user.basic", "permissions.#", "2"),
 				),
 			},
 			{
@@ -103,7 +103,7 @@ func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "id", "test+tftesting2@example.com"),
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "groups.#", "2"),
+						"wavefront_user.basic", "permissions.#", "2"),
 				),
 			},
 		},
@@ -203,8 +203,8 @@ func testAccCheckWavefrontUserAttributes(user *wavefront.User, permissions []str
 func testAccCheckWavefrontUser_basic() string {
 	return fmt.Sprintf(`
 resource "wavefront_user" "basic" {
-	email  = "test+tftesting@example.com"
-	groups = [
+	email       = "test+tftesting@example.com"
+	permissions = [
 		"agent_management",
 		"alerts_management",
 	]
@@ -214,8 +214,8 @@ resource "wavefront_user" "basic" {
 func testAccCheckWavefrontUser_changeGroups() string {
 	return fmt.Sprintf(`
 resource "wavefront_user" "basic" {
-	email  = "test+tftesting@example.com"
-	groups = [
+	email       = "test+tftesting@example.com"
+	permissions = [
 		"agent_management",
 		"events_management",
 	]
@@ -225,8 +225,8 @@ resource "wavefront_user" "basic" {
 func testAccCheckWavefrontUser_changeEmail() string {
 	return fmt.Sprintf(`
 resource "wavefront_user" "basic" {
-	email  = "test+tftesting2@example.com"
-	groups = [
+	email       = "test+tftesting2@example.com"
+	permissions = [
 		"agent_management",
 		"alerts_management",
 	]

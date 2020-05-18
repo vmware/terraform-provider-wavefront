@@ -20,28 +20,26 @@ func TestAccWavefrontUserGroup_BasicUserGroup(t *testing.T) {
 				Config: testAccCheckWavefrontUserGroup_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserGroupExists("wavefront_user_group.basic", &record),
-					testAccCheckWavefrontUserGroupAttributes(&record, []string{"alerts_management", "events_management"}),
+					testAccCheckWavefrontUserGroupAttributes(&record),
 
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
 						"wavefront_user_group.basic", "name", "Basic User Group"),
 					resource.TestCheckResourceAttr(
 						"wavefront_user_group.basic", "description", "Basic User Group for Unit Tests"),
-					resource.TestCheckResourceAttr("wavefront_user_group.basic", "permissions.#", "2"),
 				),
 			},
 			{
 				Config: testAccCheckWavefrontUserGroup_changed(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserGroupExists("wavefront_user_group.basic", &record),
-					testAccCheckWavefrontUserGroupAttributes(&record, []string{"alerts_management", "agent_management"}),
+					testAccCheckWavefrontUserGroupAttributes(&record),
 
 					// Check against the state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
 						"wavefront_user_group.basic", "name", "Basic User Groups"),
 					resource.TestCheckResourceAttr(
 						"wavefront_user_group.basic", "description", "Basic User Groups for Unit Tests"),
-					resource.TestCheckResourceAttr("wavefront_user_group.basic", "permissions.#", "2"),
 				),
 			},
 		},
@@ -115,7 +113,7 @@ func testAccCheckWavefrontUserGroupDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckWavefrontUserGroupAttributes(userGroup *wavefront.UserGroup, permissions []string) resource.TestCheckFunc {
+func testAccCheckWavefrontUserGroupAttributes(userGroup *wavefront.UserGroup) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		if !(userGroup.Name == "Basic User Group" || userGroup.Name == "Basic User Groups") {
 			return fmt.Errorf("unexpected User Group name encountered. %s", userGroup.Name)

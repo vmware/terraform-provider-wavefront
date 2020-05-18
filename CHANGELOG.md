@@ -4,7 +4,7 @@ BREAKING CHANGES:
 
 * resource/wavefront_alert: `threshold_conditions` renamed to `conditions` based on API naming.
 * resource/wavefront_user: `groups` aptly renamed to `permissions` to reflect the user/group/role permissions model
-* resource/wavefront_group: `permissions` no longer supported directly on groups
+* resource/wavefront_group: `permissions` has been removed as they are no longer supported directly on groups
 
 FEATURES:
 
