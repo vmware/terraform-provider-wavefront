@@ -17,7 +17,7 @@ func TestAccWavefrontCloudIntegrationGcp_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWavefrontCloudIntegrationGcp_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcp_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcp),
@@ -42,7 +42,7 @@ func TestAccWavefrontCloudIntegrationGcp_BasicChanged(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWavefrontCloudIntegrationGcp_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcp_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcp),
@@ -55,7 +55,7 @@ func TestAccWavefrontCloudIntegrationGcp_BasicChanged(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccWavefrontCloudIntegrationGcp_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationGcp_basicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcp),
@@ -71,7 +71,7 @@ func TestAccWavefrontCloudIntegrationGcp_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccWavefrontCloudIntegrationGcp_basic() string {
+func testAccCheckWavefrontCloudIntegrationGcp_basic() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp" "gcp" {
   name                = "Test Integration"
@@ -89,7 +89,7 @@ EOF
 }`, testGcpJsonKey("example-gcp-project"))
 }
 
-func testAccWavefrontCloudIntegrationGcp_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationGcp_basicChanged() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp" "gcp" {
   name                = "Test Integration"

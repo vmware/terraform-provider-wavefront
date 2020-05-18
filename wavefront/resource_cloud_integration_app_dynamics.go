@@ -21,12 +21,18 @@ func resourceCloudIntegrationAppDynamics() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfAppDynamics),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"user_name": {
 				Type:     schema.TypeString,
 				Required: true,

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAccDashboardJson_importBasic(t *testing.T) {
+func TestAccDashboardJson_Basic(t *testing.T) {
 	resourceName := "wavefront_dashboard_json.json_foobar"
 	var record wavefront.Dashboard
 
@@ -17,7 +17,8 @@ func TestAccDashboardJson_importBasic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJsonImporter_basic(),
+				ExpectNonEmptyPlan: true,
+				Config:             testAccCheckWavefrontDashboardJsonImporter_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.json_foobar", &record),
 				),

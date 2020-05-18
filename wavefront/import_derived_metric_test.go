@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAccDerivedMetric_importBasic(t *testing.T) {
+func TestAccDerivedMetric_Basic(t *testing.T) {
 	resourceName := "wavefront_derived_metric.derived"
 	var record wavefront.DerivedMetric
 

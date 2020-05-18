@@ -12,7 +12,6 @@ func resourceUserGroup() *schema.Resource {
 		Read:   resourceUserGroupRead,
 		Update: resourceUserGroupUpdate,
 		Delete: resourceUserGroupDelete,
-		Exists: resourceUserGroupExists,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -25,35 +24,29 @@ func resourceUserGroup() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"permissions": {
-				Type:     schema.TypeSet,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Required: true,
-			},
 		},
 	}
 }
 
-func resourceUserGroupCreate(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupCreate(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 
 	ug := &wavefront.UserGroup{
 		Name:        d.Get("name").(string),
 		Description: d.Get("description").(string),
 	}
 
-	resourceDecodeUserGroupPermissions(d, ug)
 	if err := userGroups.Create(ug); err != nil {
 		return fmt.Errorf("failed to create user group, %s", err)
 	}
 
 	d.SetId(*ug.ID)
 
-	return nil
+	return resourceUserGroupRead(d, meta)
 }
 
-func resourceUserGroupRead(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupRead(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 	id := d.Id()
 	ug := &wavefront.UserGroup{
 		ID: &id,
@@ -65,13 +58,12 @@ func resourceUserGroupRead(d *schema.ResourceData, m interface{}) error {
 
 	d.Set("name", ug.Name)
 	d.Set("description", ug.Description)
-	d.Set("permissions", ug.Permissions)
 
 	return nil
 }
 
-func resourceUserGroupUpdate(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupUpdate(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 
 	id := d.Id()
 	ug := &wavefront.UserGroup{
@@ -80,17 +72,16 @@ func resourceUserGroupUpdate(d *schema.ResourceData, m interface{}) error {
 
 	ug.Name = d.Get("name").(string)
 	ug.Description = d.Get("description").(string)
-	resourceDecodeUserGroupPermissions(d, ug)
 
 	if err := userGroups.Update(ug); err != nil {
 		return fmt.Errorf("unable to update user group %s, %s", id, err)
 	}
 
-	return nil
+	return resourceUserGroupRead(d, meta)
 }
 
-func resourceUserGroupDelete(d *schema.ResourceData, m interface{}) error {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
+func resourceUserGroupDelete(d *schema.ResourceData, meta interface{}) error {
+	userGroups := meta.(*wavefrontClient).client.UserGroups()
 
 	id := d.Id()
 	ug := &wavefront.UserGroup{
@@ -103,50 +94,4 @@ func resourceUserGroupDelete(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId("")
 	return nil
-}
-
-func resourceUserGroupExists(d *schema.ResourceData, m interface{}) (bool, error) {
-	userGroups := m.(*wavefrontClient).client.UserGroups()
-	results, err := userGroups.Find(
-		[]*wavefront.SearchCondition{
-			{
-				Key:            "id",
-				Value:          d.Id(),
-				MatchingMethod: "EXACT",
-			},
-		},
-	)
-
-	if err != nil {
-		return false, fmt.Errorf("error while searching for user group %s, %s", d.Id(), err)
-	}
-
-	if len(results) == 0 {
-		return false, nil
-	}
-
-	return true, nil
-}
-
-// Decodes the permissions from the state file and returns a []string of permissions
-func resourceDecodeUserGroupPermissions(d *schema.ResourceData, userGroup *wavefront.UserGroup) {
-	var existingPermissions *schema.Set
-	var permissions []string
-	if d.HasChange("permissions") {
-		_, n := d.GetChange("permissions")
-
-		// Largely fine if new is nil, likely means we're removing the user from all explicit permissions
-		if n == nil {
-			n = new(schema.Set)
-		}
-		existingPermissions = n.(*schema.Set)
-	} else {
-		existingPermissions = d.Get("permissions").(*schema.Set)
-	}
-
-	for _, permission := range existingPermissions.List() {
-		permissions = append(permissions, permission.(string))
-	}
-
-	userGroup.Permissions = permissions
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
-func TestAccDashboard_importBasic(t *testing.T) {
+func TestAccDashboard_Basic(t *testing.T) {
 	resourceName := "wavefront_dashboard.foobar"
 	var record wavefront.Dashboard
 

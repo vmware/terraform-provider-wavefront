@@ -19,13 +19,18 @@ func resourceCloudIntegrationTesla() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				ForceNew: true,
 			},
 			"service": serviceSchemaDefinition(wfTesla),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"email": {
 				Type:     schema.TypeString,
 				Required: true,

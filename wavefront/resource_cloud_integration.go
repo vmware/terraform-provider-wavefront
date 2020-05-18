@@ -23,6 +23,7 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 			Namespaces:            decodeTypeListToString(d, "namespaces"),
 			VolumeSelectionTags:   decodeTypeMapToStringMap(d, "volume_selection_tags"),
 			InstanceSelectionTags: decodeTypeMapToStringMap(d, "instance_selection_tags"),
+			PointTagFilterRegex:   d.Get("point_tag_filter_regex").(string),
 		}
 		break
 	case "CLOUDTRAIL":
@@ -36,7 +37,7 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		break
 	case "EC2":
 		var hostNameTags []string
-		if encodedHostNameTags, ok := d.GetOk("host_name_tags"); ok {
+		if encodedHostNameTags, ok := d.GetOk("hostname_tags"); ok {
 			for _, v := range encodedHostNameTags.(*schema.Set).List() {
 				hostNameTags = append(hostNameTags, v.(string))
 			}
@@ -113,7 +114,7 @@ func decodeAppDynamicsConfiguration(d *schema.ResourceData, integration *wavefro
 	if integration.Service != "APPDYNAMICS" {
 		return fmt.Errorf("invalid service, expected APPDYNAMICS. got %s", integration.Service)
 	}
-	var appFilterRegex []string
+	appFilterRegex := make([]string, 0)
 	if encodedAppFilterRegex, ok := d.GetOk("app_filter_regex"); ok {
 		for _, v := range encodedAppFilterRegex.([]interface{}) {
 			appFilterRegex = append(appFilterRegex, v.(string))
@@ -189,6 +190,7 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("instance_selection_tags", integration.CloudWatch.InstanceSelectionTags)
 		d.Set("role_arn", integration.CloudWatch.BaseCredentials.RoleARN)
 		d.Set("external_id", integration.CloudWatch.BaseCredentials.ExternalID)
+		d.Set("point_tag_filter_regex", integration.CloudWatch.PointTagFilterRegex)
 		break
 	case "CLOUDTRAIL":
 		d.Set("region", integration.CloudTrail.Region)
@@ -199,7 +201,7 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("external_id", integration.CloudTrail.BaseCredentials.ExternalID)
 		break
 	case "EC2":
-		d.Set("host_name_tags", integration.EC2.HostNameTags)
+		d.Set("hostname_tags", integration.EC2.HostNameTags)
 		d.Set("role_arn", integration.EC2.BaseCredentials.RoleARN)
 		d.Set("external_id", integration.EC2.BaseCredentials.ExternalID)
 		break
@@ -215,7 +217,7 @@ func encodeGcpIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 	case "GCP":
 		d.Set("project_id", integration.GCP.ProjectId)
 		d.Set("metric_filter_regex", integration.GCP.MetricFilterRegex)
-		d.Set("categories_to_fetch", integration.GCP.CategoriesToFetch)
+		d.Set("categories", integration.GCP.CategoriesToFetch)
 		break
 	case "GCPBILLING":
 		d.Set("project_id", integration.GCPBilling.ProjectId)
@@ -341,15 +343,16 @@ func encodeCloudIntegration(integration *wavefront.CloudIntegration, d *schema.R
 	return fmt.Errorf("invalid service \"%s\" specified", service)
 }
 
-func resourceCloudIntegrationCreate(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationCreate(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 
 	pointTags := decodeTypeMapToStringMap(d, "additional_tags")
 	integration := &wavefront.CloudIntegration{
-		Name:           d.Get("name").(string),
-		ForceSave:      d.Get("force_save").(bool),
-		Service:        d.Get("service").(string),
-		AdditionalTags: pointTags,
+		Name:                     d.Get("name").(string),
+		ForceSave:                d.Get("force_save").(bool),
+		Service:                  d.Get("service").(string),
+		ServiceRefreshRateInMins: d.Get("service_refresh_rate_in_minutes").(int),
+		AdditionalTags:           pointTags,
 	}
 
 	// configure the integration based on the service
@@ -363,16 +366,15 @@ func resourceCloudIntegrationCreate(d *schema.ResourceData, m interface{}) error
 	wfMutexKV.Unlock("cloud_integration_create")
 
 	if err != nil {
-		wfMutexKV.Unlock("cloud_integration_create")
 		return fmt.Errorf("error creating Cloud Integration for service %s. got %s", d.Get("service"), err)
 	}
 
 	d.SetId(integration.Id)
-	return resourceCloudIntegrationRead(d, m)
+	return resourceCloudIntegrationRead(d, meta)
 }
 
-func resourceCloudIntegrationUpdate(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationUpdate(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	integrations, err := cloudIntegrations.Find([]*wavefront.SearchCondition{
 		{
 			Key:            "id",
@@ -393,6 +395,7 @@ func resourceCloudIntegrationUpdate(d *schema.ResourceData, m interface{}) error
 	integration.Name = d.Get("name").(string)
 	integration.ForceSave = d.Get("force_save").(bool)
 	integration.Service = d.Get("service").(string)
+	integration.ServiceRefreshRateInMins = d.Get("service_refresh_rate_in_minutes").(int)
 	if additionalTags := decodeTypeMapToStringMap(d, "additional_tags"); additionalTags != nil {
 		integration.AdditionalTags = additionalTags
 	}
@@ -414,11 +417,11 @@ func resourceCloudIntegrationUpdate(d *schema.ResourceData, m interface{}) error
 		return fmt.Errorf("unable to update CloudIntegration with id %s", d.Id())
 	}
 
-	return resourceCloudIntegrationRead(d, m)
+	return resourceCloudIntegrationRead(d, meta)
 }
 
-func resourceCloudIntegrationRead(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationRead(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	integrations, err := cloudIntegrations.Find([]*wavefront.SearchCondition{
 		{
 			Key:            "id",
@@ -444,11 +447,13 @@ func resourceCloudIntegrationRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("name", integration.Name)
 	d.Set("service", integration.Service)
 	d.Set("additional_tags", integration.AdditionalTags)
+	d.Set("service_refresh_rate_in_minutes", integration.ServiceRefreshRateInMins)
+
 	return encodeCloudIntegration(integration, d)
 }
 
-func resourceCloudIntegrationDelete(d *schema.ResourceData, m interface{}) error {
-	cloudIntegrations := m.(*wavefrontClient).client.CloudIntegrations()
+func resourceCloudIntegrationDelete(d *schema.ResourceData, meta interface{}) error {
+	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 	integrations, err := cloudIntegrations.Find([]*wavefront.SearchCondition{
 		{
 			Key:            "id",

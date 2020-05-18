@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAccUser_importBasic(t *testing.T) {
+func TestAccUser_Basic(t *testing.T) {
 	resourceName := "wavefront_user.basic"
 	var record wavefront.User
 
@@ -35,7 +35,7 @@ func testAccCheckWavefrontUserImporter_basic() string {
 	return fmt.Sprintf(`
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"
-	groups = [
+	permissions = [
 		"agent_management",
 		"alerts_management",
 	]

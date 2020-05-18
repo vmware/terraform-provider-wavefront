@@ -21,12 +21,18 @@ func resourceCloudIntegrationAzureActivityLog() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfAzureActivityLog),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"category_filter": {
 				Type:     schema.TypeList,
 				Optional: true,

@@ -43,10 +43,12 @@ func resourceAlert() *schema.Resource {
 			"conditions": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"threshold_targets": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"additional_information": {
 				Type:             schema.TypeString,
@@ -95,8 +97,8 @@ func resourceAlert() *schema.Resource {
 	}
 }
 
-func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	tags := decodeTags(d)
 
@@ -124,20 +126,17 @@ func resourceAlertCreate(d *schema.ResourceData, m interface{}) error {
 	d.SetId(*a.ID)
 
 	canView, canModify := decodeAccessControlList(d)
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		err = alerts.SetACL(*a.ID, canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
 		}
 	}
-
 	return nil
 }
 
-func resourceAlertRead(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	alertID := d.Id()
 	tmpAlert := wavefront.Alert{ID: &alertID}
@@ -172,8 +171,8 @@ func resourceAlertRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	alertID := d.Id()
 	tmpAlert := wavefront.Alert{ID: &alertID}
@@ -208,11 +207,9 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	// Update the ACLs on the alert in Wavefront
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		err = alerts.SetACL(*a.ID, canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error updating ACLs on Alert %s. %s", d.Get("name"), err)
 		}
 	}
@@ -220,8 +217,8 @@ func resourceAlertUpdate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceAlertDelete(d *schema.ResourceData, m interface{}) error {
-	alerts := m.(*wavefrontClient).client.Alerts()
+func resourceAlertDelete(d *schema.ResourceData, meta interface{}) error {
+	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	alertID := d.Id()
 	tmpAlert := wavefront.Alert{ID: &alertID}

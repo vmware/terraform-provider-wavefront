@@ -10,6 +10,9 @@ func resourceCloudIntegrationCloudTrail() *schema.Resource {
 		Read:   resourceCloudIntegrationRead,
 		Update: resourceCloudIntegrationUpdate,
 		Delete: resourceCloudIntegrationDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -18,16 +21,21 @@ func resourceCloudIntegrationCloudTrail() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfCloudTrail),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"region": {
 				Type:     schema.TypeString,
 				Required: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"prefix": {
 				Type:     schema.TypeString,

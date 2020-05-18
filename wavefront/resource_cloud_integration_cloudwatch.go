@@ -10,6 +10,9 @@ func resourceCloudIntegrationCloudWatch() *schema.Resource {
 		Read:   resourceCloudIntegrationRead,
 		Update: resourceCloudIntegrationUpdate,
 		Delete: resourceCloudIntegrationDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -18,12 +21,18 @@ func resourceCloudIntegrationCloudWatch() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfCloudWatch),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"metric_filter_regex": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -36,10 +45,12 @@ func resourceCloudIntegrationCloudWatch() *schema.Resource {
 			"instance_selection_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"volume_selection_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"point_tag_filter_regex": {
 				Type:     schema.TypeString,

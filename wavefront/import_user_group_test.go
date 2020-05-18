@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAccUserGroup_importBasic(t *testing.T) {
+func TestAccUserGroup_Basic(t *testing.T) {
 	resourceName := "wavefront_user_group.basic"
 	var record wavefront.UserGroup
 
@@ -36,10 +36,6 @@ func testAccCheckWavefrontUserGroupImporter_basic() string {
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
   description = "Basic User Group for Unit Tests"
-  permissions = [
-    "alerts_management",
-	"events_management"
-  ]
 }
 `)
 }

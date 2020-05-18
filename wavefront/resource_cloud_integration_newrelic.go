@@ -36,12 +36,18 @@ func resourceCloudIntegrationNewRelic() *schema.Resource {
 			"additional_tags": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"force_save": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
 			"service": serviceSchemaDefinition(wfNewRelic),
+			"service_refresh_rate_in_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 			"api_key": {
 				Sensitive: true,
 				Type:      schema.TypeString,

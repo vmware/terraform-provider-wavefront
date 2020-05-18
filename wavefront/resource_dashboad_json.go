@@ -41,8 +41,8 @@ func buildDashboardJson(d *schema.ResourceData) (*wavefront.Dashboard, error) {
 	return &dashboard, nil
 }
 
-func resourceDashboardJsonRead(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardJsonRead(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
 	}
@@ -50,6 +50,7 @@ func resourceDashboardJsonRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
+			return nil
 		} else {
 			return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 		}
@@ -64,9 +65,9 @@ func resourceDashboardJsonRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceDashboardJsonCreate(d *schema.ResourceData, m interface{}) error {
+func resourceDashboardJsonCreate(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[INFO] Create Wavefront Dashboard %s", d.Id())
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dashboard, err := buildDashboardJson(d)
 
 	if err != nil {
@@ -79,12 +80,12 @@ func resourceDashboardJsonCreate(d *schema.ResourceData, m interface{}) error {
 	}
 	d.SetId(dashboard.ID)
 	log.Printf("[INFO] Wavefront Dashboard %s Created", d.Id())
-	return resourceDashboardJsonRead(d, m)
+	return resourceDashboardJsonRead(d, meta)
 }
 
-func resourceDashboardJsonUpdate(d *schema.ResourceData, m interface{}) error {
+func resourceDashboardJsonUpdate(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[INFO] Update Wavefront Dashboard %s", d.Id())
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dashboard, err := buildDashboardJson(d)
 
 	if err != nil {
@@ -97,17 +98,22 @@ func resourceDashboardJsonUpdate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	log.Printf("[INFO] Wavefront Dashboard %s Updated", d.Id())
-	return resourceDashboardJsonRead(d, m)
+	return resourceDashboardJsonRead(d, meta)
 }
 
-func resourceDashboardJsonDelete(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardJsonDelete(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
 	}
 
 	err := dashboards.Get(&dash)
 	if err != nil {
+		// Dashboard has already been deleted, so we'll mark it as such...
+		if strings.Contains(err.Error(), "404") {
+			d.SetId("")
+			return nil
+		}
 		return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 	}
 

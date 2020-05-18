@@ -2,6 +2,7 @@ package wavefront_plugin
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strings"
 
@@ -445,6 +446,7 @@ func resourceDashboard() *schema.Resource {
 					Type:        schema.TypeMap,
 					Required:    true,
 					Description: "Map of [string]string. At least one of the keys must match the value of default_value.",
+					Elem:        &schema.Schema{Type: schema.TypeString},
 				},
 				"query_value": {
 					Type:     schema.TypeString,
@@ -1004,8 +1006,8 @@ func buildDashboard(d *schema.ResourceData) (*wavefront.Dashboard, error) {
 }
 
 // Create a Terraform Dashboard
-func resourceDashboardCreate(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardCreate(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dashboard, err := buildDashboard(d)
 
 	if err != nil {
@@ -1019,16 +1021,14 @@ func resourceDashboardCreate(d *schema.ResourceData, m interface{}) error {
 	d.SetId(dashboard.ID)
 
 	canView, canModify := decodeAccessControlList(d)
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		err = dashboards.SetACL(dashboard.ID, canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
 		}
 	}
 
-	return resourceDashboardRead(d, m)
+	return resourceDashboardRead(d, meta)
 }
 
 type Params []map[string]interface{}
@@ -1040,8 +1040,8 @@ func (p Params) Less(i, j int) bool {
 }
 
 // Read a Wavefront Dashboard
-func resourceDashboardRead(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardRead(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
 	}
@@ -1066,12 +1066,14 @@ func resourceDashboardRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("display_section_table_of_contents", dash.DisplaySectionTableOfContents)
 	d.Set("display_query_parameters", dash.DisplayQueryParameters)
 
-	sections := []map[string]interface{}{}
+	parameterDetails := extractTerraformParameterDetails(d, dash)
+
+	var sections []map[string]interface{}
 	for _, wavefrontSection := range dash.Sections {
 		sections = append(sections, buildTerraformSection(wavefrontSection))
 	}
 	d.Set("section", sections)
-	d.Set("parameter_details", dash.ParameterDetails)
+	d.Set("parameter_details", parameterDetails)
 	d.Set("tags", dash.Tags)
 	d.Set("can_view", dash.ACL.CanView)
 	d.Set("can_modify", dash.ACL.CanModify)
@@ -1079,8 +1081,54 @@ func resourceDashboardRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func extractTerraformParameterDetails(d *schema.ResourceData, dash wavefront.Dashboard) []map[string]interface{} {
+	var parameterDetails []map[string]interface{}
+	var keys []string
+	for k := range dash.ParameterDetails {
+		keys = append(keys, k)
+	}
+
+	// This next block is going to attempt to maintain the state order of the list
+	// If it has been set before (which is important to keep plans from always showing changes)
+	if paramDetails, ok := d.GetOk("parameter_details"); ok {
+		var eKeys []string
+		for _, k := range paramDetails.([]interface{}) {
+			name := k.(map[string]interface{})["name"].(string)
+			eKeys = append(eKeys, name)
+		}
+
+		for _, k := range eKeys {
+			// Only attempt to bind it in from the remote if it exists in remote
+			if loc := inSlice(k, keys); loc >= 0 {
+				// Remove the key from the list of keys that came from remote
+				keys = append(keys[:loc], keys[loc+1:]...)
+				if v, ok := dash.ParameterDetails[k]; ok {
+					details := buildTerraformParameterDetail(v, k)
+					parameterDetails = append(parameterDetails, details)
+				}
+			}
+		}
+	}
+	// Process any remaining keys that might be new from remote state
+	for _, k := range keys {
+		log.Printf("processing remaining keys %s", k)
+		details := buildTerraformParameterDetail(dash.ParameterDetails[k], k)
+		parameterDetails = append(parameterDetails, details)
+	}
+	return parameterDetails
+}
+
+func inSlice(needle string, haystack []string) int {
+	for i, h := range haystack {
+		if needle == h {
+			return i
+		}
+	}
+	return -1
+}
+
+func resourceDashboardUpdate(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 
 	a, err := buildDashboard(d)
 	if err != nil {
@@ -1097,26 +1145,23 @@ func resourceDashboardUpdate(d *schema.ResourceData, m interface{}) error {
 		tags := decodeTags(d)
 		err = dashboards.SetTags(a.ID, tags)
 		if err != nil {
-			d.SetPartial("tags")
 			return fmt.Errorf("unable to update the tags for the Wavefront Dashboard")
 		}
 	}
 
-	if d.HasChange("can_view") || d.HasChange("can_modify") {
+	if d.HasChanges("can_view", "can_modify") {
 		canView, canModify := decodeAccessControlList(d)
 
 		err = dashboards.SetACL(d.Id(), canView, canModify)
 		if err != nil {
-			d.SetPartial("can_view")
-			d.SetPartial("can_modify")
 			return fmt.Errorf("error updating ACLs for Wavefront Dashboards")
 		}
 	}
-	return resourceDashboardRead(d, m)
+	return resourceDashboardRead(d, meta)
 }
 
-func resourceDashboardDelete(d *schema.ResourceData, m interface{}) error {
-	dashboards := m.(*wavefrontClient).client.Dashboards()
+func resourceDashboardDelete(d *schema.ResourceData, meta interface{}) error {
+	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
 	}
