@@ -17,7 +17,8 @@ func TestAccDashboardJson_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJsonImporter_basic(),
+				ExpectNonEmptyPlan: true,
+				Config:             testAccCheckWavefrontDashboardJsonImporter_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.json_foobar", &record),
 				),

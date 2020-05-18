@@ -16,7 +16,7 @@ func TestAccWavefrontCloudIntegrationGcpBilling_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWavefrontCloudIntegrationGcpBilling_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBilling_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcpBilling),
@@ -40,7 +40,7 @@ func TestAccWavefrontCloudIntegrationGcpBilling_BasicChanged(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccWavefrontCloudIntegrationGcpBilling_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBilling_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcpBilling),
@@ -52,7 +52,7 @@ func TestAccWavefrontCloudIntegrationGcpBilling_BasicChanged(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccWavefrontCloudIntegrationGcpBilling_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBilling_basicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcpBilling),
@@ -67,7 +67,7 @@ func TestAccWavefrontCloudIntegrationGcpBilling_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccWavefrontCloudIntegrationGcpBilling_basic() string {
+func testAccCheckWavefrontCloudIntegrationGcpBilling_basic() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp_billing" "gcp_billing" {
   name                = "Test Integration"
@@ -84,7 +84,7 @@ EOF
 }`, testGcpJsonKey("example-gcp-project"))
 }
 
-func testAccWavefrontCloudIntegrationGcpBilling_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationGcpBilling_basicChanged() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp_billing" "gcp_billing" {
   name                = "Test Integration"

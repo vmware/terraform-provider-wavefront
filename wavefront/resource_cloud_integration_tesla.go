@@ -24,7 +24,6 @@ func resourceCloudIntegrationTesla() *schema.Resource {
 			"force_save": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				ForceNew: true,
 			},
 			"service": serviceSchemaDefinition(wfTesla),
 			"service_refresh_rate_in_minutes": {

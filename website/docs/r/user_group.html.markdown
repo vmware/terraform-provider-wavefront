@@ -1,6 +1,6 @@
 ---
 layout: "wavefront"
-page_title: "Wavefront: "
+page_title: "Wavefront: User Group"
 description: |-
   Provides a Wavefront User Group Resource. This allows user groups to be created, updated, and deleted.
 ---
@@ -15,10 +15,6 @@ Provides a Wavefront User Group Resource. This allows user groups to be created,
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
   description = "Basic User Group for Unit Tests"
-  permissions = [
-    "alerts_management",
-	"events_management"
-  ]
 }
 ```
 
@@ -26,9 +22,8 @@ resource "wavefront_user_group" "basic" {
 
 The following arguments are supported:
 
-* `permissions` - (Required) 
-* `name` - (Required) 
-* `description` - (Required) 
+* `name` - (Required) The name of the user group
+* `description` - (Required) A short description of the user group
 
 ### Example
 
@@ -36,10 +31,6 @@ The following arguments are supported:
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
   description = "Basic User Group for Unit Tests"
-  permissions = [
-    "alerts_management",
-	"events_management"
-  ]
 }
 ```
 

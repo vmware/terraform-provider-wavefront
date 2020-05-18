@@ -10,6 +10,9 @@ func resourceCloudIntegrationEc2() *schema.Resource {
 		Read:   resourceCloudIntegrationRead,
 		Update: resourceCloudIntegrationUpdate,
 		Delete: resourceCloudIntegrationDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,

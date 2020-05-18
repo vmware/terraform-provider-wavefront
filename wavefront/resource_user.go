@@ -21,7 +21,7 @@ func resourceUser() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
-			"groups": {
+			"permissions": {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
@@ -92,7 +92,7 @@ func resourceUserRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("email", user.ID)
 	d.Set("customer", user.Customer)
-	d.Set("groups", user.Permissions)
+	d.Set("permissions", user.Permissions)
 	encodeUserGroups(d, user)
 
 	return nil
@@ -221,7 +221,7 @@ func encodeUserGroups(d *schema.ResourceData, user *wavefront.User) {
 // Decodes the permissions (groups) from the state file and returns a []string of permissions
 func resourceDecodeUserPermissions(d *schema.ResourceData, user interface{}) error {
 	var permissions []string
-	for _, permission := range d.Get("groups").(*schema.Set).List() {
+	for _, permission := range d.Get("permissions").(*schema.Set).List() {
 		permissions = append(permissions, permission.(string))
 	}
 

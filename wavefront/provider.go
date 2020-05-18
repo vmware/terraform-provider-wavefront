@@ -33,6 +33,7 @@ func Provider() *schema.Provider {
 			"wavefront_derived_metric":                       resourceDerivedMetric(),
 			"wavefront_alert_target":                         resourceTarget(),
 			"wavefront_user":                                 resourceUser(),
+			"wavefront_role":                                 resourceRole(),
 			"wavefront_user_group":                           resourceUserGroup(),
 			"wavefront_cloud_integration_cloudwatch":         resourceCloudIntegrationCloudWatch(),
 			"wavefront_cloud_integration_cloudtrail":         resourceCloudIntegrationCloudTrail(),

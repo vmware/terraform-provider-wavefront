@@ -22,22 +22,23 @@ resource "wavefront_user" "basic" {
 The following arguments are supported:
 
 * `email` - (Required) The (unique) identifier of the user to create. Must be a valid email address
-* `groups` - (Optional) List of permission groups to grant to this user.  Valid options are
-* `user_groups` - (Optional) List of user groups to this user
+* `permissions` - (Optional) List of permission to grant to this user.  Valid options are
 `agent_management`, `alerts_management`, `dashboard_management`, `embedded_charts`, `events_management`, `external_links_management`,
 `host_tag_management`, `metrics_management`, `user_management`
+* `user_groups` - (Optional) List of user groups to this user
 
 ### Example
 
 ```hcl
 
 resource "wavefront_user_group" "test_group" {
-  name = "Test Group"
+  name        = "Test Group"
+  description = "Test Group"
 }
 
 resource "wavefront_user" "basic" {
-  email  = "test+tftesting@example.com"
-  groups = [
+  email       = "test+tftesting@example.com"
+  permissions = [
     "agent_management",
     "events_management",
   ]

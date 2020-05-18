@@ -36,10 +36,6 @@ func testAccCheckWavefrontUserGroupImporter_basic() string {
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
   description = "Basic User Group for Unit Tests"
-  permissions = [
-    "alerts_management",
-	"events_management"
-  ]
 }
 `)
 }

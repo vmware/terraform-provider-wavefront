@@ -24,11 +24,6 @@ func resourceUserGroup() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"permissions": {
-				Type:     schema.TypeSet,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Required: true,
-			},
 		},
 	}
 }
@@ -41,7 +36,6 @@ func resourceUserGroupCreate(d *schema.ResourceData, meta interface{}) error {
 		Description: d.Get("description").(string),
 	}
 
-	resourceDecodeUserGroupPermissions(d, ug)
 	if err := userGroups.Create(ug); err != nil {
 		return fmt.Errorf("failed to create user group, %s", err)
 	}
@@ -64,7 +58,6 @@ func resourceUserGroupRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("name", ug.Name)
 	d.Set("description", ug.Description)
-	d.Set("permissions", ug.Permissions)
 
 	return nil
 }
@@ -79,7 +72,6 @@ func resourceUserGroupUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	ug.Name = d.Get("name").(string)
 	ug.Description = d.Get("description").(string)
-	resourceDecodeUserGroupPermissions(d, ug)
 
 	if err := userGroups.Update(ug); err != nil {
 		return fmt.Errorf("unable to update user group %s, %s", id, err)
@@ -102,27 +94,4 @@ func resourceUserGroupDelete(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId("")
 	return nil
-}
-
-// Decodes the permissions from the state file and returns a []string of permissions
-func resourceDecodeUserGroupPermissions(d *schema.ResourceData, userGroup *wavefront.UserGroup) {
-	var existingPermissions *schema.Set
-	var permissions []string
-	if d.HasChange("permissions") {
-		n := d.Get("permissions")
-
-		// Largely fine if new is nil, likely means we're removing the user from all explicit permissions
-		if n == nil {
-			n = new(schema.Set)
-		}
-		existingPermissions = n.(*schema.Set)
-	} else {
-		existingPermissions = d.Get("permissions").(*schema.Set)
-	}
-
-	for _, permission := range existingPermissions.List() {
-		permissions = append(permissions, permission.(string))
-	}
-
-	userGroup.Permissions = permissions
 }

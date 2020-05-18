@@ -16,8 +16,7 @@ func TestAccWavefrontDashboardJson_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontDashboardJson_basic(),
+				Config: testAccCheckWavefrontDashboardJson_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
 					testAccCheckWavefrontDashboardJsonAttributes(&record),
@@ -38,8 +37,7 @@ func TestAccWavefrontDashboardJson_Updated(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontDashboardJson_basic(),
+				Config: testAccCheckWavefrontDashboardJson_basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
 					testAccCheckWavefrontDashboardJsonAttributes(&record),
@@ -48,8 +46,7 @@ func TestAccWavefrontDashboardJson_Updated(t *testing.T) {
 				),
 			},
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontDashboardJson_new_value(),
+				Config: testAccCheckWavefrontDashboardJson_new_value(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
 					testAccCheckWavefrontDashboardJsonAttributesUpdated(&record),
@@ -70,8 +67,7 @@ func TestAccWavefrontDashboardJson_Multiple(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
 		Steps: []resource.TestStep{
 			{
-				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontDashboardJson_multiple(),
+				Config: testAccCheckWavefrontDashboardJson_multiple(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_1", &record),
 					resource.TestCheckResourceAttr(
@@ -163,6 +159,9 @@ func testAccCheckWavefrontDashboardJsonExists(n string, dashboard *wavefront.Das
 
 func testAccCheckWavefrontDashboardJson_basic() string {
 	return fmt.Sprintf(`
+data "wavefront_default_user_group" "everyone" { 
+}
+
 resource "wavefront_dashboard_json" "test_dashboard_json" {
 	dashboard_json = <<EOF
 {
@@ -175,6 +174,11 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
   "displayDescription": false,
   "displaySectionTableOfContents": true,
   "displayQueryParameters": false,
+  "acl": {
+    "canModify": [
+       "${data.wavefront_default_user_group.everyone.group_id}"
+     ]
+  },
   "sections": [
     {
       "name": "section 1",
@@ -269,6 +273,9 @@ EOF
 
 func testAccCheckWavefrontDashboardJson_new_value() string {
 	return fmt.Sprintf(`
+data "wavefront_default_user_group" "everyone" { 
+}
+
 resource "wavefront_dashboard_json" "test_dashboard_json" {
 	dashboard_json = <<EOF
 {
@@ -281,6 +288,11 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
   "displayDescription": false,
   "displaySectionTableOfContents": true,
   "displayQueryParameters": false,
+  "acl": {
+    "canModify": [
+       "${data.wavefront_default_user_group.everyone.group_id}"
+     ]
+  },
   "sections": [
     {
       "name": "section 1",
@@ -369,6 +381,9 @@ EOF
 
 func testAccCheckWavefrontDashboardJson_multiple() string {
 	return fmt.Sprintf(`
+data "wavefront_default_user_group" "everyone" { 
+}
+
 resource "wavefront_dashboard_json" "test_dashboard_1" {
   dashboard_json = <<EOF
 {
@@ -378,6 +393,11 @@ resource "wavefront_dashboard_json" "test_dashboard_1" {
   "displayDescription": false,
   "displaySectionTableOfContents": true,
   "displayQueryParameters": false,
+  "acl": {
+    "canModify": [
+       "${data.wavefront_default_user_group.everyone.group_id}"
+     ]
+  },
   "sections": [
     {
       "name": "New Section",
@@ -397,6 +417,11 @@ resource "wavefront_dashboard_json" "test_dashboard_2" {
   "displayDescription": false,
   "displaySectionTableOfContents": true,
   "displayQueryParameters": false,
+  "acl": {
+    "canModify": [
+       "${data.wavefront_default_user_group.everyone.group_id}"
+     ]
+  },
   "sections": [
     {
       "name": "New Section",
@@ -416,6 +441,11 @@ resource "wavefront_dashboard_json" "test_dashboard_3" {
   "displayDescription": false,
   "displaySectionTableOfContents": true,
   "displayQueryParameters": false,
+  "acl": {
+    "canModify": [
+       "${data.wavefront_default_user_group.everyone.group_id}"
+     ]
+  },
   "sections": [
     {
       "name": "New Section",

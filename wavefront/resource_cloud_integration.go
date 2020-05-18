@@ -23,6 +23,7 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 			Namespaces:            decodeTypeListToString(d, "namespaces"),
 			VolumeSelectionTags:   decodeTypeMapToStringMap(d, "volume_selection_tags"),
 			InstanceSelectionTags: decodeTypeMapToStringMap(d, "instance_selection_tags"),
+			PointTagFilterRegex:   d.Get("point_tag_filter_regex").(string),
 		}
 		break
 	case "CLOUDTRAIL":
@@ -36,7 +37,7 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		break
 	case "EC2":
 		var hostNameTags []string
-		if encodedHostNameTags, ok := d.GetOk("host_name_tags"); ok {
+		if encodedHostNameTags, ok := d.GetOk("hostname_tags"); ok {
 			for _, v := range encodedHostNameTags.(*schema.Set).List() {
 				hostNameTags = append(hostNameTags, v.(string))
 			}
@@ -189,6 +190,7 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("instance_selection_tags", integration.CloudWatch.InstanceSelectionTags)
 		d.Set("role_arn", integration.CloudWatch.BaseCredentials.RoleARN)
 		d.Set("external_id", integration.CloudWatch.BaseCredentials.ExternalID)
+		d.Set("point_tag_filter_regex", integration.CloudWatch.PointTagFilterRegex)
 		break
 	case "CLOUDTRAIL":
 		d.Set("region", integration.CloudTrail.Region)
@@ -199,7 +201,7 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("external_id", integration.CloudTrail.BaseCredentials.ExternalID)
 		break
 	case "EC2":
-		d.Set("host_name_tags", integration.EC2.HostNameTags)
+		d.Set("hostname_tags", integration.EC2.HostNameTags)
 		d.Set("role_arn", integration.EC2.BaseCredentials.RoleARN)
 		d.Set("external_id", integration.EC2.BaseCredentials.ExternalID)
 		break
@@ -215,7 +217,7 @@ func encodeGcpIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 	case "GCP":
 		d.Set("project_id", integration.GCP.ProjectId)
 		d.Set("metric_filter_regex", integration.GCP.MetricFilterRegex)
-		d.Set("categories_to_fetch", integration.GCP.CategoriesToFetch)
+		d.Set("categories", integration.GCP.CategoriesToFetch)
 		break
 	case "GCPBILLING":
 		d.Set("project_id", integration.GCPBilling.ProjectId)

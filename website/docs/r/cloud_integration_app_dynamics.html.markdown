@@ -15,10 +15,10 @@ updated, and deleted.
 
 ```hcl
 resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
-  name 				= "Test Integration"
-  user_name 			= "example"
-  controller_name 	= "exampleController"
-  encrypted_password 	= "encryptedPassword"	
+  name 	             = "Test Integration"
+  user_name 	     = "example"
+  controller_name    = "exampleController"
+  encrypted_password = "encryptedPassword"	
 }
 ```
 

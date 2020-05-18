@@ -1,11 +1,24 @@
 ## 2.3.0 (Unreleased)
 
 BREAKING CHANGES:
+
 * resource/wavefront_alert: `threshold_conditions` renamed to `conditions` based on API naming.
+* resource/wavefront_user: `groups` aptly renamed to `permissions` to reflect the user/group/role permissions model
+* resource/wavefront_group: `permissions` no longer supported directly on groups
+
+FEATURES:
+
+* **New Resource:** `wavefront_role`
+
+BUG FIXES:
+
+* resource/wavefront_cloud_integration_tesla: Fixed issue where `force_new` changes caused new resource
+* resource/wavefront_cloud_integration_gcp: Fixed `categories` not being properly persisted to state
+* resource/wavefront_cloud_integration_ec2: Fixed `hostname_tags` not being properly persisted to state
 
 ENHANCEMENTS:
 
-* resource/wavefront_dashboard: `parameter_details` will no longer always show changes. 
+* resource/wavefront_dashboard: `parameter_details` will no longer always show changes
 * resource/wavefront_dashboard: `tags` set on a dashboard will update properly
 
 ## 2.2.0 (May 03, 2020)

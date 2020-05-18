@@ -5,7 +5,6 @@ import (
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"sort"
 	"testing"
 )
 
@@ -118,13 +117,6 @@ func testAccCheckWavefrontUserGroupDestroy(s *terraform.State) error {
 
 func testAccCheckWavefrontUserGroupAttributes(userGroup *wavefront.UserGroup, permissions []string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-		for _, v := range permissions {
-			sort.Strings(userGroup.Permissions)
-			if sort.SearchStrings(userGroup.Permissions, v) == len(userGroup.Permissions) {
-				return fmt.Errorf("permission not found or present on User Group. %s", v)
-			}
-		}
-
 		if !(userGroup.Name == "Basic User Group" || userGroup.Name == "Basic User Groups") {
 			return fmt.Errorf("unexpected User Group name encountered. %s", userGroup.Name)
 		}
@@ -143,10 +135,6 @@ func testAccCheckWavefrontUserGroup_basic() string {
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
   description = "Basic User Group for Unit Tests"
-  permissions = [
-    "alerts_management",
-	"events_management"
-  ]
 }
 `)
 }
@@ -156,10 +144,6 @@ func testAccCheckWavefrontUserGroup_changed() string {
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Groups"
   description = "Basic User Groups for Unit Tests"
-  permissions = [
-    "alerts_management",
-	"agent_management",
-  ]
 }
 `)
 }
