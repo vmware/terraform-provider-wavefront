@@ -15,11 +15,13 @@ BUG FIXES:
 * resource/wavefront_cloud_integration_tesla: Fixed issue where `force_new` changes caused new resource
 * resource/wavefront_cloud_integration_gcp: Fixed `categories` not being properly persisted to state
 * resource/wavefront_cloud_integration_ec2: Fixed `hostname_tags` not being properly persisted to state
+* resource/wavefront_dashboard: `parameter_details` will no longer always show changes
+* resource/wavefront_dashboard: `tags` set on a dashboard will update properly
 
 ENHANCEMENTS:
 
-* resource/wavefront_dashboard: `parameter_details` will no longer always show changes
-* resource/wavefront_dashboard: `tags` set on a dashboard will update properly
+* resource/wavefront_alert_target: new `target_id` computed value which prefixes `target:` onto the id for joining into wavefront alerts.
+* resource/wavefront_alert: added validation on `target` field
 
 ## 2.2.0 (May 03, 2020)
 

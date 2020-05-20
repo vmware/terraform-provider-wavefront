@@ -85,6 +85,10 @@ func resourceTarget() *schema.Resource {
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
+			"target_id": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 		},
 	}
 }
@@ -126,7 +130,7 @@ func resourceTargetCreate(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(*t.ID)
 
-	return nil
+	return resourceTargetRead(d, meta)
 }
 
 func resourceTargetRead(d *schema.ResourceData, meta interface{}) error {
@@ -157,6 +161,7 @@ func resourceTargetRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("content_type", tmpTarget.ContentType)
 	d.Set("is_html_content", tmpTarget.IsHtmlContent)
 	d.Set("custom_headers", tmpTarget.CustomHeaders)
+	d.Set("target_id", fmt.Sprintf("target:%s", *tmpTarget.ID))
 
 	resourceEncodeAlertRoutes(&tmpTarget.Routes, d)
 
@@ -210,7 +215,8 @@ func resourceTargetUpdate(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return fmt.Errorf("error Updating Target %s. %s", d.Get("name"), err)
 	}
-	return nil
+
+	return resourceTargetRead(d, meta)
 }
 
 func resourceTargetDelete(d *schema.ResourceData, meta interface{}) error {

@@ -49,6 +49,10 @@ routing key. `WEBHOOK`: URL endpoint.
 * `custom_headers` - (Optional) A `string->string` map specifying the custome HTTP header key/value pairs that will be 
 sent in the requests with a method of `WEBHOOK`.
 
+## Attributes Reference 
+
+* `target_id` - The target ID prefixed with `target:` for interpolating into a Wavefront Alert. 
+
 ### Route
 
 The `route` mapping supports the following:

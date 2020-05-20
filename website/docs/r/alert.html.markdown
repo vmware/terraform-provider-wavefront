@@ -37,7 +37,7 @@ The following arguments are supported:
 or `THRESHOLD`
 * `minutes` - (Required) The number of consecutive minutes that a series matching the condition query must 
 evaluate to "true" (non-zero value) before the alert fires.
-* `target` - (Optional) The email address or integration endpoint 
+* `target` - (Optional) A comma-separated list of the email address or integration endpoint 
 (such as PagerDuty or web hook) to notify when the alert status changes.
 * `condition` - (Optional) A Wavefront query that is evaluated at regular intervals (default 1m).
 The alert fires and notifications are triggered when data series matching this query evaluates 

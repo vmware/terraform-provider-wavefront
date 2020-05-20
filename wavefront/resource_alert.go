@@ -33,6 +33,7 @@ func resourceAlert() *schema.Resource {
 				Optional:         true,
 				StateFunc:        trimSpaces,
 				DiffSuppressFunc: suppressSpaces,
+				ValidateFunc:     validateAlertTarget,
 			},
 			"condition": {
 				Type:             schema.TypeString,
@@ -97,6 +98,26 @@ func resourceAlert() *schema.Resource {
 	}
 }
 
+func validateAlertTarget(val interface{}, key string) (warnings []string, errors []error) {
+	target := val.(string)
+	if target == "" {
+		return nil, nil
+	}
+
+	targets := strings.Split(target, ",")
+	for _, t := range targets {
+		if strings.HasPrefix(t, "pd:") || strings.HasPrefix(t, "target:") ||
+			strings.Contains(t, "@") {
+			continue
+		}
+		errors = append(errors,
+			fmt.Errorf("valid alert targets must be prefixed with pd:, target:, or be a valid email address"))
+
+		break
+	}
+
+	return warnings, errors
+}
 func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 	alerts := meta.(*wavefrontClient).client.Alerts()
 
