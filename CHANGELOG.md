@@ -1,4 +1,4 @@
-## 2.3.0 (Unreleased)
+## 2.3.0 (June 02, 2020)
 
 BREAKING CHANGES:
 
