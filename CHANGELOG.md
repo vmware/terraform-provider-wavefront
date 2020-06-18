@@ -1,4 +1,4 @@
-## 2.3.0 (Unreleased)
+## 2.3.1 (Unreleased)
 
 BREAKING CHANGES:
 
@@ -12,11 +12,13 @@ FEATURES:
 
 BUG FIXES:
 
+* resource/wavefront_cloud_integration_*: Fixed an issue where resource lookup would crash when no results were returned.
 * resource/wavefront_cloud_integration_tesla: Fixed issue where `force_new` changes caused new resource
 * resource/wavefront_cloud_integration_gcp: Fixed `categories` not being properly persisted to state
 * resource/wavefront_cloud_integration_ec2: Fixed `hostname_tags` not being properly persisted to state
 * resource/wavefront_dashboard: `parameter_details` will no longer always show changes
 * resource/wavefront_dashboard: `tags` set on a dashboard will update properly
+* provider/wavefront: Support for `http_proxy` in provider and support for environment variables `http_proxy` and `https_proxy`
 
 ENHANCEMENTS:
 

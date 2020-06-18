@@ -25,6 +25,10 @@ func Provider() *schema.Provider {
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("WAVEFRONT_TOKEN", ""),
 			},
+			"http_proxy": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"wavefront_alert":                                resourceAlert(),
@@ -56,8 +60,9 @@ func Provider() *schema.Provider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := &wavefront.Config{
-		Address: d.Get("address").(string),
-		Token:   d.Get("token").(string),
+		Address:   d.Get("address").(string),
+		Token:     d.Get("token").(string),
+		HttpProxy: d.Get("http_proxy").(string),
 	}
 	wFClient, err := wavefront.NewClient(config)
 	if err != nil {

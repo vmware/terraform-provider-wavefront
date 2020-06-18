@@ -83,3 +83,6 @@ leading `https://` or trailing `/` (e.g. `https://longboard.wavefront.com/` beco
 
 * `token` - (Optional) this is a either a Users token or Service Account token with permissions necessary 
 to manage your Wavefront account. 
+
+* `http_proxy` - (Optional) The proxy type is determined by the URL scheme.  "Http", "https", and "socks5" are supported.  
+If the scheme is empty "http" is assumed.
