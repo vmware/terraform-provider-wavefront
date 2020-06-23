@@ -438,7 +438,13 @@ func resourceCloudIntegrationRead(d *schema.ResourceData, meta interface{}) erro
 		}
 	}
 
-	integration := integrations[0]
+	var integration *wavefront.CloudIntegration
+	if len(integrations) <= 0 {
+		d.SetId("")
+		return nil
+	} else {
+		integration = integrations[0]
+	}
 	/*
 		You will notice we don't ever set the forceSave and that is because it is ALWAYS returned as false
 		We'll use it when we create/update because it is necessary, but we won't set the state on read from it

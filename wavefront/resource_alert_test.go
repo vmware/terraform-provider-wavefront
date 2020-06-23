@@ -10,6 +10,37 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
+func TestValidateAlertTarget(t *testing.T) {
+	email := "example@wavefront.com"
+	pdKey := "pd:not-a-real-pagerduty-key"
+	targetId := "target:efKj3H9aF"
+
+	w, e := validateAlertTarget(email, "target")
+	if len(w) != 0 || len(e) != 0 {
+		t.Fatal("expected no errors on email address validation")
+	}
+
+	w, e = validateAlertTarget(pdKey, "target")
+	if len(w) != 0 && len(e) != 0 {
+		t.Fatal("expected no errors on pager-duty key target validation")
+	}
+
+	w, e = validateAlertTarget(targetId, "target")
+	if len(w) != 0 && len(e) != 0 {
+		t.Fatal("expected no errors on alert target validation")
+	}
+
+	w, e = validateAlertTarget("totally,invalid,target", "target")
+	if len(e) == 0 {
+		t.Fatal("expected error on invalid alert targets")
+	}
+
+	w, e = validateAlertTarget(fmt.Sprintf("%s,%s,%s", email, pdKey, targetId), "target")
+	if len(w) != 0 && len(e) != 0 {
+		t.Fatal("expected no errors on multiple alert target validation")
+	}
+}
+
 func TestAccWavefrontAlert_Basic(t *testing.T) {
 	var record wavefront.Alert
 
@@ -325,7 +356,7 @@ func testAccCheckWavefrontAlertDestroy(s *terraform.State) error {
 func testAccCheckWavefrontAlertAttributes(alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
-		if alert.Target != "test@example.com" {
+		if alert.Target != "test@example.com" && alert.Target != "test@example.com,foo@example.com" {
 			return fmt.Errorf("bad value: %s", alert.Target)
 		}
 
@@ -515,7 +546,7 @@ func testAccCheckWavefrontAlert_multiple() string {
 	return fmt.Sprintf(`
 resource "wavefront_alert" "test_alert1" {
   name = "Terraform Test Alert 1"
-  target = "test@example.com"
+  target = "test@example.com,foo@example.com"
   condition = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
   additional_information = "This is a Terraform Test Alert"
   display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"

@@ -1,4 +1,16 @@
 ## 2.3.1 (Unreleased)
+
+BUG FIXES:
+
+* resource/wavefront_cloud_integration_*: Fixed an issue where resource lookup would crash when no results were returned.
+
+ENHANCEMENTS:
+
+* provider/wavefront: Support for `http_proxy` in provider and support for environment variables `http_proxy` and `https_proxy`
+* resource/wavefront_alert_target: new `target_id` computed value which prefixes `target:` onto the id for joining into wavefront alerts.
+* resource/wavefront_alert: added validation on `target` field
+
+
 ## 2.3.0 (June 02, 2020)
 
 BREAKING CHANGES:

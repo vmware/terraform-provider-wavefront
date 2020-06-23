@@ -46,6 +46,7 @@ func TestAccWavefrontTarget_BasicWebhook(t *testing.T) {
 						"wavefront_alert_target.test_target", "triggers.1", "ALERT_RESOLVED"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "custom_headers.%", "1"),
+					resource.TestCheckResourceAttrSet("wavefront_alert_target.test_target", "target_id"),
 				),
 			},
 		},
@@ -156,6 +157,45 @@ func TestAccWavefrontTarget_BasicPagerduty(t *testing.T) {
 						"wavefront_alert_target.test_target", "triggers.0", "ALERT_OPENED"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "triggers.1", "ALERT_RESOLVED"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccWavefrontTarget_AlertTargetId(t *testing.T) {
+	var record wavefront.Target
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckWavefrontTargetDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccCheckWavefrontTarget_alertTargetId(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
+					testAccCheckWavefrontTargetAttributes(&record),
+
+					// Check against state that the attributes are as we expect
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "name", "Terraform Test Target"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "description", "Test target"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "method", "PAGERDUTY"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "recipient", "12345678910111213141516171819202"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "template", "{}"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "triggers.#", "2"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "triggers.0", "ALERT_OPENED"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert_target.test_target", "triggers.1", "ALERT_RESOLVED"),
+					resource.TestCheckResourceAttrSet(
+						"wavefront_alert_target.test_target", "target_id"),
 				),
 			},
 		},
@@ -532,6 +572,37 @@ resource "wavefront_alert_target" "test_target" {
 		"ALERT_OPENED",
 		"ALERT_RESOLVED"
 	]
+}
+`)
+}
+
+func testAccCheckWavefrontTarget_alertTargetId() string {
+	return fmt.Sprintf(`
+resource "wavefront_alert_target" "test_target" {
+  name        = "Terraform Test Target"
+  description = "Test target"
+  method      = "PAGERDUTY"
+  recipient   = "12345678910111213141516171819202"
+  template    = "{}"
+  triggers    = [
+    "ALERT_OPENED",
+	"ALERT_RESOLVED"
+  ]
+}
+
+resource "wavefront_alert" "test_alert" {
+  name                   = "Terraform Test Alert"
+  target                 = wavefront_alert_target.test_target.target_id
+  condition              = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
+  additional_information = "This is a Terraform Test Alert"
+  display_expression     = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
+  minutes                = 5
+  resolve_after_minutes  = 5
+  severity               = "WARN"
+  tags = [
+    "terraform",
+    "test"
+  ]
 }
 `)
 }
