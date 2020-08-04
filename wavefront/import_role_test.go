@@ -1,4 +1,4 @@
-package wavefront_plugin
+package wavefront
 
 import (
 	"github.com/WavefrontHQ/go-wavefront-management-api"

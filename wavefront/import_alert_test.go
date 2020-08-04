@@ -1,4 +1,4 @@
-package wavefront_plugin
+package wavefront
 
 import (
 	"testing"
