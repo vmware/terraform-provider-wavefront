@@ -25,12 +25,15 @@ func resourceUser() *schema.Resource {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
+				Computed: true,
+				Set:      schema.HashString,
 			},
 			"user_groups": {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 				Computed: true,
+				Set:      schema.HashString,
 			},
 			"customer": {
 				Type:     schema.TypeString,
@@ -92,7 +95,8 @@ func resourceUserRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("email", user.ID)
 	d.Set("customer", user.Customer)
-	d.Set("permissions", user.Permissions)
+
+	encodePermissions(d, user)
 	encodeUserGroups(d, user)
 
 	return nil
@@ -206,16 +210,23 @@ func decodeUserGroups(d *schema.ResourceData, user interface{}) error {
 	return nil
 }
 
-// Encodes user groups from the User and assign them to the TF State
-func encodeUserGroups(d *schema.ResourceData, user *wavefront.User) {
-	var userGroups []string
-	if len(user.Groups.UserGroups) > 0 {
-		for _, g := range user.Groups.UserGroups {
-			userGroups = append(userGroups, *g.ID)
-		}
+func encodePermissions(d *schema.ResourceData, user *wavefront.User) {
+	perms := make([]interface{}, 0, len(user.Permissions))
+	for _, perm := range user.Permissions {
+		perms = append(perms, perm)
 	}
 
-	d.Set("user_groups", userGroups)
+	d.Set("permissions", schema.NewSet(schema.HashString, perms))
+}
+
+// Encodes user groups from the User and assign them to the TF State
+func encodeUserGroups(d *schema.ResourceData, user *wavefront.User) {
+	userGroups := make([]interface{}, 0, len(user.Groups.UserGroups))
+	for _, g := range user.Groups.UserGroups {
+		userGroups = append(userGroups, *g.ID)
+	}
+
+	d.Set("user_groups", schema.NewSet(schema.HashString, userGroups))
 }
 
 // Decodes the permissions (groups) from the state file and returns a []string of permissions
