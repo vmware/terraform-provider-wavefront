@@ -4,3 +4,4 @@ terraform-provider-wavefront*
 crash.log
 main.tf
 .idea/*
+dist/
