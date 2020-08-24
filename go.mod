@@ -1,4 +1,4 @@
-module github.com/terraform-providers/terraform-provider-wavefront
+module github.com/vmware/terraform-provider-wavefront
 
 require (
 	github.com/WavefrontHQ/go-wavefront-management-api v1.9.1
