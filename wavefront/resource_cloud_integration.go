@@ -414,7 +414,7 @@ func resourceCloudIntegrationUpdate(d *schema.ResourceData, meta interface{}) er
 	wfMutexKV.Unlock("cloud_integration_update")
 
 	if err != nil {
-		return fmt.Errorf("unable to update CloudIntegration with id %s", d.Id())
+		return fmt.Errorf("unable to update CloudIntegration with id %s. %s", d.Id(), err)
 	}
 
 	return resourceCloudIntegrationRead(d, meta)
