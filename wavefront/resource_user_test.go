@@ -2,11 +2,12 @@ package wavefront
 
 import (
 	"fmt"
+	"sort"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"sort"
-	"testing"
 )
 
 func TestAccWavefrontUser_BasicUser(t *testing.T) {
@@ -201,34 +202,34 @@ func testAccCheckWavefrontUserAttributes(user *wavefront.User, permissions []str
 }
 
 func testAccCheckWavefrontUser_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user" "basic" {
 	email       = "test+tftesting@example.com"
 	permissions = [
 		"agent_management",
 		"alerts_management",
 	]
-}`)
+}`
 }
 
 func testAccCheckWavefrontUser_changeGroups() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user" "basic" {
 	email       = "test+tftesting@example.com"
 	permissions = [
 		"agent_management",
 		"events_management",
 	]
-}`)
+}`
 }
 
 func testAccCheckWavefrontUser_changeEmail() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user" "basic" {
 	email       = "test+tftesting2@example.com"
 	permissions = [
 		"agent_management",
 		"alerts_management",
 	]
-}`)
+}`
 }

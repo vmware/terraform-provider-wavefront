@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccWavefrontCloudIntegrationTesla_Basic(t *testing.T) {
@@ -63,7 +63,7 @@ func TestAccWavefrontCloudIntegrationTesla_BasicChanged(t *testing.T) {
 }
 
 func testAccCheckWavefrontCloudIntegrationTesla_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_tesla" "tesla" {
   name              = "Test Integration"
   force_save        = true
@@ -74,11 +74,11 @@ resource "wavefront_cloud_integration_tesla" "tesla" {
   email    = "email@example.com"
   password = "password"
 }
-`)
+`
 }
 
 func testAccCheckWavefrontCloudIntegrationTesla_basicChanged() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_tesla" "tesla" {
   name              = "Test Integration"
   force_save        = true
@@ -89,5 +89,5 @@ resource "wavefront_cloud_integration_tesla" "tesla" {
   email    = "email@example.com"
   password = "password2"
 }
-`)
+`
 }

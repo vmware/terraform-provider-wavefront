@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccUserGroup_Basic(t *testing.T) {
@@ -32,10 +32,10 @@ func TestAccUserGroup_Basic(t *testing.T) {
 }
 
 func testAccCheckWavefrontUserGroupImporter_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
   description = "Basic User Group for Unit Tests"
 }
-`)
+`
 }

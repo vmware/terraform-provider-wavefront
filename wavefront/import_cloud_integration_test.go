@@ -1,9 +1,10 @@
 package wavefront
 
 import (
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccCloudIntegration_AppDynamics(t *testing.T) {

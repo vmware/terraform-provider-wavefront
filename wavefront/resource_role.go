@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"log"
 	"strings"
+
+	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func resourceRole() *schema.Resource {

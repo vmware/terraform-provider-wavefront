@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccWavefrontCloudIntegrationAzureActivityLog_Basic(t *testing.T) {
@@ -83,7 +83,7 @@ func TestAccWavefrontCloudIntegrationAzureActivityLog_BasicChange(t *testing.T) 
 }
 
 func testAccCheckWavefrontCloudIntegrationAzureActivityLog_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 	name 				= "Test Integration"
 	force_save 			= true
@@ -96,11 +96,11 @@ resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 	client_secret		= "client-secret"
 	tenant				= "my-tenant"
 }
-`)
+`
 }
 
 func testAccCheckWavefrontCloudIntegrationAzureActivityLog_basicChangeAdd() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 	name 			= "Test Integration"
 	force_save 		= true
@@ -114,5 +114,5 @@ resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 	client_secret	 = "client-secret2"
 	tenant			 = "my-tenant2"
 }
-`)
+`
 }

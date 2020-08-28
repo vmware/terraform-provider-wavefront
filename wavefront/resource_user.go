@@ -2,6 +2,7 @@ package wavefront
 
 import (
 	"fmt"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -50,7 +51,7 @@ func resourceUserCreate(d *schema.ResourceData, meta interface{}) error {
 
 	err := resourceDecodeUserPermissions(d, newUserRequest)
 	if err != nil {
-		return fmt.Errorf("error extracting permisisons from terraform state. %s", err)
+		return fmt.Errorf("error extracting permissions from terraform state. %s", err)
 	}
 
 	err = decodeUserGroups(d, newUserRequest)
@@ -192,13 +193,9 @@ func decodeUserGroups(d *schema.ResourceData, user interface{}) error {
 
 	switch v := (user).(type) {
 	case *wavefront.User:
-		u := user.(*wavefront.User)
-		u.Groups = wavefront.UserGroupsWrapper{UserGroups: wfUserGroups}
-		user = u
+		v.Groups = wavefront.UserGroupsWrapper{UserGroups: wfUserGroups}
 	case *wavefront.NewUserRequest:
-		u := user.(*wavefront.NewUserRequest)
-		u.Groups = wavefront.UserGroupsWrapper{UserGroups: wfUserGroups}
-		user = u
+		v.Groups = wavefront.UserGroupsWrapper{UserGroups: wfUserGroups}
 	default:
 		return fmt.Errorf("unknown type attempted to cast %T", v)
 	}

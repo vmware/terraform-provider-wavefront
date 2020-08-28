@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"strings"
 )
 
 func testAccCheckWavefrontCloudIntegrationDestroy(s *terraform.State) error {

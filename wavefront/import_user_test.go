@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccUser_Basic(t *testing.T) {
@@ -32,12 +32,12 @@ func TestAccUser_Basic(t *testing.T) {
 }
 
 func testAccCheckWavefrontUserImporter_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"
 	permissions = [
 		"agent_management",
 		"alerts_management",
 	]
-}`)
+}`
 }

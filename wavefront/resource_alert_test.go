@@ -2,8 +2,9 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
@@ -30,7 +31,7 @@ func TestValidateAlertTarget(t *testing.T) {
 		t.Fatal("expected no errors on alert target validation")
 	}
 
-	w, e = validateAlertTarget("totally,invalid,target", "target")
+	_, e = validateAlertTarget("totally,invalid,target", "target")
 	if len(e) == 0 {
 		t.Fatal("expected error on invalid alert targets")
 	}
@@ -439,7 +440,7 @@ func testAccCheckWavefrontAlertExists(n string, alert *wavefront.Alert) resource
 }
 
 func testAccCheckWavefrontAlert_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"
 	permissions = [
@@ -468,11 +469,11 @@ resource "wavefront_alert" "test_alert" {
     wavefront_user.basic.id,
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontAlert_RemoveAttributes() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert" "test_alert_required" {
   name = "Terraform Test Alert Required Attributes Only"
   target = "test@example.com"
@@ -486,11 +487,11 @@ resource "wavefront_alert" "test_alert_required" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontAlert_UpdatedRemoveAttributes() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert" "test_alert_required" {
   name = "Terraform Test Alert Required Attributes Only"
   target = "terraform@example.com"
@@ -503,11 +504,11 @@ resource "wavefront_alert" "test_alert_required" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontAlert_requiredAttributes() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert" "test_alert_required" {
   name = "Terraform Test Alert Required Attributes Only"
   target = "test@example.com"
@@ -520,11 +521,11 @@ resource "wavefront_alert" "test_alert_required" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontAlert_new_value() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert" "test_alert" {
   name = "Terraform Test Alert"
   target = "terraform@example.com"
@@ -539,11 +540,11 @@ resource "wavefront_alert" "test_alert" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontAlert_multiple() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert" "test_alert1" {
   name = "Terraform Test Alert 1"
   target = "test@example.com,foo@example.com"
@@ -584,11 +585,11 @@ resource "wavefront_alert" "test_alert3" {
     "terraform",
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontAlert_threshold() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
   description = "Test target"
@@ -626,5 +627,5 @@ resource "wavefront_alert" "test_threshold_alert" {
     "terraform"
   ]
 }
-`)
+`
 }

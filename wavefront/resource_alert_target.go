@@ -2,9 +2,10 @@ package wavefront
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"strings"
 )
 
 func resourceTarget() *schema.Resource {
@@ -143,10 +144,9 @@ func resourceTargetRead(d *schema.ResourceData, meta interface{}) error {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			d.SetId("")
-			return fmt.Errorf("error finding Wavefront Alert Target %s. %s", d.Id(), err)
 		}
+		d.SetId("")
+		return fmt.Errorf("error finding Wavefront Alert Target %s. %s", d.Id(), err)
 	}
 
 	// Use the Wavefront ID as the Terraform ID
@@ -249,10 +249,7 @@ func resourceDecodeAlertRoutes(d *schema.ResourceData) []wavefront.AlertRoute {
 	var routes *schema.Set
 	if d.HasChange("route") {
 		// get the old / new
-		o, n := d.GetChange("route")
-		if o == nil {
-			o = new(schema.Set)
-		}
+		_, n := d.GetChange("route")
 		if n == nil {
 			n = new(schema.Set)
 		}

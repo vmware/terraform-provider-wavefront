@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccDerivedMetric_Basic(t *testing.T) {
@@ -32,7 +32,7 @@ func TestAccDerivedMetric_Basic(t *testing.T) {
 }
 
 func testAccCheckWavefrontDerivedMetricImporter_Basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"
   minutes                = 5
@@ -44,5 +44,5 @@ resource "wavefront_derived_metric" "derived" {
     "withmytags"
   ]
 }
-`)
+`
 }

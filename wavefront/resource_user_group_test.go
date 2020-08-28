@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccWavefrontUserGroup_BasicUserGroup(t *testing.T) {
@@ -129,19 +130,19 @@ func testAccCheckWavefrontUserGroupAttributes(userGroup *wavefront.UserGroup) re
 }
 
 func testAccCheckWavefrontUserGroup_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
   description = "Basic User Group for Unit Tests"
 }
-`)
+`
 }
 
 func testAccCheckWavefrontUserGroup_changed() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Groups"
   description = "Basic User Groups for Unit Tests"
 }
-`)
+`
 }

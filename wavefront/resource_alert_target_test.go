@@ -414,7 +414,7 @@ func testAccCheckWavefrontTargetExists(n string, target *wavefront.Target) resou
 }
 
 func testAccCheckWavefrontTarget_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
 	description = "Test target"
@@ -430,11 +430,11 @@ resource "wavefront_alert_target" "test_target" {
 		"ALERT_RESOLVED"
 	]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontTarget_new_value() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Updated"
 	description = "Test target"
@@ -450,11 +450,11 @@ resource "wavefront_alert_target" "test_target" {
 		"ALERT_RESOLVED"
 	]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontTarget_routes() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
 	name 		   = "Terraform Test Target"
 	description    = "Test target"
@@ -477,11 +477,11 @@ resource "wavefront_alert_target" "test_target" {
       		value = "prod.*"
 		}
   	}
-}`)
+}`
 }
 
 func testAccCheckWavefrontTarget_addRoutes() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
 	name 		   = "Terraform Test Target"
 	description    = "Test target"
@@ -512,11 +512,11 @@ resource "wavefront_alert_target" "test_target" {
       		value = "dev.*"
 		}
   	}
-}`)
+}`
 }
 
 func testAccCheckWavefrontTarget_changeRoutes() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
 	name 		   = "Terraform Test Target"
 	description    = "Test target"
@@ -539,11 +539,11 @@ resource "wavefront_alert_target" "test_target" {
       		value = "prod2.*"
 		}
   	}
-}`)
+}`
 }
 
 func testAccCheckWavefrontTarget_email() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
   description = "Test target"
@@ -557,11 +557,11 @@ resource "wavefront_alert_target" "test_target" {
     "ALERT_RESOLVED"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontTarget_pagerduty() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
 	description = "Test target"
@@ -573,11 +573,11 @@ resource "wavefront_alert_target" "test_target" {
 		"ALERT_RESOLVED"
 	]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontTarget_alertTargetId() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
   name        = "Terraform Test Target"
   description = "Test target"
@@ -604,5 +604,5 @@ resource "wavefront_alert" "test_alert" {
     "test"
   ]
 }
-`)
+`
 }

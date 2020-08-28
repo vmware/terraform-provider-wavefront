@@ -3,8 +3,6 @@ package wavefront
 import (
 	"testing"
 
-	"fmt"
-
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
@@ -34,7 +32,7 @@ func TestAccDashboard_Basic(t *testing.T) {
 }
 
 func testAccCheckWavefrontDashboardImporter_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "foobar" {
   name        = "Terraform Test Dashboard"
   description = "a"
@@ -104,5 +102,5 @@ resource "wavefront_dashboard" "foobar" {
     "flamingo",
   ]
 }
-`)
+`
 }

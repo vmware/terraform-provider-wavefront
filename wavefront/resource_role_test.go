@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccWavefrontRole_BasicRole(t *testing.T) {
@@ -63,15 +64,15 @@ func TestAccWavefrontRole_AdvancedRole(t *testing.T) {
 }
 
 func testAccCheckWavefrontRole_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_role" "role" {
   name = "Test Role"
 }
-`)
+`
 }
 
 func testAccCheckWavefrontRole_advanced() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user_group" "user_group" {
   name        = "User Group"
   description = "User Group Description"
@@ -88,11 +89,11 @@ resource "wavefront_role" "role" {
   ]
   assignees = [wavefront_user_group.user_group.id, ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontRole_advancedChanged() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user_group" "user_group" {
   name        = "User Group"
   description = "User Group Description"
@@ -107,7 +108,7 @@ resource "wavefront_role" "role" {
     "alerts_management",
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontRoleExists(resourceName string, role *wavefront.Role) resource.TestCheckFunc {

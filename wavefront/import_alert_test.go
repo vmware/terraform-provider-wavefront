@@ -3,7 +3,6 @@ package wavefront
 import (
 	"testing"
 
-	"fmt"
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
@@ -57,7 +56,7 @@ func TestAccAlert_Threshold(t *testing.T) {
 }
 
 func testAccCheckWavefrontAlertImporter_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert" "foobar" {
   name = "Terraform Test Alert"
   target = "test@example.com"
@@ -71,11 +70,11 @@ resource "wavefront_alert" "foobar" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontAlertImporter_threshold() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target Import"
   description = "Test target"
@@ -113,5 +112,5 @@ resource "wavefront_alert" "test_threshold_alert" {
     "terraform"
   ]
 }
-`)
+`
 }

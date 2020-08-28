@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccWavefrontCloudIntegrationCloudTrail_Basic(t *testing.T) {
@@ -114,7 +115,7 @@ func testAccCheckWavefrontCloudIntegrationVerifyExtId(resourcePrefix, n string) 
 }
 
 func testAccCheckWavefrontCloudIntegrationCloudTrail_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" { 
 }
 
@@ -129,11 +130,11 @@ resource "wavefront_cloud_integration_cloudtrail" "cloudtrail" {
   external_id = wavefront_cloud_integration_aws_external_id.ext_id.id
   region      = "us-west-2"
   bucket_name = "example-s3-bucket"
-}`)
+}`
 }
 
 func testAccCheckWavefrontCloudIntegrationCloudTrail_basicChanged() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }
 
@@ -150,5 +151,5 @@ resource "wavefront_cloud_integration_cloudtrail" "cloudtrail" {
   role_arn    = "arn:aws::1234567:role/example-arn"
   external_id = wavefront_cloud_integration_aws_external_id.ext_id.id
 }
-`)
+`
 }

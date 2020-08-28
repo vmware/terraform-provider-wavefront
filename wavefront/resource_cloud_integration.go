@@ -2,9 +2,10 @@ package wavefront
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"strings"
 )
 
 type DecodeCloudIntegration func(*schema.ResourceData, *wavefront.CloudIntegration) error
@@ -25,7 +26,6 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 			InstanceSelectionTags: decodeTypeMapToStringMap(d, "instance_selection_tags"),
 			PointTagFilterRegex:   d.Get("point_tag_filter_regex").(string),
 		}
-		break
 	case "CLOUDTRAIL":
 		integration.CloudTrail = &wavefront.CloudTrailConfiguration{
 			Region:          d.Get("region").(string),
@@ -34,7 +34,6 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 			BucketName:      d.Get("bucket_name").(string),
 			FilterRule:      d.Get("filter_rule").(string),
 		}
-		break
 	case "EC2":
 		var hostNameTags []string
 		if encodedHostNameTags, ok := d.GetOk("hostname_tags"); ok {
@@ -46,7 +45,6 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 			BaseCredentials: baseCredentials,
 			HostNameTags:    hostNameTags,
 		}
-		break
 	default:
 		return fmt.Errorf("invalid service, expected one of CLOUDWATCH, CLOUDTRAIL, or EC2. got %s", integration.Service)
 	}
@@ -71,14 +69,12 @@ func decodeGcpIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 			GcpJSONKey:        jsonKey,
 			CategoriesToFetch: categories,
 		}
-		break
 	case "GCPBILLING":
 		integration.GCPBilling = &wavefront.GCPBillingConfiguration{
 			ProjectId:  projectId,
 			GcpApiKey:  d.Get("api_key").(string),
 			GcpJSONKey: jsonKey,
 		}
-		break
 	default:
 		return fmt.Errorf("invalid service, expected one of GCP or GCPBILLING. got %s", integration.Service)
 	}
@@ -165,13 +161,11 @@ func decodeAzureIntegration(d *schema.ResourceData, integration *wavefront.Cloud
 			CategoryFilter:      categoryFilter,
 			ResourceGroupFilter: resourceGroupFilter,
 		}
-		break
 	case "AZUREACTIVITYLOG":
 		integration.AzureActivityLog = &wavefront.AzureActivityLogConfiguration{
 			BaseCredentials: azureBaseCredentials,
 			CategoryFilter:  categoryFilter,
 		}
-		break
 	default:
 		return fmt.Errorf("invalid service, expected one of AZURE or AZUREACTIVITYLOG. got %s",
 			integration.Service)
@@ -191,7 +185,6 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("role_arn", integration.CloudWatch.BaseCredentials.RoleARN)
 		d.Set("external_id", integration.CloudWatch.BaseCredentials.ExternalID)
 		d.Set("point_tag_filter_regex", integration.CloudWatch.PointTagFilterRegex)
-		break
 	case "CLOUDTRAIL":
 		d.Set("region", integration.CloudTrail.Region)
 		d.Set("prefix", integration.CloudTrail.Prefix)
@@ -199,12 +192,10 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("filter_rule", integration.CloudTrail.FilterRule)
 		d.Set("role_arn", integration.CloudTrail.BaseCredentials.RoleARN)
 		d.Set("external_id", integration.CloudTrail.BaseCredentials.ExternalID)
-		break
 	case "EC2":
 		d.Set("hostname_tags", integration.EC2.HostNameTags)
 		d.Set("role_arn", integration.EC2.BaseCredentials.RoleARN)
 		d.Set("external_id", integration.EC2.BaseCredentials.ExternalID)
-		break
 	default:
 		return fmt.Errorf("invalid service, expected one of CLOUDWATCH, CLOUDTRAIL, or EC2. got %s", integration.Service)
 	}
@@ -218,10 +209,8 @@ func encodeGcpIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("project_id", integration.GCP.ProjectId)
 		d.Set("metric_filter_regex", integration.GCP.MetricFilterRegex)
 		d.Set("categories", integration.GCP.CategoriesToFetch)
-		break
 	case "GCPBILLING":
 		d.Set("project_id", integration.GCPBilling.ProjectId)
-		break
 	default:
 		return fmt.Errorf("invalid service, expected one of GCP or GCPBILLING. got %s", integration.Service)
 	}
@@ -276,12 +265,10 @@ func encodeAzureCloudIntegration(d *schema.ResourceData, integration *wavefront.
 		d.Set("resource_group_filter", integration.Azure.ResourceGroupFilter)
 		d.Set("tenant", integration.Azure.BaseCredentials.Tenant)
 		d.Set("client_id", integration.Azure.BaseCredentials.ClientID)
-		break
 	case "AZUREACTIVITYLOG":
 		d.Set("category_filter", integration.AzureActivityLog.CategoryFilter)
 		d.Set("tenant", integration.AzureActivityLog.BaseCredentials.Tenant)
 		d.Set("client_id", integration.AzureActivityLog.BaseCredentials.ClientID)
-		break
 	default:
 		return fmt.Errorf("invalid service, expected one of AZURE or AZUREACTIVITYLOG. got %s",
 			integration.Service)
@@ -386,9 +373,8 @@ func resourceCloudIntegrationUpdate(d *schema.ResourceData, meta interface{}) er
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("unable to find CloudIntegration with ID %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("unable to find CloudIntegration with ID %s. %s", d.Id(), err)
 	}
 
 	integration := integrations[0]
@@ -433,18 +419,15 @@ func resourceCloudIntegrationRead(d *schema.ResourceData, meta interface{}) erro
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("unable to find CloudIntegration with ID %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("unable to find CloudIntegration with ID %s. %s", d.Id(), err)
 	}
 
-	var integration *wavefront.CloudIntegration
 	if len(integrations) <= 0 {
 		d.SetId("")
 		return nil
-	} else {
-		integration = integrations[0]
 	}
+	integration := integrations[0]
 	/*
 		You will notice we don't ever set the forceSave and that is because it is ALWAYS returned as false
 		We'll use it when we create/update because it is necessary, but we won't set the state on read from it
@@ -471,9 +454,8 @@ func resourceCloudIntegrationDelete(d *schema.ResourceData, meta interface{}) er
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("unable to find CloudIntegration with ID %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("unable to find CloudIntegration with ID %s. %s", d.Id(), err)
 	}
 
 	integration := integrations[0]
