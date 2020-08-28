@@ -1,4 +1,15 @@
-## 2.4.0 (Unreleased)
+## 2.4.0 (August 28, 2020)
+
+BUG FIXES:
+
+* Provide more descriptive error messages.
+
+BREAKING CHANGES:
+
+* package wavefront_plugin renamed to wavefront to ensure consistency between the package folder structure and the package name.
+* Rename terraform-providers to vmware due to repo move.
+
+
 ## 2.3.1 (July 02, 2020)
 
 BUG FIXES:
