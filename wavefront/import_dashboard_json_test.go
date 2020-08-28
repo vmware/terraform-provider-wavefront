@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccDashboardJson_Basic(t *testing.T) {
@@ -33,7 +33,7 @@ func TestAccDashboardJson_Basic(t *testing.T) {
 }
 
 func testAccCheckWavefrontDashboardJsonImporter_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard_json" "json_foobar" {
 	dashboard_json = <<EOF
 {
@@ -126,5 +126,5 @@ resource "wavefront_dashboard_json" "json_foobar" {
 }
 EOF
 }
-`)
+`
 }

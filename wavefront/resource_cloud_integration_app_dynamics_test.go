@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccWavefrontCloudIntegrationAppDynamics_Basic(t *testing.T) {
@@ -86,7 +86,7 @@ func TestAccWavefrontCloudIntegrationAppDynamics_BasicChange(t *testing.T) {
 }
 
 func testAccCheckWavefrontCloudIntegrationAppDynamics_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
 	name 				= "Test Integration"
 	force_save 			= true
@@ -98,11 +98,11 @@ resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
 	controller_name 	= "exampleController"
 	encrypted_password 	= "encryptedPassword"	
 }
-`)
+`
 }
 
 func testAccCheckWavefrontCloudIntegrationAppDynamics_basicChanges() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
   name       = "Test Integration"
   force_save = true
@@ -122,5 +122,5 @@ resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
   enable_app_infra_metrics        = true
   enable_service_endpoint_metrics = true
 }
-`)
+`
 }

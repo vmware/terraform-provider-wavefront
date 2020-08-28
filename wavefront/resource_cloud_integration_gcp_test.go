@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"strings"
 	"testing"
+
+	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
 func TestAccWavefrontCloudIntegrationGcp_Basic(t *testing.T) {

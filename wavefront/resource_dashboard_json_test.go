@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccWavefrontDashboardJson_Basic(t *testing.T) {
@@ -158,7 +159,7 @@ func testAccCheckWavefrontDashboardJsonExists(n string, dashboard *wavefront.Das
 }
 
 func testAccCheckWavefrontDashboardJson_basic() string {
-	return fmt.Sprintf(`
+	return `
 data "wavefront_default_user_group" "everyone" { 
 }
 
@@ -268,11 +269,11 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
 }
 EOF
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboardJson_new_value() string {
-	return fmt.Sprintf(`
+	return `
 data "wavefront_default_user_group" "everyone" { 
 }
 
@@ -376,11 +377,11 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
 }
 EOF
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboardJson_multiple() string {
-	return fmt.Sprintf(`
+	return `
 data "wavefront_default_user_group" "everyone" { 
 }
 
@@ -456,5 +457,5 @@ resource "wavefront_dashboard_json" "test_dashboard_3" {
 }
 EOF
 }
-`)
+`
 }

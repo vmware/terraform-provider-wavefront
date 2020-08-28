@@ -2,8 +2,9 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"strings"
+
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func resourceCloudIntegrationAwsExternalId() *schema.Resource {
@@ -38,9 +39,8 @@ func resourceCloudIntegrationAwsExternalIdRead(d *schema.ResourceData, meta inte
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("unable to find AWS External ID %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("unable to find AWS External ID %s. %s", d.Id(), err)
 	}
 	d.SetId(extId)
 

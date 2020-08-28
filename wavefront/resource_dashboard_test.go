@@ -160,7 +160,7 @@ func TestBuildChartSettings(t *testing.T) {
 	result := buildChartSettings(&settings)
 
 	if result == nil {
-		t.Errorf("expected chart settings for %v", settings)
+		t.Fatalf("expected chart settings for %v", settings)
 	}
 
 	if result.Type != settings0["type"] {
@@ -987,7 +987,7 @@ func testAccCheckWavefrontDashboardExists(n string, dashboard *wavefront.Dashboa
 }
 
 func testAccCheckWavefrontDashboard_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"
 	permissions = [
@@ -1041,11 +1041,11 @@ resource "wavefront_dashboard" "test_dashboard" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_new_value() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "test_dashboard" {
   name = "Terraform Test Dashboard Updated"
   description = "testing, testing"
@@ -1087,11 +1087,11 @@ resource "wavefront_dashboard" "test_dashboard" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_multiple() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "test_dashboarda" {
   name = "Terraform Test Dashboard Multi A"
   description = "testing, testing"
@@ -1203,11 +1203,11 @@ resource "wavefront_dashboard" "test_dashboardc" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_ListParam() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "list_param_dash" {
   name = "Terraform Test Dashboard Updated"
   description = "testing, testing"
@@ -1277,11 +1277,11 @@ resource "wavefront_dashboard" "list_param_dash" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_DynamicSourceParam() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Param"
   description = "testing, testing"
@@ -1321,11 +1321,11 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_DynamicSourceTagParam() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
   description = "testing, testing"
@@ -1365,11 +1365,11 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_DynamicMetricNameParam() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
   description = "testing, testing"
@@ -1409,11 +1409,11 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_DynamicTagKeyParam() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
   description = "testing, testing"
@@ -1454,11 +1454,11 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_DynamicMatchingSourceTagParam() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
   description = "testing, testing"
@@ -1498,11 +1498,11 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
     "test"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDashboard_Linear_ChartSettings() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"
   description = "testing, testing"
@@ -1564,10 +1564,10 @@ resource "wavefront_dashboard" "chart_settings_dash" {
     "test"
   ]
 }
-`)
+`
 }
 func testAccCheckWavefrontDashboard_Table_ChartSettings() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"
   description = "testing, testing"
@@ -1635,10 +1635,10 @@ resource "wavefront_dashboard" "chart_settings_dash" {
     "test"
   ]
 }
-`)
+`
 }
 func testAccCheckWavefrontDashboard_Sparkline_ChartSettings() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"
   description = "testing, testing"
@@ -1715,10 +1715,10 @@ resource "wavefront_dashboard" "chart_settings_dash" {
     "test"
   ]
 }
-`)
+`
 }
 func testAccCheckWavefrontDashboard_Markdown_ChartSettings() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"
   description = "testing, testing"
@@ -1784,5 +1784,5 @@ resource "wavefront_dashboard" "chart_settings_dash" {
     "test"
   ]
 }
-`)
+`
 }

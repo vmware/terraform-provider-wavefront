@@ -2,23 +2,17 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"strings"
+
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func suppressCase(k, old, new string, d *schema.ResourceData) bool {
-	if strings.ToLower(old) == strings.ToLower(new) {
-		return true
-	}
-	return false
+	return strings.EqualFold(old, new)
 }
 
 func suppressSpaces(k, old, new string, d *schema.ResourceData) bool {
-	if strings.TrimSpace(old) == strings.TrimSpace(new) {
-		return true
-	}
-	return false
+	return strings.TrimSpace(old) == strings.TrimSpace(new)
 }
 
 func trimSpaces(d interface{}) string {
@@ -79,20 +73,4 @@ func decodeTypeMapToStringMap(d *schema.ResourceData, field string) map[string]s
 		}
 	}
 	return decoded
-}
-
-// Given a GroupID will check if this group is the Everyone group
-func isEveryoneGroup(id string, m interface{}) (bool, error) {
-	client := m.(*wavefrontClient).client.UserGroups()
-	ug := &wavefront.UserGroup{ID: &id}
-	err := client.Get(ug)
-	if err != nil {
-		return false, fmt.Errorf("id provided does not match any user groups. %s", id)
-	}
-
-	if ug.Name != "Everyone" {
-		return false, nil
-	}
-
-	return true, nil
 }

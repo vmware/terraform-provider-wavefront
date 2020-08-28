@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"strings"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
 func TestAccWavefrontCloudIntegrationAwsExternalId_Basic(t *testing.T) {
@@ -62,8 +63,8 @@ func testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(s *terraform.Stat
 }
 
 func testAccCheckWavefrontCloudIntegrationAwsExternalId_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_aws_external_id" "external_id" {
 }
-`)
+`
 }

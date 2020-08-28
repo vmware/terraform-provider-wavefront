@@ -2,9 +2,9 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/mutexkv"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/mutexkv"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 

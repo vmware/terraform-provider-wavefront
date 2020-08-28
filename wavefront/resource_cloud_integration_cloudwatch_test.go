@@ -1,11 +1,11 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccWavefrontCloudIntegrationCloudWatch_Basic(t *testing.T) {
@@ -106,7 +106,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_BasicChanged(t *testing.T) {
 }
 
 func testAccCheckWavefrontCloudIntegrationCloudWatch_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" { 
 }
 
@@ -129,11 +129,11 @@ resource "wavefront_cloud_integration_cloudwatch" "cloudwatch" {
   }
   point_tag_filter_regex = "^prod$"
   metric_filter_regex    = "^.*?\\.cpu.*$"
-}`)
+}`
 }
 
 func testAccCheckWavefrontCloudIntegrationCloudWatch_basicChanged() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }
 
@@ -156,5 +156,5 @@ resource "wavefront_cloud_integration_cloudwatch" "cloudwatch" {
   }
   point_tag_filter_regex = "^dev"
   metric_filter_regex    = "^.*?\\.cpu.*$"
-}`)
+}`
 }

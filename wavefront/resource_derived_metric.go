@@ -2,9 +2,10 @@ package wavefront
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"strings"
 )
 
 func resourceDerivedMetric() *schema.Resource {

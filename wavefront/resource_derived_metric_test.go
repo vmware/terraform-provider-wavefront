@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccWavefrontDerivedMetric_Basic(t *testing.T) {
@@ -186,7 +187,7 @@ func testAccCheckWavefrontDerivedMetricDestroy(s *terraform.State) error {
 }
 
 func testAccCheckWavefrontDerivedMetric_Basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"
   minutes                = 5
@@ -198,11 +199,11 @@ resource "wavefront_derived_metric" "derived" {
     "withmytags"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDerivedMetric_Updated() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"
   minutes                = 10
@@ -214,11 +215,11 @@ resource "wavefront_derived_metric" "derived" {
     "withmytags"
   ]
 }
-`)
+`
 }
 
 func testAccCheckWavefrontDerivedMetric_Multiple() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"
   minutes                = 5
@@ -242,5 +243,5 @@ resource "wavefront_derived_metric" "derived2" {
     "withmytags"
   ]
 }
-`)
+`
 }

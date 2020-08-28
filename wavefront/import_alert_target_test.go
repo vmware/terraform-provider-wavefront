@@ -3,8 +3,6 @@ package wavefront
 import (
 	"testing"
 
-	"fmt"
-
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
@@ -36,7 +34,7 @@ func TestAccTarget_Basic(t *testing.T) {
 }
 
 func testAccCheckWavefrontTargetImporter_basic() string {
-	return fmt.Sprintf(`
+	return `
 	resource "wavefront_alert_target" "foobar" {
 	  name = "Terraform Test Target"
 		description = "Test target"
@@ -52,5 +50,5 @@ func testAccCheckWavefrontTargetImporter_basic() string {
 			"ALERT_RESOLVED"
 		]
 	}
-	`)
+	`
 }

@@ -1,10 +1,10 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"testing"
 )
 
 func TestAccWavefrontCloudIntegrationNewRelic_Basic(t *testing.T) {
@@ -79,7 +79,7 @@ func TestAccWavefrontCloudIntegrationNewRelic_BasicChanged(t *testing.T) {
 }
 
 func testAccCheckWavefrontCloudIntegrationNewRelic_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_newrelic" "newrelic" {
   name              = "Test Integration"
   force_save        = true
@@ -99,11 +99,11 @@ resource "wavefront_cloud_integration_newrelic" "newrelic" {
     metric_filter_regex = "^mem.*?"
   }
 }
-`)
+`
 }
 
 func testAccCheckWavefrontCloudIntegrationNewRelic_basicChanged() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_newrelic" "newrelic" {
   name              = "Test Integration"
   force_save        = true
@@ -119,5 +119,5 @@ resource "wavefront_cloud_integration_newrelic" "newrelic" {
     metric_filter_regex = "^mem.*?"
   }
 }
-`)
+`
 }

@@ -3,9 +3,10 @@ package wavefront
 import (
 	"testing"
 
+	"os"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"os"
 )
 
 var testAccProviders map[string]terraform.ResourceProvider

@@ -2,10 +2,11 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"log"
 	"strings"
+
+	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func resourceDashboardJson() *schema.Resource {
@@ -55,7 +56,7 @@ func resourceDashboardJsonRead(d *schema.ResourceData, meta interface{}) error {
 			return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 		}
 	}
-	bytes, err := dash.MarshalJSON()
+	bytes, _ := dash.MarshalJSON()
 	// Use the Wavefront url as the Terraform ID
 	d.SetId(dash.ID)
 	err = d.Set("dashboard_json", NormalizeDashboardJson(string(bytes)))

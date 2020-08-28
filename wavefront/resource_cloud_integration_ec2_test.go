@@ -1,11 +1,11 @@
 package wavefront
 
 import (
-	"fmt"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccWavefrontCloudIntegrationEc2_Basic(t *testing.T) {
@@ -93,7 +93,7 @@ func TestAccWavefrontCloudIntegrationEc2_BasicChanged(t *testing.T) {
 }
 
 func testAccCheckWavefrontCloudIntegrationEc2_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" { 
 }
 
@@ -107,11 +107,11 @@ resource "wavefront_cloud_integration_ec2" "ec2" {
   role_arn    = "arn:aws::1234567:role/example-arn"
   external_id = wavefront_cloud_integration_aws_external_id.ext_id.id
   hostname_tags  = ["host", "source"]
-}`)
+}`
 }
 
 func testAccCheckWavefrontCloudIntegrationEc2_basicChanged() string {
-	return fmt.Sprintf(`
+	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }
 
@@ -125,5 +125,5 @@ resource "wavefront_cloud_integration_ec2" "ec2" {
   role_arn    = "arn:aws::1234567:role/example-arn"
   external_id = wavefront_cloud_integration_aws_external_id.ext_id.id
   hostname_tags  = ["host", "source", "name"]
-}`)
+}`
 }
