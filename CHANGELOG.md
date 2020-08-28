@@ -4,7 +4,7 @@ BUG FIXES:
 
 * Provide more descriptive error messages.
 
-BREAKING CHANGES:
+ENHANCEMENTS:
 
 * package wavefront_plugin renamed to wavefront to ensure consistency between the package folder structure and the package name.
 * Rename terraform-providers to vmware due to repo move.
