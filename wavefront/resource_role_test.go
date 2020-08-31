@@ -18,7 +18,7 @@ func TestAccWavefrontRole_BasicRole(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontRoleDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontRole_basic(),
+				Config: testAccCheckWavefrontRoleBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontRoleExists(resourceName, &record),
 					testAccCheckWavefrontRoleAttributes(&record),
@@ -38,7 +38,7 @@ func TestAccWavefrontRole_AdvancedRole(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontRoleDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontRole_advanced(),
+				Config: testAccCheckWavefrontRoleAdvanced(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontRoleExists(resourceName, &record),
 					testAccCheckWavefrontRoleAttributes(&record),
@@ -49,7 +49,7 @@ func TestAccWavefrontRole_AdvancedRole(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontRole_advancedChanged(),
+				Config: testAccCheckWavefrontRoleAdvancedChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontRoleExists(resourceName, &record),
 					testAccCheckWavefrontRoleAttributes(&record),
@@ -63,7 +63,7 @@ func TestAccWavefrontRole_AdvancedRole(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontRole_basic() string {
+func testAccCheckWavefrontRoleBasic() string {
 	return `
 resource "wavefront_role" "role" {
   name = "Test Role"
@@ -71,7 +71,7 @@ resource "wavefront_role" "role" {
 `
 }
 
-func testAccCheckWavefrontRole_advanced() string {
+func testAccCheckWavefrontRoleAdvanced() string {
 	return `
 resource "wavefront_user_group" "user_group" {
   name        = "User Group"
@@ -92,7 +92,7 @@ resource "wavefront_role" "role" {
 `
 }
 
-func testAccCheckWavefrontRole_advancedChanged() string {
+func testAccCheckWavefrontRoleAdvancedChanged() string {
 	return `
 resource "wavefront_user_group" "user_group" {
   name        = "User Group"

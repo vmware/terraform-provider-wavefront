@@ -73,8 +73,8 @@ func resourceDerivedMetricCreate(d *schema.ResourceData, meta interface{}) error
 func resourceDerivedMetricUpdate(d *schema.ResourceData, meta interface{}) error {
 	derivedMetrics := meta.(*wavefrontClient).client.DerivedMetrics()
 
-	derivedMetricId := d.Id()
-	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricId}
+	derivedMetricID := d.Id()
+	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricID}
 	err := derivedMetrics.Get(tmpDM)
 
 	if err != nil {
@@ -96,7 +96,7 @@ func resourceDerivedMetricUpdate(d *schema.ResourceData, meta interface{}) error
 
 	err = derivedMetrics.Update(dm)
 	if err != nil {
-		return fmt.Errorf("unable to update Wavefront Derived Metric %s, %s", derivedMetricId, err)
+		return fmt.Errorf("unable to update Wavefront Derived Metric %s, %s", derivedMetricID, err)
 	}
 
 	return resourceDerivedMetricRead(d, meta)
@@ -105,17 +105,16 @@ func resourceDerivedMetricUpdate(d *schema.ResourceData, meta interface{}) error
 func resourceDerivedMetricRead(d *schema.ResourceData, meta interface{}) error {
 	derivedMetrics := meta.(*wavefrontClient).client.DerivedMetrics()
 
-	derivedMetricId := d.Id()
-	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricId}
+	derivedMetricID := d.Id()
+	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricID}
 	err := derivedMetrics.Get(tmpDM)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("unable to find Wavefront Derived Metric %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("unable to find Wavefront Derived Metric %s. %s", d.Id(), err)
 	}
 
 	d.SetId(*tmpDM.ID)
@@ -131,17 +130,16 @@ func resourceDerivedMetricRead(d *schema.ResourceData, meta interface{}) error {
 func resourceDerivedMetricDelete(d *schema.ResourceData, meta interface{}) error {
 	derivedMetrics := meta.(*wavefrontClient).client.DerivedMetrics()
 
-	derivedMetricId := d.Id()
-	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricId}
+	derivedMetricID := d.Id()
+	tmpDM := &wavefront.DerivedMetric{ID: &derivedMetricID}
 	err := derivedMetrics.Get(tmpDM)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("unable to find Wavefront Derived Metric %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("unable to find Wavefront Derived Metric %s. %s", d.Id(), err)
 	}
 
 	err = derivedMetrics.Delete(tmpDM, true)

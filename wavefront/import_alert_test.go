@@ -17,7 +17,7 @@ func TestAccAlert_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlertImporter_basic(),
+				Config: testAccCheckWavefrontAlertImporterBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.foobar", &record),
 				),
@@ -41,7 +41,7 @@ func TestAccAlert_Threshold(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlertImporter_threshold(),
+				Config: testAccCheckWavefrontAlertImporterThreshold(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_threshold_alert", &record),
 				),
@@ -55,7 +55,7 @@ func TestAccAlert_Threshold(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontAlertImporter_basic() string {
+func testAccCheckWavefrontAlertImporterBasic() string {
 	return `
 resource "wavefront_alert" "foobar" {
   name = "Terraform Test Alert"
@@ -73,7 +73,7 @@ resource "wavefront_alert" "foobar" {
 `
 }
 
-func testAccCheckWavefrontAlertImporter_threshold() string {
+func testAccCheckWavefrontAlertImporterThreshold() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target Import"

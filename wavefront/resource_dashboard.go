@@ -1052,9 +1052,8 @@ func resourceDashboardRead(d *schema.ResourceData, meta interface{}) error {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 	}
 
 	// Use the Wavefront url as the Terraform ID

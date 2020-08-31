@@ -19,7 +19,7 @@ func TestAccWavefrontCloudIntegrationEc2_Basic(t *testing.T) {
 			if err != nil {
 				return err
 			}
-			err = testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(state)
+			err = testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy(state)
 			if err != nil {
 				return err
 			}
@@ -27,14 +27,14 @@ func TestAccWavefrontCloudIntegrationEc2_Basic(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationEc2_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationEc2Basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfEc2),
 					// Check against state that the attributes are as we expect
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfEc2),
 					resource.TestCheckResourceAttr(resourcePrefix, "hostname_tags.#", "2"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
 				),
@@ -54,7 +54,7 @@ func TestAccWavefrontCloudIntegrationEc2_BasicChanged(t *testing.T) {
 			if err != nil {
 				return err
 			}
-			err = testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(state)
+			err = testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy(state)
 			if err != nil {
 				return err
 			}
@@ -62,27 +62,27 @@ func TestAccWavefrontCloudIntegrationEc2_BasicChanged(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationEc2_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationEc2Basic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					// Check against state that the attributes are as we expect
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfEc2),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfEc2),
 					resource.TestCheckResourceAttr(resourcePrefix, "hostname_tags.#", "2"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationEc2_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationEc2BasicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfEc2),
 					// Check against state that the attributes are as we expect
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfEc2),
 					resource.TestCheckResourceAttr(resourcePrefix, "hostname_tags.#", "3"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(
 						resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
@@ -92,7 +92,7 @@ func TestAccWavefrontCloudIntegrationEc2_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationEc2_basic() string {
+func testAccCheckWavefrontCloudIntegrationEc2Basic() string {
 	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" { 
 }
@@ -110,7 +110,7 @@ resource "wavefront_cloud_integration_ec2" "ec2" {
 }`
 }
 
-func testAccCheckWavefrontCloudIntegrationEc2_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationEc2BasicChanged() string {
 	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }

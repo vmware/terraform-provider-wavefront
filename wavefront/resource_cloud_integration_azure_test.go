@@ -17,7 +17,7 @@ func TestAccWavefrontCloudIntegrationAzure_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAzure_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationAzureBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAzure),
@@ -46,7 +46,7 @@ func TestAccWavefrontCloudIntegrationAzure_BasicChange(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAzure_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationAzureBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAzure),
@@ -63,7 +63,7 @@ func TestAccWavefrontCloudIntegrationAzure_BasicChange(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAzure_basicChangeAdd(),
+				Config: testAccCheckWavefrontCloudIntegrationAzureBasicChangeAdd(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAzure),
@@ -84,7 +84,7 @@ func TestAccWavefrontCloudIntegrationAzure_BasicChange(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationAzure_basic() string {
+func testAccCheckWavefrontCloudIntegrationAzureBasic() string {
 	return `
 resource "wavefront_cloud_integration_azure" "azure" {
 	name 				= "Test Integration"
@@ -102,7 +102,7 @@ resource "wavefront_cloud_integration_azure" "azure" {
 `
 }
 
-func testAccCheckWavefrontCloudIntegrationAzure_basicChangeAdd() string {
+func testAccCheckWavefrontCloudIntegrationAzureBasicChangeAdd() string {
 	return `
 resource "wavefront_cloud_integration_azure" "azure" {
 	name 			= "Test Integration"

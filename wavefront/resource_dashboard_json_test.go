@@ -14,13 +14,13 @@ func TestAccWavefrontDashboardJson_Basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
+		CheckDestroy: testAccCheckWavefrontDashboardJSONDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJson_basic(),
+				Config: testAccCheckWavefrontDashboardJSONBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
-					testAccCheckWavefrontDashboardJsonAttributes(&record),
+					testAccCheckWavefrontDashboardJSONExists("wavefront_dashboard_json.test_dashboard_json", &record),
+					testAccCheckWavefrontDashboardJSONAttributes(&record),
 
 					resource.TestCheckResourceAttr(
 						"wavefront_dashboard_json.test_dashboard_json", "id", "tftestimport"),
@@ -35,22 +35,22 @@ func TestAccWavefrontDashboardJson_Updated(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
+		CheckDestroy: testAccCheckWavefrontDashboardJSONDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJson_basic(),
+				Config: testAccCheckWavefrontDashboardJSONBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
-					testAccCheckWavefrontDashboardJsonAttributes(&record),
+					testAccCheckWavefrontDashboardJSONExists("wavefront_dashboard_json.test_dashboard_json", &record),
+					testAccCheckWavefrontDashboardJSONAttributes(&record),
 					resource.TestCheckResourceAttr(
 						"wavefront_dashboard_json.test_dashboard_json", "id", "tftestimport"),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontDashboardJson_new_value(),
+				Config: testAccCheckWavefrontDashboardJSONNewValue(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_json", &record),
-					testAccCheckWavefrontDashboardJsonAttributesUpdated(&record),
+					testAccCheckWavefrontDashboardJSONExists("wavefront_dashboard_json.test_dashboard_json", &record),
+					testAccCheckWavefrontDashboardJSONAttributesUpdated(&record),
 					resource.TestCheckResourceAttr(
 						"wavefront_dashboard_json.test_dashboard_json", "id", "tftestimport"),
 				),
@@ -65,12 +65,12 @@ func TestAccWavefrontDashboardJson_Multiple(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
+		CheckDestroy: testAccCheckWavefrontDashboardJSONDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardJson_multiple(),
+				Config: testAccCheckWavefrontDashboardJSONMultiple(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.test_dashboard_1", &record),
+					testAccCheckWavefrontDashboardJSONExists("wavefront_dashboard_json.test_dashboard_1", &record),
 					resource.TestCheckResourceAttr(
 						"wavefront_dashboard_json.test_dashboard_1", "id", "test_dashboard_1"),
 					resource.TestCheckResourceAttr(
@@ -83,7 +83,7 @@ func TestAccWavefrontDashboardJson_Multiple(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontDashboardJsonDestroy(s *terraform.State) error {
+func testAccCheckWavefrontDashboardJSONDestroy(s *terraform.State) error {
 
 	dashboards := testAccProvider.Meta().(*wavefrontClient).client.Dashboards()
 
@@ -111,7 +111,7 @@ func testAccCheckWavefrontDashboardJsonDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckWavefrontDashboardJsonAttributes(dashboard *wavefront.Dashboard) resource.TestCheckFunc {
+func testAccCheckWavefrontDashboardJSONAttributes(dashboard *wavefront.Dashboard) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if dashboard.Name != "Terraform Test Dashboard Json" {
@@ -122,7 +122,7 @@ func testAccCheckWavefrontDashboardJsonAttributes(dashboard *wavefront.Dashboard
 	}
 }
 
-func testAccCheckWavefrontDashboardJsonAttributesUpdated(dashboard *wavefront.Dashboard) resource.TestCheckFunc {
+func testAccCheckWavefrontDashboardJSONAttributesUpdated(dashboard *wavefront.Dashboard) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if dashboard.Name != "Terraform Test Dashboard Json Updated" {
@@ -133,7 +133,7 @@ func testAccCheckWavefrontDashboardJsonAttributesUpdated(dashboard *wavefront.Da
 	}
 }
 
-func testAccCheckWavefrontDashboardJsonExists(n string, dashboard *wavefront.Dashboard) resource.TestCheckFunc {
+func testAccCheckWavefrontDashboardJSONExists(n string, dashboard *wavefront.Dashboard) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 		if !ok {
@@ -158,7 +158,7 @@ func testAccCheckWavefrontDashboardJsonExists(n string, dashboard *wavefront.Das
 	}
 }
 
-func testAccCheckWavefrontDashboardJson_basic() string {
+func testAccCheckWavefrontDashboardJSONBasic() string {
 	return `
 data "wavefront_default_user_group" "everyone" { 
 }
@@ -272,7 +272,7 @@ EOF
 `
 }
 
-func testAccCheckWavefrontDashboardJson_new_value() string {
+func testAccCheckWavefrontDashboardJSONNewValue() string {
 	return `
 data "wavefront_default_user_group" "everyone" { 
 }
@@ -380,7 +380,7 @@ EOF
 `
 }
 
-func testAccCheckWavefrontDashboardJson_multiple() string {
+func testAccCheckWavefrontDashboardJSONMultiple() string {
 	return `
 data "wavefront_default_user_group" "everyone" { 
 }

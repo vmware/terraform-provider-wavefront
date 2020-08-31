@@ -17,7 +17,7 @@ func TestAccWavefrontCloudIntegrationAppDynamics_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAppDynamics_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationAppDynamicsBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAppDynamics),
@@ -42,7 +42,7 @@ func TestAccWavefrontCloudIntegrationAppDynamics_BasicChange(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAppDynamics_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationAppDynamicsBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAppDynamics),
@@ -62,7 +62,7 @@ func TestAccWavefrontCloudIntegrationAppDynamics_BasicChange(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAppDynamics_basicChanges(),
+				Config: testAccCheckWavefrontCloudIntegrationAppDynamicsBasicChanges(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAppDynamics),
@@ -85,7 +85,7 @@ func TestAccWavefrontCloudIntegrationAppDynamics_BasicChange(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationAppDynamics_basic() string {
+func testAccCheckWavefrontCloudIntegrationAppDynamicsBasic() string {
 	return `
 resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
 	name 				= "Test Integration"
@@ -101,7 +101,7 @@ resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
 `
 }
 
-func testAccCheckWavefrontCloudIntegrationAppDynamics_basicChanges() string {
+func testAccCheckWavefrontCloudIntegrationAppDynamicsBasicChanges() string {
 	return `
 resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
   name       = "Test Integration"

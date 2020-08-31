@@ -13,19 +13,19 @@ func TestAccWavefrontCloudIntegrationAwsExternalId_Basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy,
+		CheckDestroy: testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAwsExternalId_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationAwsExternalIDBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckWavefrontCloudIntegrationAwsExternalIdExists(),
+					testAccCheckWavefrontCloudIntegrationAwsExternalIDExists(),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationAwsExternalIdExists() resource.TestCheckFunc {
+func testAccCheckWavefrontCloudIntegrationAwsExternalIDExists() resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources["wavefront_cloud_integration_aws_external_id.external_id"]
 
@@ -47,7 +47,7 @@ func testAccCheckWavefrontCloudIntegrationAwsExternalIdExists() resource.TestChe
 	}
 }
 
-func testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(s *terraform.State) error {
+func testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy(s *terraform.State) error {
 	integrations := testAccProvider.Meta().(*wavefrontClient).client.CloudIntegrations()
 	for _, rs := range s.RootModule().Resources {
 		if !strings.Contains(rs.Type, "wavefront_cloud_integration") {
@@ -62,7 +62,7 @@ func testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(s *terraform.Stat
 	return nil
 }
 
-func testAccCheckWavefrontCloudIntegrationAwsExternalId_basic() string {
+func testAccCheckWavefrontCloudIntegrationAwsExternalIDBasic() string {
 	return `
 resource "wavefront_cloud_integration_aws_external_id" "external_id" {
 }

@@ -9,12 +9,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourceDashboardJson() *schema.Resource {
+func resourceDashboardJSON() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceDashboardJsonCreate,
-		Read:   resourceDashboardJsonRead,
-		Update: resourceDashboardJsonUpdate,
-		Delete: resourceDashboardJsonDelete,
+		Create: resourceDashboardJSONCreate,
+		Read:   resourceDashboardJSONRead,
+		Update: resourceDashboardJSONUpdate,
+		Delete: resourceDashboardJSONDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -23,26 +23,26 @@ func resourceDashboardJson() *schema.Resource {
 			"dashboard_json": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: ValidateDashboardJson,
-				StateFunc:    NormalizeDashboardJson,
+				ValidateFunc: ValidateDashboardJSON,
+				StateFunc:    NormalizeDashboardJSON,
 			},
 		},
 	}
 
 }
 
-func buildDashboardJson(d *schema.ResourceData) (*wavefront.Dashboard, error) {
+func buildDashboardJSON(d *schema.ResourceData) (*wavefront.Dashboard, error) {
 	var dashboard wavefront.Dashboard
-	dashboardJsonString := d.Get("dashboard_json").(string)
+	dashboardJSONString := d.Get("dashboard_json").(string)
 	// json is already validated during resource Validation
-	_ = dashboard.UnmarshalJSON([]byte(dashboardJsonString))
+	_ = dashboard.UnmarshalJSON([]byte(dashboardJSONString))
 
 	// set url name as the resource ID
 	dashboard.ID = dashboard.Url
 	return &dashboard, nil
 }
 
-func resourceDashboardJsonRead(d *schema.ResourceData, meta interface{}) error {
+func resourceDashboardJSONRead(d *schema.ResourceData, meta interface{}) error {
 	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
@@ -52,24 +52,23 @@ func resourceDashboardJsonRead(d *schema.ResourceData, meta interface{}) error {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
 			return nil
-		} else {
-			return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 		}
+		return fmt.Errorf("error finding Wavefront Dashboard %s. %s", d.Id(), err)
 	}
 	bytes, _ := dash.MarshalJSON()
 	// Use the Wavefront url as the Terraform ID
 	d.SetId(dash.ID)
-	err = d.Set("dashboard_json", NormalizeDashboardJson(string(bytes)))
+	err = d.Set("dashboard_json", NormalizeDashboardJSON(string(bytes)))
 	if err != nil {
 		return fmt.Errorf("failed to set dashboard json %s. %s", d.Id(), err)
 	}
 	return nil
 }
 
-func resourceDashboardJsonCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceDashboardJSONCreate(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[INFO] Create Wavefront Dashboard %s", d.Id())
 	dashboards := meta.(*wavefrontClient).client.Dashboards()
-	dashboard, err := buildDashboardJson(d)
+	dashboard, err := buildDashboardJSON(d)
 
 	if err != nil {
 		return fmt.Errorf("failed to parse dashboard, %s", err)
@@ -81,13 +80,13 @@ func resourceDashboardJsonCreate(d *schema.ResourceData, meta interface{}) error
 	}
 	d.SetId(dashboard.ID)
 	log.Printf("[INFO] Wavefront Dashboard %s Created", d.Id())
-	return resourceDashboardJsonRead(d, meta)
+	return resourceDashboardJSONRead(d, meta)
 }
 
-func resourceDashboardJsonUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceDashboardJSONUpdate(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[INFO] Update Wavefront Dashboard %s", d.Id())
 	dashboards := meta.(*wavefrontClient).client.Dashboards()
-	dashboard, err := buildDashboardJson(d)
+	dashboard, err := buildDashboardJSON(d)
 
 	if err != nil {
 		return fmt.Errorf("failed to parse dashboard, %s", err)
@@ -99,10 +98,10 @@ func resourceDashboardJsonUpdate(d *schema.ResourceData, meta interface{}) error
 	}
 
 	log.Printf("[INFO] Wavefront Dashboard %s Updated", d.Id())
-	return resourceDashboardJsonRead(d, meta)
+	return resourceDashboardJSONRead(d, meta)
 }
 
-func resourceDashboardJsonDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceDashboardJSONDelete(d *schema.ResourceData, meta interface{}) error {
 	dashboards := meta.(*wavefrontClient).client.Dashboards()
 	dash := wavefront.Dashboard{
 		ID: d.Id(),
@@ -127,20 +126,20 @@ func resourceDashboardJsonDelete(d *schema.ResourceData, meta interface{}) error
 	return nil
 }
 
-func ValidateDashboardJson(val interface{}, key string) ([]string, []error) {
-	dashboardJsonString := val.(string)
+func ValidateDashboardJSON(val interface{}, key string) ([]string, []error) {
+	dashboardJSONString := val.(string)
 	var dashboard wavefront.Dashboard
-	err := dashboard.UnmarshalJSON([]byte(dashboardJsonString))
+	err := dashboard.UnmarshalJSON([]byte(dashboardJSONString))
 	if err != nil {
 		return nil, []error{err}
 	}
 	return nil, nil
 }
 
-func NormalizeDashboardJson(val interface{}) string {
-	dashboardJsonString := val.(string)
+func NormalizeDashboardJSON(val interface{}) string {
+	dashboardJSONString := val.(string)
 	var dashboard wavefront.Dashboard
-	_ = dashboard.UnmarshalJSON([]byte(dashboardJsonString))
+	_ = dashboard.UnmarshalJSON([]byte(dashboardJSONString))
 
 	// set url name as the resource ID
 	dashboard.ID = dashboard.Url

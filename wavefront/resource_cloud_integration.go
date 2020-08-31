@@ -54,7 +54,7 @@ func decodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 
 func decodeGcpIntegration(d *schema.ResourceData, integration *wavefront.CloudIntegration) error {
 	jsonKey := d.Get("json_key").(string)
-	projectId := d.Get("project_id").(string)
+	projectID := d.Get("project_id").(string)
 	switch integration.Service {
 	case "GCP":
 		var categories []string
@@ -65,13 +65,13 @@ func decodeGcpIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		}
 		integration.GCP = &wavefront.GCPConfiguration{
 			MetricFilterRegex: d.Get("metric_filter_regex").(string),
-			ProjectId:         projectId,
+			ProjectId:         projectID,
 			GcpJSONKey:        jsonKey,
 			CategoriesToFetch: categories,
 		}
 	case "GCPBILLING":
 		integration.GCPBilling = &wavefront.GCPBillingConfiguration{
-			ProjectId:  projectId,
+			ProjectId:  projectID,
 			GcpApiKey:  d.Get("api_key").(string),
 			GcpJSONKey: jsonKey,
 		}

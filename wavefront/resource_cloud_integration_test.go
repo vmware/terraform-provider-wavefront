@@ -71,20 +71,20 @@ func testAccCheckWavefrontCloudIntegrationAttributes(integration *wavefront.Clou
 			return fmt.Errorf("bad value, expected %s. got %s", service, integration.Service)
 		}
 
-		if val, ok := integration.AdditionalTags["tag1"]; !ok {
+		val, ok := integration.AdditionalTags["tag1"]
+		if !ok {
 			return fmt.Errorf("key missing: %s", "tag1")
-		} else {
-			if val != "value1" {
-				return fmt.Errorf("tag1 value is incorrect. got %s", val)
-			}
+		}
+		if val != "value1" {
+			return fmt.Errorf("tag1 value is incorrect. got %s", val)
 		}
 
-		if val, ok := integration.AdditionalTags["tag2"]; !ok {
+		val, ok = integration.AdditionalTags["tag2"]
+		if !ok {
 			return fmt.Errorf("key missing: %s", "tag2")
-		} else {
-			if val != "value2" {
-				return fmt.Errorf("tag2 value is incorrect. got %s", val)
-			}
+		}
+		if val != "value2" {
+			return fmt.Errorf("tag2 value is incorrect. got %s", val)
 		}
 		return nil
 	}

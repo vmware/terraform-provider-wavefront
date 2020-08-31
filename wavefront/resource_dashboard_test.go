@@ -312,7 +312,7 @@ func TestAccWavefrontDashboard_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_basic(),
+				Config: testAccCheckWavefrontDashboardBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboard", &record),
 					testAccCheckWavefrontDashboardAttributes(&record),
@@ -377,7 +377,7 @@ func TestAccWavefrontDashboard_Updated(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_basic(),
+				Config: testAccCheckWavefrontDashboardBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboard", &record),
 					testAccCheckWavefrontDashboardAttributes(&record),
@@ -390,7 +390,7 @@ func TestAccWavefrontDashboard_Updated(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontDashboard_new_value(),
+				Config: testAccCheckWavefrontDashboardNewValue(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboard", &record),
 					testAccCheckWavefrontDashboardAttributesUpdated(&record),
@@ -415,7 +415,7 @@ func TestAccWavefrontDashboard_Multiple(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_multiple(),
+				Config: testAccCheckWavefrontDashboardMultiple(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboarda", &record),
 					resource.TestCheckResourceAttr(
@@ -439,7 +439,7 @@ func TestAccWavefrontDashboard_ListParam(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_ListParam(),
+				Config: testAccCheckWavefrontDashboardListParam(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.list_param_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -465,7 +465,7 @@ func TestAccWavefrontDashboard_DynamicSourceParam(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_DynamicSourceParam(),
+				Config: testAccCheckWavefrontDashboardDynamicSourceParam(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.dynamic_source_param_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -493,7 +493,7 @@ func TestAccWavefrontDashboard_DynamicSourceTagParam(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_DynamicSourceTagParam(),
+				Config: testAccCheckWavefrontDashboardDynamicSourceTagParam(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.dynamic_source_param_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -521,7 +521,7 @@ func TestAccWavefrontDashboard_DynamicMetricNameParam(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_DynamicMetricNameParam(),
+				Config: testAccCheckWavefrontDashboardDynamicMetricNameParam(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.dynamic_source_param_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -549,7 +549,7 @@ func TestAccWavefrontDashboard_DynamicTagKeyParam(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_DynamicTagKeyParam(),
+				Config: testAccCheckWavefrontDashboardDynamicTagKeyParam(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.dynamic_source_param_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -579,7 +579,7 @@ func TestAccWavefrontDashboard_DynamicMatchingSourceTagParam(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_DynamicMatchingSourceTagParam(),
+				Config: testAccCheckWavefrontDashboardDynamicMatchingSourceTagParam(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.dynamic_source_param_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -607,7 +607,7 @@ func TestAccWavefrontDashboard_Linear_ChartSettings(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_Linear_ChartSettings(),
+				Config: testAccCheckWavefrontDashboardLinearChartSettings(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.chart_settings_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -674,7 +674,7 @@ func TestAccWavefrontDashboard_Table_ChartSettings(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_Table_ChartSettings(),
+				Config: testAccCheckWavefrontDashboardTableChartSettings(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.chart_settings_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -753,7 +753,7 @@ func TestAccWavefrontDashboard_Sparkline_ChartSettings(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_Sparkline_ChartSettings(),
+				Config: testAccCheckWavefrontDashboardSparklineChartSettings(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.chart_settings_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -848,7 +848,7 @@ func TestAccWavefrontDashboard_Markdown_ChartSettings(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboard_Markdown_ChartSettings(),
+				Config: testAccCheckWavefrontDashboardMarkdownChartSettings(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.chart_settings_dash", &record),
 					resource.TestCheckResourceAttr(
@@ -986,7 +986,7 @@ func testAccCheckWavefrontDashboardExists(n string, dashboard *wavefront.Dashboa
 	}
 }
 
-func testAccCheckWavefrontDashboard_basic() string {
+func testAccCheckWavefrontDashboardBasic() string {
 	return `
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"
@@ -1044,7 +1044,7 @@ resource "wavefront_dashboard" "test_dashboard" {
 `
 }
 
-func testAccCheckWavefrontDashboard_new_value() string {
+func testAccCheckWavefrontDashboardNewValue() string {
 	return `
 resource "wavefront_dashboard" "test_dashboard" {
   name = "Terraform Test Dashboard Updated"
@@ -1090,7 +1090,7 @@ resource "wavefront_dashboard" "test_dashboard" {
 `
 }
 
-func testAccCheckWavefrontDashboard_multiple() string {
+func testAccCheckWavefrontDashboardMultiple() string {
 	return `
 resource "wavefront_dashboard" "test_dashboarda" {
   name = "Terraform Test Dashboard Multi A"
@@ -1206,7 +1206,7 @@ resource "wavefront_dashboard" "test_dashboardc" {
 `
 }
 
-func testAccCheckWavefrontDashboard_ListParam() string {
+func testAccCheckWavefrontDashboardListParam() string {
 	return `
 resource "wavefront_dashboard" "list_param_dash" {
   name = "Terraform Test Dashboard Updated"
@@ -1280,7 +1280,7 @@ resource "wavefront_dashboard" "list_param_dash" {
 `
 }
 
-func testAccCheckWavefrontDashboard_DynamicSourceParam() string {
+func testAccCheckWavefrontDashboardDynamicSourceParam() string {
 	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Param"
@@ -1324,7 +1324,7 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
 `
 }
 
-func testAccCheckWavefrontDashboard_DynamicSourceTagParam() string {
+func testAccCheckWavefrontDashboardDynamicSourceTagParam() string {
 	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
@@ -1368,7 +1368,7 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
 `
 }
 
-func testAccCheckWavefrontDashboard_DynamicMetricNameParam() string {
+func testAccCheckWavefrontDashboardDynamicMetricNameParam() string {
 	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
@@ -1412,7 +1412,7 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
 `
 }
 
-func testAccCheckWavefrontDashboard_DynamicTagKeyParam() string {
+func testAccCheckWavefrontDashboardDynamicTagKeyParam() string {
 	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
@@ -1457,7 +1457,7 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
 `
 }
 
-func testAccCheckWavefrontDashboard_DynamicMatchingSourceTagParam() string {
+func testAccCheckWavefrontDashboardDynamicMatchingSourceTagParam() string {
 	return `
 resource "wavefront_dashboard" "dynamic_source_param_dash" {
   name = "Terraform Dynamic Source Tag Param"
@@ -1501,7 +1501,7 @@ resource "wavefront_dashboard" "dynamic_source_param_dash" {
 `
 }
 
-func testAccCheckWavefrontDashboard_Linear_ChartSettings() string {
+func testAccCheckWavefrontDashboardLinearChartSettings() string {
 	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"
@@ -1566,7 +1566,7 @@ resource "wavefront_dashboard" "chart_settings_dash" {
 }
 `
 }
-func testAccCheckWavefrontDashboard_Table_ChartSettings() string {
+func testAccCheckWavefrontDashboardTableChartSettings() string {
 	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"
@@ -1637,7 +1637,7 @@ resource "wavefront_dashboard" "chart_settings_dash" {
 }
 `
 }
-func testAccCheckWavefrontDashboard_Sparkline_ChartSettings() string {
+func testAccCheckWavefrontDashboardSparklineChartSettings() string {
 	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"
@@ -1717,7 +1717,7 @@ resource "wavefront_dashboard" "chart_settings_dash" {
 }
 `
 }
-func testAccCheckWavefrontDashboard_Markdown_ChartSettings() string {
+func testAccCheckWavefrontDashboardMarkdownChartSettings() string {
 	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
   name = "Terraform Chart Settings"

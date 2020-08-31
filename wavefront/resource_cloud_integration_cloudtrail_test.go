@@ -20,7 +20,7 @@ func TestAccWavefrontCloudIntegrationCloudTrail_Basic(t *testing.T) {
 			if err != nil {
 				return err
 			}
-			err = testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(state)
+			err = testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy(state)
 			if err != nil {
 				return err
 			}
@@ -28,11 +28,11 @@ func TestAccWavefrontCloudIntegrationCloudTrail_Basic(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationCloudTrail_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationCloudTrailBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfCloudTrail),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					// Check against state that the attributes are as we expect
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfCloudTrail),
@@ -56,7 +56,7 @@ func TestAccWavefrontCloudIntegrationCloudTrail_BasicChanged(t *testing.T) {
 			if err != nil {
 				return err
 			}
-			err = testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(state)
+			err = testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy(state)
 			if err != nil {
 				return err
 			}
@@ -64,7 +64,7 @@ func TestAccWavefrontCloudIntegrationCloudTrail_BasicChanged(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationCloudTrail_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationCloudTrailBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					// Check against state that the attributes are as we expect
@@ -72,13 +72,13 @@ func TestAccWavefrontCloudIntegrationCloudTrail_BasicChanged(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfCloudTrail),
 					resource.TestCheckResourceAttr(resourcePrefix, "bucket_name", "example-s3-bucket"),
 					resource.TestCheckResourceAttr(resourcePrefix, "region", "us-west-2"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationCloudTrail_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationCloudTrailBasicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfCloudTrail),
@@ -87,7 +87,7 @@ func TestAccWavefrontCloudIntegrationCloudTrail_BasicChanged(t *testing.T) {
 					resource.TestCheckResourceAttr(resourcePrefix, "bucket_name", "example-s3-bucket2"),
 					resource.TestCheckResourceAttr(resourcePrefix, "region", "us-west-1"),
 					resource.TestCheckResourceAttr(resourcePrefix, "filter_rule", "someFilterRule"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
 				),
@@ -96,7 +96,7 @@ func TestAccWavefrontCloudIntegrationCloudTrail_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationVerifyExtId(resourcePrefix, n string) resource.TestCheckFunc {
+func testAccCheckWavefrontCloudIntegrationVerifyExtID(resourcePrefix, n string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 		if !ok {
@@ -114,7 +114,7 @@ func testAccCheckWavefrontCloudIntegrationVerifyExtId(resourcePrefix, n string) 
 	}
 }
 
-func testAccCheckWavefrontCloudIntegrationCloudTrail_basic() string {
+func testAccCheckWavefrontCloudIntegrationCloudTrailBasic() string {
 	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" { 
 }
@@ -133,7 +133,7 @@ resource "wavefront_cloud_integration_cloudtrail" "cloudtrail" {
 }`
 }
 
-func testAccCheckWavefrontCloudIntegrationCloudTrail_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationCloudTrailBasicChanged() string {
 	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }

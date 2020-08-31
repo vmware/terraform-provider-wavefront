@@ -18,7 +18,7 @@ func TestAccWavefrontDerivedMetric_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDerivedMetricDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDerivedMetric_Basic(),
+				Config: testAccCheckWavefrontDerivedMetricBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDerivedMetricExists("wavefront_derived_metric.derived", &record),
 					testAccCheckWavefrontDerivedMetricAttributes(&record),
@@ -47,7 +47,7 @@ func TestAccWavefrontDerivedMetric_Updated(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDerivedMetricDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDerivedMetric_Basic(),
+				Config: testAccCheckWavefrontDerivedMetricBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDerivedMetricExists("wavefront_derived_metric.derived", &record),
 					testAccCheckWavefrontDerivedMetricAttributes(&record),
@@ -56,7 +56,7 @@ func TestAccWavefrontDerivedMetric_Updated(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontDerivedMetric_Updated(),
+				Config: testAccCheckWavefrontDerivedMetricUpdated(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDerivedMetricExists("wavefront_derived_metric.derived", &record),
 					testAccCheckWavefrontDerivedMetricAttributes(&record),
@@ -78,7 +78,7 @@ func TestAccWavefrontDerivedMetric_Multiple(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDerivedMetricDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDerivedMetric_Multiple(),
+				Config: testAccCheckWavefrontDerivedMetricMultiple(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDerivedMetricExists("wavefront_derived_metric.derived", &record),
 					testAccCheckWavefrontDerivedMetricAttributes(&record),
@@ -186,7 +186,7 @@ func testAccCheckWavefrontDerivedMetricDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckWavefrontDerivedMetric_Basic() string {
+func testAccCheckWavefrontDerivedMetricBasic() string {
 	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"
@@ -202,7 +202,7 @@ resource "wavefront_derived_metric" "derived" {
 `
 }
 
-func testAccCheckWavefrontDerivedMetric_Updated() string {
+func testAccCheckWavefrontDerivedMetricUpdated() string {
 	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"
@@ -218,7 +218,7 @@ resource "wavefront_derived_metric" "derived" {
 `
 }
 
-func testAccCheckWavefrontDerivedMetric_Multiple() string {
+func testAccCheckWavefrontDerivedMetricMultiple() string {
 	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"

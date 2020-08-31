@@ -33,7 +33,7 @@ func Provider() *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"wavefront_alert":                                resourceAlert(),
 			"wavefront_dashboard":                            resourceDashboard(),
-			"wavefront_dashboard_json":                       resourceDashboardJson(),
+			"wavefront_dashboard_json":                       resourceDashboardJSON(),
 			"wavefront_derived_metric":                       resourceDerivedMetric(),
 			"wavefront_alert_target":                         resourceTarget(),
 			"wavefront_user":                                 resourceUser(),
@@ -49,7 +49,7 @@ func Provider() *schema.Provider {
 			"wavefront_cloud_integration_tesla":              resourceCloudIntegrationTesla(),
 			"wavefront_cloud_integration_azure":              resourceCloudIntegrationAzure(),
 			"wavefront_cloud_integration_azure_activity_log": resourceCloudIntegrationAzureActivityLog(),
-			"wavefront_cloud_integration_aws_external_id":    resourceCloudIntegrationAwsExternalId(),
+			"wavefront_cloud_integration_aws_external_id":    resourceCloudIntegrationAwsExternalID(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"wavefront_default_user_group": dataSourceDefaultUserGroup(),

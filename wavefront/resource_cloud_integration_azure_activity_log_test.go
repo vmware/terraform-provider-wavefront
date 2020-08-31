@@ -17,7 +17,7 @@ func TestAccWavefrontCloudIntegrationAzureActivityLog_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAzureActivityLog_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationAzureActivityLogBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAzureActivityLog),
@@ -46,7 +46,7 @@ func TestAccWavefrontCloudIntegrationAzureActivityLog_BasicChange(t *testing.T) 
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAzureActivityLog_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationAzureActivityLogBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAzureActivityLog),
@@ -62,7 +62,7 @@ func TestAccWavefrontCloudIntegrationAzureActivityLog_BasicChange(t *testing.T) 
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationAzureActivityLog_basicChangeAdd(),
+				Config: testAccCheckWavefrontCloudIntegrationAzureActivityLogBasicChangeAdd(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfAzureActivityLog),
@@ -82,7 +82,7 @@ func TestAccWavefrontCloudIntegrationAzureActivityLog_BasicChange(t *testing.T) 
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationAzureActivityLog_basic() string {
+func testAccCheckWavefrontCloudIntegrationAzureActivityLogBasic() string {
 	return `
 resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 	name 				= "Test Integration"
@@ -99,7 +99,7 @@ resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 `
 }
 
-func testAccCheckWavefrontCloudIntegrationAzureActivityLog_basicChangeAdd() string {
+func testAccCheckWavefrontCloudIntegrationAzureActivityLogBasicChangeAdd() string {
 	return `
 resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 	name 			= "Test Integration"
