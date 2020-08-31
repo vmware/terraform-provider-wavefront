@@ -17,7 +17,7 @@ func TestAccWavefrontCloudIntegrationGcpBilling_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationGcpBilling_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBillingBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcpBilling),
@@ -25,7 +25,7 @@ func TestAccWavefrontCloudIntegrationGcpBilling_Basic(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfGcpBilling),
 					resource.TestCheckResourceAttr(resourcePrefix, "project_id", "example-gcp-project"),
 					resource.TestCheckResourceAttr(resourcePrefix, "api_key", "example-api-key"),
-					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJsonKey("example-gcp-project")),
+					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJSONKey("example-gcp-project")),
 				),
 			},
 		},
@@ -41,7 +41,7 @@ func TestAccWavefrontCloudIntegrationGcpBilling_BasicChanged(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationGcpBilling_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBillingBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcpBilling),
@@ -49,11 +49,11 @@ func TestAccWavefrontCloudIntegrationGcpBilling_BasicChanged(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfGcpBilling),
 					resource.TestCheckResourceAttr(resourcePrefix, "project_id", "example-gcp-project"),
 					resource.TestCheckResourceAttr(resourcePrefix, "api_key", "example-api-key"),
-					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJsonKey("example-gcp-project")),
+					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJSONKey("example-gcp-project")),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationGcpBilling_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBillingBasicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcpBilling),
@@ -61,14 +61,14 @@ func TestAccWavefrontCloudIntegrationGcpBilling_BasicChanged(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfGcpBilling),
 					resource.TestCheckResourceAttr(resourcePrefix, "project_id", "example-gcp-project"),
 					resource.TestCheckResourceAttr(resourcePrefix, "api_key", "example-api-key"),
-					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJsonKey("example-gcp-project2")),
+					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJSONKey("example-gcp-project2")),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationGcpBilling_basic() string {
+func testAccCheckWavefrontCloudIntegrationGcpBillingBasic() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp_billing" "gcp_billing" {
   name                = "Test Integration"
@@ -82,10 +82,10 @@ resource "wavefront_cloud_integration_gcp_billing" "gcp_billing" {
   json_key            = <<EOF
 %s
 EOF
-}`, testGcpJsonKey("example-gcp-project"))
+}`, testGcpJSONKey("example-gcp-project"))
 }
 
-func testAccCheckWavefrontCloudIntegrationGcpBilling_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationGcpBillingBasicChanged() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp_billing" "gcp_billing" {
   name                = "Test Integration"
@@ -99,5 +99,5 @@ resource "wavefront_cloud_integration_gcp_billing" "gcp_billing" {
   json_key            = <<EOF
 %s
 EOF
-}`, testGcpJsonKey("example-gcp-project2"))
+}`, testGcpJSONKey("example-gcp-project2"))
 }

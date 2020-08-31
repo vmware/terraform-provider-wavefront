@@ -18,7 +18,7 @@ func TestAccTarget_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTargetImporter_basic(),
+				Config:             testAccCheckWavefrontTargetImporterBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.foobar", &record),
 				),
@@ -33,7 +33,7 @@ func TestAccTarget_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontTargetImporter_basic() string {
+func testAccCheckWavefrontTargetImporterBasic() string {
 	return `
 	resource "wavefront_alert_target" "foobar" {
 	  name = "Terraform Test Target"

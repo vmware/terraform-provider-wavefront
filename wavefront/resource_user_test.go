@@ -19,7 +19,7 @@ func TestAccWavefrontUser_BasicUser(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUser_basic(),
+				Config: testAccCheckWavefrontUserBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
@@ -44,7 +44,7 @@ func TestAccWavefrontUser_BasicUserChangeGroups(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUser_basic(),
+				Config: testAccCheckWavefrontUserBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
@@ -57,7 +57,7 @@ func TestAccWavefrontUser_BasicUserChangeGroups(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontUser_changeGroups(),
+				Config: testAccCheckWavefrontUserChangeGroups(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "events_management"}, []string{}),
@@ -82,7 +82,7 @@ func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUser_basic(),
+				Config: testAccCheckWavefrontUserBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
@@ -95,7 +95,7 @@ func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontUser_changeEmail(),
+				Config: testAccCheckWavefrontUserChangeEmail(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
@@ -201,7 +201,7 @@ func testAccCheckWavefrontUserAttributes(user *wavefront.User, permissions []str
 	}
 }
 
-func testAccCheckWavefrontUser_basic() string {
+func testAccCheckWavefrontUserBasic() string {
 	return `
 resource "wavefront_user" "basic" {
 	email       = "test+tftesting@example.com"
@@ -212,7 +212,7 @@ resource "wavefront_user" "basic" {
 }`
 }
 
-func testAccCheckWavefrontUser_changeGroups() string {
+func testAccCheckWavefrontUserChangeGroups() string {
 	return `
 resource "wavefront_user" "basic" {
 	email       = "test+tftesting@example.com"
@@ -223,7 +223,7 @@ resource "wavefront_user" "basic" {
 }`
 }
 
-func testAccCheckWavefrontUser_changeEmail() string {
+func testAccCheckWavefrontUserChangeEmail() string {
 	return `
 resource "wavefront_user" "basic" {
 	email       = "test+tftesting2@example.com"

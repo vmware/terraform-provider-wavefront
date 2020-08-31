@@ -17,7 +17,7 @@ func TestAccDerivedMetric_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDerivedMetricDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDerivedMetricImporter_Basic(),
+				Config: testAccCheckWavefrontDerivedMetricImporterBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDerivedMetricExists("wavefront_derived_metric.derived", &record),
 				),
@@ -31,7 +31,7 @@ func TestAccDerivedMetric_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontDerivedMetricImporter_Basic() string {
+func testAccCheckWavefrontDerivedMetricImporterBasic() string {
 	return `
 resource "wavefront_derived_metric" "derived" {
   name                   = "dummy derived metric"

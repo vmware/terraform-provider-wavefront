@@ -185,9 +185,9 @@ func decodeUserGroups(d *schema.ResourceData, user interface{}) error {
 		if ug == nil {
 			continue
 		}
-		ugId := ug.(string)
+		ugID := ug.(string)
 		wfUserGroups = append(wfUserGroups, wavefront.UserGroup{
-			ID: &ugId,
+			ID: &ugID,
 		})
 	}
 

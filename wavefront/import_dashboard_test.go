@@ -17,7 +17,7 @@ func TestAccDashboard_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardImporter_basic(),
+				Config: testAccCheckWavefrontDashboardImporterBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.foobar", &record),
 				),
@@ -31,7 +31,7 @@ func TestAccDashboard_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontDashboardImporter_basic() string {
+func testAccCheckWavefrontDashboardImporterBasic() string {
 	return `
 resource "wavefront_dashboard" "foobar" {
   name        = "Terraform Test Dashboard"

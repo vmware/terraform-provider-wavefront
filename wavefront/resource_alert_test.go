@@ -14,7 +14,7 @@ import (
 func TestValidateAlertTarget(t *testing.T) {
 	email := "example@wavefront.com"
 	pdKey := "pd:not-a-real-pagerduty-key"
-	targetId := "target:efKj3H9aF"
+	targetID := "target:efKj3H9aF"
 
 	w, e := validateAlertTarget(email, "target")
 	if len(w) != 0 || len(e) != 0 {
@@ -26,7 +26,7 @@ func TestValidateAlertTarget(t *testing.T) {
 		t.Fatal("expected no errors on pager-duty key target validation")
 	}
 
-	w, e = validateAlertTarget(targetId, "target")
+	w, e = validateAlertTarget(targetID, "target")
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on alert target validation")
 	}
@@ -36,7 +36,7 @@ func TestValidateAlertTarget(t *testing.T) {
 		t.Fatal("expected error on invalid alert targets")
 	}
 
-	w, e = validateAlertTarget(fmt.Sprintf("%s,%s,%s", email, pdKey, targetId), "target")
+	w, e = validateAlertTarget(fmt.Sprintf("%s,%s,%s", email, pdKey, targetID), "target")
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on multiple alert target validation")
 	}
@@ -51,7 +51,7 @@ func TestAccWavefrontAlert_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlert_basic(),
+				Config: testAccCheckWavefrontAlertBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
@@ -90,7 +90,7 @@ func TestAccWavefrontAlert_RequiredAttributes(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlert_requiredAttributes(),
+				Config: testAccCheckWavefrontAlertRequiredAttributes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert_required", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
@@ -125,7 +125,7 @@ func TestAccWavefrontAlert_Updated(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlert_basic(),
+				Config: testAccCheckWavefrontAlertBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
@@ -134,7 +134,7 @@ func TestAccWavefrontAlert_Updated(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontAlert_new_value(),
+				Config: testAccCheckWavefrontAlertNewValue(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributesUpdated(&record),
@@ -155,7 +155,7 @@ func TestAccWavefrontAlert_RemoveOptionalAttribute(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlert_RemoveAttributes(),
+				Config: testAccCheckWavefrontAlertRemoveAttributes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert_required", &record),
 					testAccCheckWavefrontAlertAttributesRemoved(&record),
@@ -164,7 +164,7 @@ func TestAccWavefrontAlert_RemoveOptionalAttribute(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontAlert_UpdatedRemoveAttributes(),
+				Config: testAccCheckWavefrontAlertUpdatedRemoveAttributes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert_required", &record),
 					testAccCheckWavefrontAlertAttributesRemovedUpdated(&record),
@@ -185,7 +185,7 @@ func TestAccWavefrontAlert_Multiple(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlert_multiple(),
+				Config: testAccCheckWavefrontAlertMultiple(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert1", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
@@ -210,7 +210,7 @@ func TestAccWavefrontAlert_Threshold(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlert_threshold(),
+				Config: testAccCheckWavefrontAlertThreshold(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_threshold_alert", &record),
 					testAccCheckWavefrontThresholdAlertAttributes(&record),
@@ -439,7 +439,7 @@ func testAccCheckWavefrontAlertExists(n string, alert *wavefront.Alert) resource
 	}
 }
 
-func testAccCheckWavefrontAlert_basic() string {
+func testAccCheckWavefrontAlertBasic() string {
 	return `
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"
@@ -472,7 +472,7 @@ resource "wavefront_alert" "test_alert" {
 `
 }
 
-func testAccCheckWavefrontAlert_RemoveAttributes() string {
+func testAccCheckWavefrontAlertRemoveAttributes() string {
 	return `
 resource "wavefront_alert" "test_alert_required" {
   name = "Terraform Test Alert Required Attributes Only"
@@ -490,7 +490,7 @@ resource "wavefront_alert" "test_alert_required" {
 `
 }
 
-func testAccCheckWavefrontAlert_UpdatedRemoveAttributes() string {
+func testAccCheckWavefrontAlertUpdatedRemoveAttributes() string {
 	return `
 resource "wavefront_alert" "test_alert_required" {
   name = "Terraform Test Alert Required Attributes Only"
@@ -507,7 +507,7 @@ resource "wavefront_alert" "test_alert_required" {
 `
 }
 
-func testAccCheckWavefrontAlert_requiredAttributes() string {
+func testAccCheckWavefrontAlertRequiredAttributes() string {
 	return `
 resource "wavefront_alert" "test_alert_required" {
   name = "Terraform Test Alert Required Attributes Only"
@@ -524,7 +524,7 @@ resource "wavefront_alert" "test_alert_required" {
 `
 }
 
-func testAccCheckWavefrontAlert_new_value() string {
+func testAccCheckWavefrontAlertNewValue() string {
 	return `
 resource "wavefront_alert" "test_alert" {
   name = "Terraform Test Alert"
@@ -543,7 +543,7 @@ resource "wavefront_alert" "test_alert" {
 `
 }
 
-func testAccCheckWavefrontAlert_multiple() string {
+func testAccCheckWavefrontAlertMultiple() string {
 	return `
 resource "wavefront_alert" "test_alert1" {
   name = "Terraform Test Alert 1"
@@ -588,7 +588,7 @@ resource "wavefront_alert" "test_alert3" {
 `
 }
 
-func testAccCheckWavefrontAlert_threshold() string {
+func testAccCheckWavefrontAlertThreshold() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"

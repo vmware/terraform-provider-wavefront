@@ -14,13 +14,13 @@ func TestAccDashboardJson_Basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckWavefrontDashboardJsonDestroy,
+		CheckDestroy: testAccCheckWavefrontDashboardJSONDestroy,
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontDashboardJsonImporter_basic(),
+				Config:             testAccCheckWavefrontDashboardJSONImporterBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckWavefrontDashboardJsonExists("wavefront_dashboard_json.json_foobar", &record),
+					testAccCheckWavefrontDashboardJSONExists("wavefront_dashboard_json.json_foobar", &record),
 				),
 			},
 			{
@@ -32,7 +32,7 @@ func TestAccDashboardJson_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontDashboardJsonImporter_basic() string {
+func testAccCheckWavefrontDashboardJSONImporterBasic() string {
 	return `
 resource "wavefront_dashboard_json" "json_foobar" {
 	dashboard_json = <<EOF

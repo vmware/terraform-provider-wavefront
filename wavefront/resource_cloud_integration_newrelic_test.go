@@ -15,7 +15,7 @@ func TestAccWavefrontCloudIntegrationNewRelic_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationNewRelic_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationNewRelicBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfNewRelic),
@@ -43,7 +43,7 @@ func TestAccWavefrontCloudIntegrationNewRelic_BasicChanged(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationNewRelic_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationNewRelicBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfNewRelic),
@@ -60,7 +60,7 @@ func TestAccWavefrontCloudIntegrationNewRelic_BasicChanged(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationNewRelic_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationNewRelicBasicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfNewRelic),
@@ -78,7 +78,7 @@ func TestAccWavefrontCloudIntegrationNewRelic_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationNewRelic_basic() string {
+func testAccCheckWavefrontCloudIntegrationNewRelicBasic() string {
 	return `
 resource "wavefront_cloud_integration_newrelic" "newrelic" {
   name              = "Test Integration"
@@ -102,7 +102,7 @@ resource "wavefront_cloud_integration_newrelic" "newrelic" {
 `
 }
 
-func testAccCheckWavefrontCloudIntegrationNewRelic_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationNewRelicBasicChanged() string {
 	return `
 resource "wavefront_cloud_integration_newrelic" "newrelic" {
   name              = "Test Integration"

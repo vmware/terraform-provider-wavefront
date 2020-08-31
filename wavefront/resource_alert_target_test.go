@@ -20,7 +20,7 @@ func TestAccWavefrontTarget_BasicWebhook(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_basic(),
+				Config:             testAccCheckWavefrontTargetBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -63,7 +63,7 @@ func TestAccWavefrontTarget_Updated(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_basic(),
+				Config:             testAccCheckWavefrontTargetBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -73,7 +73,7 @@ func TestAccWavefrontTarget_Updated(t *testing.T) {
 			},
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_new_value(),
+				Config:             testAccCheckWavefrontTargetNewValue(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributesUpdated(&record),
@@ -94,7 +94,7 @@ func TestAccWavefrontTarget_BasicEmail(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontTargetDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontTarget_email(),
+				Config: testAccCheckWavefrontTargetEmail(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -135,7 +135,7 @@ func TestAccWavefrontTarget_BasicPagerduty(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontTargetDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontTarget_pagerduty(),
+				Config: testAccCheckWavefrontTargetPagerduty(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -172,7 +172,7 @@ func TestAccWavefrontTarget_AlertTargetId(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontTargetDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontTarget_alertTargetId(),
+				Config: testAccCheckWavefrontTargetAlertTargetID(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -212,7 +212,7 @@ func TestAccWavefrontTarget_Routes(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_routes(),
+				Config:             testAccCheckWavefrontTargetRoutes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -236,7 +236,7 @@ func TestAccWavefrontTarget_MultipleRoutes(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_routes(),
+				Config:             testAccCheckWavefrontTargetRoutes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -248,7 +248,7 @@ func TestAccWavefrontTarget_MultipleRoutes(t *testing.T) {
 			},
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_addRoutes(),
+				Config:             testAccCheckWavefrontTargetAddRoutes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -271,7 +271,7 @@ func TestAccWavefrontTarget_UpdateRoutes(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_routes(),
+				Config:             testAccCheckWavefrontTargetRoutes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -283,7 +283,7 @@ func TestAccWavefrontTarget_UpdateRoutes(t *testing.T) {
 			},
 			{
 				ExpectNonEmptyPlan: true,
-				Config:             testAccCheckWavefrontTarget_changeRoutes(),
+				Config:             testAccCheckWavefrontTargetChangeRoutes(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontTargetExists("wavefront_alert_target.test_target", &record),
 					testAccCheckWavefrontTargetAttributes(&record),
@@ -413,7 +413,7 @@ func testAccCheckWavefrontTargetExists(n string, target *wavefront.Target) resou
 	}
 }
 
-func testAccCheckWavefrontTarget_basic() string {
+func testAccCheckWavefrontTargetBasic() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
@@ -433,7 +433,7 @@ resource "wavefront_alert_target" "test_target" {
 `
 }
 
-func testAccCheckWavefrontTarget_new_value() string {
+func testAccCheckWavefrontTargetNewValue() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Updated"
@@ -453,7 +453,7 @@ resource "wavefront_alert_target" "test_target" {
 `
 }
 
-func testAccCheckWavefrontTarget_routes() string {
+func testAccCheckWavefrontTargetRoutes() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
 	name 		   = "Terraform Test Target"
@@ -480,7 +480,7 @@ resource "wavefront_alert_target" "test_target" {
 }`
 }
 
-func testAccCheckWavefrontTarget_addRoutes() string {
+func testAccCheckWavefrontTargetAddRoutes() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
 	name 		   = "Terraform Test Target"
@@ -515,7 +515,7 @@ resource "wavefront_alert_target" "test_target" {
 }`
 }
 
-func testAccCheckWavefrontTarget_changeRoutes() string {
+func testAccCheckWavefrontTargetChangeRoutes() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
 	name 		   = "Terraform Test Target"
@@ -542,7 +542,7 @@ resource "wavefront_alert_target" "test_target" {
 }`
 }
 
-func testAccCheckWavefrontTarget_email() string {
+func testAccCheckWavefrontTargetEmail() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
@@ -560,7 +560,7 @@ resource "wavefront_alert_target" "test_target" {
 `
 }
 
-func testAccCheckWavefrontTarget_pagerduty() string {
+func testAccCheckWavefrontTargetPagerduty() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
   name = "Terraform Test Target"
@@ -576,7 +576,7 @@ resource "wavefront_alert_target" "test_target" {
 `
 }
 
-func testAccCheckWavefrontTarget_alertTargetId() string {
+func testAccCheckWavefrontTargetAlertTargetID() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
   name        = "Terraform Test Target"

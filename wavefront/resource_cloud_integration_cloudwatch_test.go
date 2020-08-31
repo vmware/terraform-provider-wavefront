@@ -19,7 +19,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_Basic(t *testing.T) {
 			if err != nil {
 				return err
 			}
-			err = testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(state)
+			err = testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy(state)
 			if err != nil {
 				return err
 			}
@@ -27,7 +27,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_Basic(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationCloudWatch_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationCloudWatchBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfCloudWatch),
@@ -38,7 +38,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(resourcePrefix, "volume_selection_tags.env", "prod"),
 					resource.TestCheckResourceAttr(resourcePrefix, "point_tag_filter_regex", "^prod$"),
 					resource.TestCheckResourceAttr(resourcePrefix, "metric_filter_regex", "^.*?\\.cpu.*$"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
 				),
@@ -58,7 +58,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_BasicChanged(t *testing.T) {
 			if err != nil {
 				return err
 			}
-			err = testAccCheckWavefrontCloudIntegrationAwsExternalIdDestroy(state)
+			err = testAccCheckWavefrontCloudIntegrationAwsExternalIDDestroy(state)
 			if err != nil {
 				return err
 			}
@@ -66,7 +66,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_BasicChanged(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationCloudWatch_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationCloudWatchBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					// Check against state that the attributes are as we expect
@@ -77,13 +77,13 @@ func TestAccWavefrontCloudIntegrationCloudWatch_BasicChanged(t *testing.T) {
 					resource.TestCheckResourceAttr(resourcePrefix, "volume_selection_tags.env", "prod"),
 					resource.TestCheckResourceAttr(resourcePrefix, "point_tag_filter_regex", "^prod$"),
 					resource.TestCheckResourceAttr(resourcePrefix, "metric_filter_regex", "^.*?\\.cpu.*$"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationCloudWatch_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationCloudWatchBasicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfCloudWatch),
@@ -95,7 +95,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_BasicChanged(t *testing.T) {
 					resource.TestCheckResourceAttr(resourcePrefix, "volume_selection_tags.env", "dev"),
 					resource.TestCheckResourceAttr(resourcePrefix, "point_tag_filter_regex", "^dev"),
 					resource.TestCheckResourceAttr(resourcePrefix, "metric_filter_regex", "^.*?\\.cpu.*$"),
-					testAccCheckWavefrontCloudIntegrationVerifyExtId(
+					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(
 						resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
@@ -105,7 +105,7 @@ func TestAccWavefrontCloudIntegrationCloudWatch_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationCloudWatch_basic() string {
+func testAccCheckWavefrontCloudIntegrationCloudWatchBasic() string {
 	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" { 
 }
@@ -132,7 +132,7 @@ resource "wavefront_cloud_integration_cloudwatch" "cloudwatch" {
 }`
 }
 
-func testAccCheckWavefrontCloudIntegrationCloudWatch_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationCloudWatchBasicChanged() string {
 	return `
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }

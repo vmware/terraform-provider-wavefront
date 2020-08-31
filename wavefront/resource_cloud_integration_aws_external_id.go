@@ -7,11 +7,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourceCloudIntegrationAwsExternalId() *schema.Resource {
+func resourceCloudIntegrationAwsExternalID() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceCloudIntegrationAwsExternalIdCreate,
-		Read:   resourceCloudIntegrationAwsExternalIdRead,
-		Delete: resourceCloudIntegrationAwsExternalIdDelete,
+		Create: resourceCloudIntegrationAwsExternalIDCreate,
+		Read:   resourceCloudIntegrationAwsExternalIDRead,
+		Delete: resourceCloudIntegrationAwsExternalIDDelete,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -19,22 +19,22 @@ func resourceCloudIntegrationAwsExternalId() *schema.Resource {
 	}
 }
 
-func resourceCloudIntegrationAwsExternalIdCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceCloudIntegrationAwsExternalIDCreate(d *schema.ResourceData, meta interface{}) error {
 	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
 
-	extId, err := cloudIntegrations.CreateAwsExternalID()
+	extID, err := cloudIntegrations.CreateAwsExternalID()
 	if err != nil {
 		return fmt.Errorf("error creating AWS External ID. %s", err)
 	}
 
-	d.SetId(extId)
+	d.SetId(extID)
 	return nil
 }
 
-func resourceCloudIntegrationAwsExternalIdRead(d *schema.ResourceData, meta interface{}) error {
+func resourceCloudIntegrationAwsExternalIDRead(d *schema.ResourceData, meta interface{}) error {
 	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
-	extId := d.Id()
-	err := cloudIntegrations.VerifyAwsExternalID(extId)
+	extID := d.Id()
+	err := cloudIntegrations.VerifyAwsExternalID(extID)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
 			d.SetId("")
@@ -42,15 +42,15 @@ func resourceCloudIntegrationAwsExternalIdRead(d *schema.ResourceData, meta inte
 		}
 		return fmt.Errorf("unable to find AWS External ID %s. %s", d.Id(), err)
 	}
-	d.SetId(extId)
+	d.SetId(extID)
 
 	return nil
 }
 
-func resourceCloudIntegrationAwsExternalIdDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceCloudIntegrationAwsExternalIDDelete(d *schema.ResourceData, meta interface{}) error {
 	cloudIntegrations := meta.(*wavefrontClient).client.CloudIntegrations()
-	extId := d.Id()
-	err := cloudIntegrations.DeleteAwsExternalID(&extId)
+	extID := d.Id()
+	err := cloudIntegrations.DeleteAwsExternalID(&extID)
 	if err != nil {
 		return fmt.Errorf("error deleting AWS External ID. %s", err)
 	}

@@ -17,7 +17,7 @@ func TestAccUserGroup_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserGroupDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUserGroupImporter_basic(),
+				Config: testAccCheckWavefrontUserGroupImporterBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserGroupExists("wavefront_user_group.basic", &record),
 				),
@@ -31,7 +31,7 @@ func TestAccUserGroup_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontUserGroupImporter_basic() string {
+func testAccCheckWavefrontUserGroupImporterBasic() string {
 	return `
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"

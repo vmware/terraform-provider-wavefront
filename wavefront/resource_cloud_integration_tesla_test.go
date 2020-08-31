@@ -15,7 +15,7 @@ func TestAccWavefrontCloudIntegrationTesla_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationTesla_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationTeslaBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfTesla),
@@ -37,7 +37,7 @@ func TestAccWavefrontCloudIntegrationTesla_BasicChanged(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationTesla_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationTeslaBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfTesla),
@@ -48,7 +48,7 @@ func TestAccWavefrontCloudIntegrationTesla_BasicChanged(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationTesla_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationTeslaBasicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfTesla),
@@ -62,7 +62,7 @@ func TestAccWavefrontCloudIntegrationTesla_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationTesla_basic() string {
+func testAccCheckWavefrontCloudIntegrationTeslaBasic() string {
 	return `
 resource "wavefront_cloud_integration_tesla" "tesla" {
   name              = "Test Integration"
@@ -77,7 +77,7 @@ resource "wavefront_cloud_integration_tesla" "tesla" {
 `
 }
 
-func testAccCheckWavefrontCloudIntegrationTesla_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationTeslaBasicChanged() string {
 	return `
 resource "wavefront_cloud_integration_tesla" "tesla" {
   name              = "Test Integration"

@@ -18,7 +18,7 @@ func TestAccWavefrontCloudIntegrationGcp_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationGcp_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcp),
@@ -26,7 +26,7 @@ func TestAccWavefrontCloudIntegrationGcp_Basic(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfGcp),
 					resource.TestCheckResourceAttr(resourcePrefix, "metric_filter_regex", "^(exampleMetricRegex).*?"),
 					resource.TestCheckResourceAttr(resourcePrefix, "project_id", "example-gcp-project"),
-					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJsonKey("example-gcp-project")),
+					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJSONKey("example-gcp-project")),
 					resource.TestCheckResourceAttr(resourcePrefix, "categories.#", "1"),
 				),
 			},
@@ -43,7 +43,7 @@ func TestAccWavefrontCloudIntegrationGcp_BasicChanged(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontCloudIntegrationGcp_basic(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcp),
@@ -51,12 +51,12 @@ func TestAccWavefrontCloudIntegrationGcp_BasicChanged(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfGcp),
 					resource.TestCheckResourceAttr(resourcePrefix, "metric_filter_regex", "^(exampleMetricRegex).*?"),
 					resource.TestCheckResourceAttr(resourcePrefix, "project_id", "example-gcp-project"),
-					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJsonKey("example-gcp-project")),
+					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJSONKey("example-gcp-project")),
 					resource.TestCheckResourceAttr(resourcePrefix, "categories.#", "1"),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontCloudIntegrationGcp_basicChanged(),
+				Config: testAccCheckWavefrontCloudIntegrationGcpBasicChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontCloudIntegrationExists(resourcePrefix, &record),
 					testAccCheckWavefrontCloudIntegrationAttributes(&record, wfGcp),
@@ -64,7 +64,7 @@ func TestAccWavefrontCloudIntegrationGcp_BasicChanged(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfGcp),
 					resource.TestCheckResourceAttr(resourcePrefix, "metric_filter_regex", "^(exampleMetricRegex).*?"),
 					resource.TestCheckResourceAttr(resourcePrefix, "project_id", "example-gcp-project"),
-					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJsonKey("example-gcp-project")),
+					resource.TestCheckResourceAttr(resourcePrefix, "json_key", testGcpJSONKey("example-gcp-project")),
 					resource.TestCheckResourceAttr(resourcePrefix, "categories.#", "2"),
 				),
 			},
@@ -72,7 +72,7 @@ func TestAccWavefrontCloudIntegrationGcp_BasicChanged(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontCloudIntegrationGcp_basic() string {
+func testAccCheckWavefrontCloudIntegrationGcpBasic() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp" "gcp" {
   name                = "Test Integration"
@@ -87,10 +87,10 @@ resource "wavefront_cloud_integration_gcp" "gcp" {
 %s
 EOF
   categories          = ["APPENGINE"]
-}`, testGcpJsonKey("example-gcp-project"))
+}`, testGcpJSONKey("example-gcp-project"))
 }
 
-func testAccCheckWavefrontCloudIntegrationGcp_basicChanged() string {
+func testAccCheckWavefrontCloudIntegrationGcpBasicChanged() string {
 	return fmt.Sprintf(`
 resource "wavefront_cloud_integration_gcp" "gcp" {
   name                = "Test Integration"
@@ -105,10 +105,10 @@ resource "wavefront_cloud_integration_gcp" "gcp" {
 %s
 EOF
   categories          = ["APPENGINE", "BIGQUERY"]
-}`, testGcpJsonKey("example-gcp-project"))
+}`, testGcpJSONKey("example-gcp-project"))
 }
 
-func testGcpJsonKey(pid string) string {
+func testGcpJSONKey(pid string) string {
 	return strings.TrimSpace(fmt.Sprintf(`{
   "project-id": "%s"
 }`, pid))

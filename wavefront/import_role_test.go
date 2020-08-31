@@ -16,7 +16,7 @@ func TestAccRole_basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontCloudIntegrationDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontRole_basic(),
+				Config: testAccCheckWavefrontRoleBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontRoleExists(resourceName, &record),
 				),

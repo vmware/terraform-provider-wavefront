@@ -17,7 +17,7 @@ func TestAccUser_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUserImporter_basic(),
+				Config: testAccCheckWavefrontUserImporterBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 				),
@@ -31,7 +31,7 @@ func TestAccUser_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckWavefrontUserImporter_basic() string {
+func testAccCheckWavefrontUserImporterBasic() string {
 	return `
 resource "wavefront_user" "basic" {
 	email  = "test+tftesting@example.com"

@@ -18,7 +18,7 @@ func TestAccWavefrontUserGroup_BasicUserGroup(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserGroupDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUserGroup_basic(),
+				Config: testAccCheckWavefrontUserGroupBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserGroupExists("wavefront_user_group.basic", &record),
 					testAccCheckWavefrontUserGroupAttributes(&record),
@@ -31,7 +31,7 @@ func TestAccWavefrontUserGroup_BasicUserGroup(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCheckWavefrontUserGroup_changed(),
+				Config: testAccCheckWavefrontUserGroupChanged(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserGroupExists("wavefront_user_group.basic", &record),
 					testAccCheckWavefrontUserGroupAttributes(&record),
@@ -129,7 +129,7 @@ func testAccCheckWavefrontUserGroupAttributes(userGroup *wavefront.UserGroup) re
 	}
 }
 
-func testAccCheckWavefrontUserGroup_basic() string {
+func testAccCheckWavefrontUserGroupBasic() string {
 	return `
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Group"
@@ -138,7 +138,7 @@ resource "wavefront_user_group" "basic" {
 `
 }
 
-func testAccCheckWavefrontUserGroup_changed() string {
+func testAccCheckWavefrontUserGroupChanged() string {
 	return `
 resource "wavefront_user_group" "basic" {
   name        = "Basic User Groups"
