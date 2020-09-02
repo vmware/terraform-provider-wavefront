@@ -1,7 +1,5 @@
 dist: trusty
 sudo: required
-services:
-  - docker
 language: go
 go:
   - "1.11.x"
@@ -19,7 +17,6 @@ install:
 script:
   - make test
   - make vet
-  - make website-test
 
 branches:
   only:
