@@ -1,19 +1,20 @@
 ---
 layout: "wavefront"
-page_title: "Wavefront: Role"
+page_title: "Wavefront: Service Account"
 description: |-
-  Provides a Wavefront Role Resource. This allows roles to be created, updated, and deleted.
+  Provides a Wavefront Service Account Resource. This allows service accounts to be created, updated, and deleted.
 ---
 
-# Resource : wavefront_user_group
+# Resource : wavefront_service_account
 
-Provides a Wavefront Role Resource. This allows user groups to be created, updated, and deleted.
+Provides a Wavefront Service Account Resource. This allows service accounts to be created, updated, and deleted.
 
 ## Example usage
 
 ```hcl
-resource "wavefront_role" "role" {
-  name        = "Test Role"
+resource "wavefront_service_account" "basic" {
+  identifier  = "sa::tftesting"
+  active = true
 }
 ```
 
@@ -21,36 +22,32 @@ resource "wavefront_role" "role" {
 
 The following arguments are supported:
 
-* `name` - (Required) The name of the user group
-* `description` - (Optional) A short description of the user group
-* `permissions` - (Optional) A list of permissions to assign to this role. Valid options are 
+* `identifier` - (Required) The (unique) identifier of the service account to create. Must start with sa::
+* `active` - (Required) Whether or not the service account is active
+* `description` - (Optional) The description of the service account
+* `permissions` - (Optional) List of permission to grant to this service account.  Valid options are
 `agent_management`, `alerts_management`, `dashboard_management`, `embedded_charts`, `events_management`, `external_links_management`,
 `host_tag_management`, `metrics_management`, `user_management`
-* `assignees` - (Optional) A list of user groups or accounts to assign to this role. 
-
+* `user_groups` - (Optional) List of user groups for this service account
 
 ### Example
 
 ```hcl
-resource "wavefront_user_group" "agents_group" {
+
+resource "wavefront_user_group" "test_group" {
   name        = "Test Group"
   description = "Test Group"
 }
 
-resource "wavefront_user" "basic" {
-  email       = "test+tftesting@example.com"
-  user_groups = [
-    wavefront_user_group.test_group.id
-  ]
-}
-
-resource "wavefront_role" "agent_management" {
-  name        = "Agent Management Role"
-  description = "Agent Management Role for Testing"
+resource "wavefront_service_account" "basic" {
+  identifier  = "sa::tftesting"
+  active      = true
+  description = "A service account description"
   permissions = [
-    "agent_management"
+    "agent_management",
+    "events_management",
   ]
-  assignees   = [
+  user_groups = [
     wavefront_user_group.test_group.id
   ]
 }
@@ -58,8 +55,8 @@ resource "wavefront_role" "agent_management" {
 
 ## Import
 
-User Groups can be imported using the `id`, e.g.
+Service accounts can be imported using `identifier`, e.g.
 
 ```
-$ terraform import wavefront_user_group.some_group a411c16b-3cf7-4f03-bf11-8ca05aab898d
+$ terraform import wavefront_service_account.basic sa::tftesting
 ```
