@@ -1,3 +1,18 @@
+## 2.5.0 (September 10, 2020)
+
+BUG FIXES:
+
+* wavefront_user resource fixed so that terraform doesn't try to constantly update the user groups field [PR 4](https://github.com/vmware/terraform-provider-wavefront/pull/4).
+* Code made to pass the golangci lint checker
+
+ENHANCEMENTS:
+
+* Documentation changed to meet latest standards
+
+FEATURES:
+
+* **New Resource:** `wavefront_service_account`
+
 ## 2.4.0 (August 28, 2020)
 
 BUG FIXES:
