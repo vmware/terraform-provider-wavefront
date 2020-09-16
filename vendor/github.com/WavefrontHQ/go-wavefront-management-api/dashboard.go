@@ -160,7 +160,7 @@ type Source struct {
 	Disabled bool `json:"disabled,omitempty"`
 
 	// ScatterPlotSource
-	ScatterPlotSource string `json:"scatterPlotSource"`
+	ScatterPlotSource string `json:"scatterPlotSource,omitempty"`
 
 	// QuerybuilderEnabled
 	QuerybuilderEnabled bool `json:"querybuilderEnabled"`
@@ -296,7 +296,7 @@ func (d Dashboards) Find(filter []*SearchCondition) ([]*Dashboard, error) {
 
 	var results []*Dashboard
 	moreItems := true
-	for moreItems == true {
+	for moreItems {
 		resp, err := search.Execute()
 		if err != nil {
 			return nil, err

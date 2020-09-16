@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"reflect"
 	"time"
 )
 
@@ -67,7 +68,8 @@ func NewClient(config *Config) (*Client, error) {
 
 	// need to disable http/2 as it doesn't play nicely with nginx
 	// to do so we set TLSNextProto to an empty, non-nil map
-	c := &Client{Config: config,
+	configCopy := *config
+	c := &Client{Config: &configCopy,
 		BaseURL: baseURL,
 		httpClient: &http.Client{
 			Transport: &http.Transport{
@@ -90,7 +92,7 @@ func NewClient(config *Config) (*Client, error) {
 	}
 
 	//For testing ONLY
-	if config.SkipTLSVerify == true {
+	if config.SkipTLSVerify {
 		tr := &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
@@ -111,17 +113,17 @@ func (c Client) NewRequest(method, path string, params *map[string]string, body 
 		return nil, err
 	}
 
-	url := c.BaseURL.ResolveReference(rel)
+	currentUrl := c.BaseURL.ResolveReference(rel)
 
 	if params != nil {
-		q := url.Query()
+		q := currentUrl.Query()
 		for k, v := range *params {
 			q.Set(k, v)
 		}
-		url.RawQuery = q.Encode()
+		currentUrl.RawQuery = q.Encode()
 	}
 
-	req, err := http.NewRequest(method, url.String(), nil)
+	req, err := http.NewRequest(method, currentUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +164,7 @@ func NotFound(err error) bool {
 // be closed by the requester.
 func (c Client) Do(req *http.Request) (io.ReadCloser, error) {
 
-	if c.debug == true {
+	if c.debug {
 		d, err := httputil.DumpRequestOut(req, true)
 		if err != nil {
 			return nil, err
@@ -208,11 +210,11 @@ func (c Client) Do(req *http.Request) (io.ReadCloser, error) {
 					fmt.Printf("[DEBUG] retry '%d' of '%d', sleep sleepiing for %s", retries, maxRetries,
 						sleepTime.String())
 				}
-				time.Sleep(*sleepTime)
+				time.Sleep(sleepTime)
 				continue
 			}
 			body, err := ioutil.ReadAll(resp.Body)
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			if err != nil {
 				re := newRestError(
 					fmt.Errorf("server returned %s\n", resp.Status),
@@ -228,16 +230,16 @@ func (c Client) Do(req *http.Request) (io.ReadCloser, error) {
 	}
 }
 
-func (c *Client) getSleepTime(retries int) *time.Duration {
+func (c *Client) getSleepTime(retries int) time.Duration {
 	defaultSleep := time.Duration(c.MaxRetryDurationInMS) * time.Millisecond
 	// Add some jitter, add 500ms * our retry, convert to MS
 	jitter := time.Duration(rand.Int63n(50)+50) * time.Millisecond
 	duration := time.Duration(500*retries) * time.Millisecond
 	sleep := duration + jitter
 	if sleep >= defaultSleep {
-		return &defaultSleep
+		return defaultSleep
 	}
-	return &sleep
+	return sleep
 }
 
 // Debug enables dumping http request objects to stdout
@@ -264,9 +266,10 @@ func jsonResponseWrapper(responsePtr interface{}) interface{} {
 }
 
 type doSettings struct {
-	inPtr  interface{}
-	outPtr interface{}
-	params map[string]string
+	inPtr          interface{}
+	outPtr         interface{}
+	params         map[string]string
+	directResponse bool
 }
 
 type doOption func(d *doSettings)
@@ -293,11 +296,23 @@ func doOutput(ptr interface{}) doOption {
 	}
 }
 
+// doDirectResponse is only used with doOutput. doDirectResponse specifies that
+// the rest API result does not have a "Status" and "Response" stanza
+func doDirectResponse() doOption {
+	return func(d *doSettings) {
+		d.directResponse = true
+	}
+}
+
 // doParams specifies that the given query parameters should be used with
 // the rest URL.
 func doParams(params map[string]string) doOption {
+	paramsCopy := make(map[string]string, len(params))
+	for k, v := range params {
+		paramsCopy[k] = v
+	}
 	return func(d *doSettings) {
-		d.params = params
+		d.params = paramsCopy
 	}
 }
 
@@ -338,7 +353,29 @@ func doRest(
 	defer resp.Close()
 	if settings.outPtr != nil {
 		decoder := json.NewDecoder(resp)
+		pointToZeroValue(settings.outPtr)
+		if settings.directResponse {
+			return decoder.Decode(settings.outPtr)
+		}
 		return decoder.Decode(jsonResponseWrapper(settings.outPtr))
 	}
 	return nil
+}
+
+// pointToZeroValue makes what ptr points to be the zero value. This helps to
+// ensure that the assignment operator with JSON structs works as expected.
+// When the go json package unmarshalls, it modifies slices and maps within a
+// struct in place which breaks assigning one struct to another using the
+// assignment operator. The way to fix this is to set the struct to its zero
+// value before unmarshalling to it. Since the zero value has no allocated
+// slices or maps, the json library will allocate new slices and maps rather
+// than modifying existing ones in place which is what we need for the
+// assignment operator to work as expected.
+func pointToZeroValue(ptr interface{}) {
+	if reflect.TypeOf(ptr).Kind() != reflect.Ptr {
+		// Skip if we don't have a pointer
+		return
+	}
+	val := reflect.ValueOf(ptr).Elem()
+	val.Set(reflect.Zero(val.Type()))
 }
