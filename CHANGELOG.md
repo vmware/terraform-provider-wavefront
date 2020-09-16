@@ -1,3 +1,9 @@
+## 2.5.1 (September 16, 2020)
+
+BUG FIXES:
+
+* fix resource_cloud_integration_cloudwatch so that it doesn't think the resource changed all the time because of missing external_id.
+
 ## 2.5.0 (September 10, 2020)
 
 BUG FIXES:
