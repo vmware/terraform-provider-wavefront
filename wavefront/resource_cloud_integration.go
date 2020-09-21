@@ -183,6 +183,7 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("volume_selection_tags", integration.CloudWatch.VolumeSelectionTags)
 		d.Set("instance_selection_tags", integration.CloudWatch.InstanceSelectionTags)
 		d.Set("role_arn", integration.CloudWatch.BaseCredentials.RoleARN)
+		d.Set("external_id", integration.CloudWatch.BaseCredentials.ExternalID)
 		d.Set("point_tag_filter_regex", integration.CloudWatch.PointTagFilterRegex)
 	case "CLOUDTRAIL":
 		d.Set("region", integration.CloudTrail.Region)
@@ -190,9 +191,11 @@ func encodeAwsIntegration(d *schema.ResourceData, integration *wavefront.CloudIn
 		d.Set("bucket_name", integration.CloudTrail.BucketName)
 		d.Set("filter_rule", integration.CloudTrail.FilterRule)
 		d.Set("role_arn", integration.CloudTrail.BaseCredentials.RoleARN)
+		d.Set("external_id", integration.CloudTrail.BaseCredentials.ExternalID)
 	case "EC2":
 		d.Set("hostname_tags", integration.EC2.HostNameTags)
 		d.Set("role_arn", integration.EC2.BaseCredentials.RoleARN)
+		d.Set("external_id", integration.EC2.BaseCredentials.ExternalID)
 	default:
 		return fmt.Errorf("invalid service, expected one of CLOUDWATCH, CLOUDTRAIL, or EC2. got %s", integration.Service)
 	}
