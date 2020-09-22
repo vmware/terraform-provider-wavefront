@@ -86,7 +86,6 @@ func TestAccWavefrontCloudIntegrationCloudTrail_BasicChanged(t *testing.T) {
 					testAccCheckWavefrontCloudIntegrationResourceAttributes(resourcePrefix, wfCloudTrail),
 					resource.TestCheckResourceAttr(resourcePrefix, "bucket_name", "example-s3-bucket2"),
 					resource.TestCheckResourceAttr(resourcePrefix, "region", "us-west-1"),
-					resource.TestCheckResourceAttr(resourcePrefix, "filter_rule", "someFilterRule"),
 					testAccCheckWavefrontCloudIntegrationVerifyExtID(
 						resourcePrefix, "wavefront_cloud_integration_aws_external_id.ext_id"),
 					resource.TestCheckResourceAttr(resourcePrefix, "role_arn", "arn:aws::1234567:role/example-arn"),
@@ -147,7 +146,6 @@ resource "wavefront_cloud_integration_cloudtrail" "cloudtrail" {
   }
   region      = "us-west-1"
   bucket_name = "example-s3-bucket2"
-  filter_rule = "someFilterRule"
   role_arn    = "arn:aws::1234567:role/example-arn"
   external_id = wavefront_cloud_integration_aws_external_id.ext_id.id
 }
