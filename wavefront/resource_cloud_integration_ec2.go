@@ -45,6 +45,7 @@ func resourceCloudIntegrationEc2() *schema.Resource {
 			"external_id": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 		},
 	}

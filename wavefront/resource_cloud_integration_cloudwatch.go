@@ -63,6 +63,7 @@ func resourceCloudIntegrationCloudWatch() *schema.Resource {
 			"external_id": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 		},
 	}
