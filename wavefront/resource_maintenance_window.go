@@ -8,15 +8,15 @@ import (
 )
 
 const (
-	reasonKey                          = "reason"
-	titleKey                           = "title"
-	startTimeInSecondsKey              = "start_time_in_seconds"
-	endTimeInSecondsKey                = "end_time_in_seconds"
-	relevantCustomerTagsKey            = "relevant_customer_tags"
-	relevantHostTagsKey                = "relevant_host_tags"
-	relevantHostNamesKey               = "relevant_host_names"
-	relevantHostTagsAndedKey           = "relevant_host_tags_anded"
-	hostTagGroupHostNamesGroupAndedKey = "host_tag_group_host_names_group_anded"
+	mwReasonKey                          = "reason"
+	mwTitleKey                           = "title"
+	mwStartTimeInSecondsKey              = "start_time_in_seconds"
+	mwEndTimeInSecondsKey                = "end_time_in_seconds"
+	mwRelevantCustomerTagsKey            = "relevant_customer_tags"
+	mwRelevantHostTagsKey                = "relevant_host_tags"
+	mwRelevantHostNamesKey               = "relevant_host_names"
+	mwRelevantHostTagsAndedKey           = "relevant_host_tags_anded"
+	mwHostTagGroupHostNamesGroupAndedKey = "host_tag_group_host_names_group_anded"
 )
 
 func resourceMaintenanceWindow() *schema.Resource {
@@ -29,46 +29,46 @@ func resourceMaintenanceWindow() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Schema: map[string]*schema.Schema{
-			reasonKey: {
+			mwReasonKey: {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			titleKey: {
+			mwTitleKey: {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			startTimeInSecondsKey: {
+			mwStartTimeInSecondsKey: {
 				Type:     schema.TypeInt,
 				Required: true,
 			},
-			endTimeInSecondsKey: {
+			mwEndTimeInSecondsKey: {
 				Type:     schema.TypeInt,
 				Required: true,
 			},
-			relevantCustomerTagsKey: {
+			mwRelevantCustomerTagsKey: {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 				Set:      schema.HashString,
 			},
-			relevantHostTagsKey: {
+			mwRelevantHostTagsKey: {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 				Set:      schema.HashString,
 			},
-			relevantHostNamesKey: {
+			mwRelevantHostNamesKey: {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 				Set:      schema.HashString,
 			},
-			relevantHostTagsAndedKey: {
+			mwRelevantHostTagsAndedKey: {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
-			hostTagGroupHostNamesGroupAndedKey: {
+			mwHostTagGroupHostNamesGroupAndedKey: {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
@@ -83,15 +83,15 @@ func resourceMaintenanceWindowCreate(
 
 	mw, err := maintenanceWindows.Create(
 		&wavefront.MaintenanceWindowOptions{
-			Reason:                          d.Get(reasonKey).(string),
-			Title:                           d.Get(titleKey).(string),
-			StartTimeInSeconds:              int64(d.Get(startTimeInSecondsKey).(int)),
-			EndTimeInSeconds:                int64(d.Get(endTimeInSecondsKey).(int)),
-			RelevantCustomerTags:            getStringSlice(d, relevantCustomerTagsKey),
-			RelevantHostTags:                getStringSlice(d, relevantHostTagsKey),
-			RelevantHostNames:               getStringSlice(d, relevantHostNamesKey),
-			RelevantHostTagsAnded:           d.Get(relevantHostTagsAndedKey).(bool),
-			HostTagGroupHostNamesGroupAnded: d.Get(hostTagGroupHostNamesGroupAndedKey).(bool),
+			Reason:                          d.Get(mwReasonKey).(string),
+			Title:                           d.Get(mwTitleKey).(string),
+			StartTimeInSeconds:              int64(d.Get(mwStartTimeInSecondsKey).(int)),
+			EndTimeInSeconds:                int64(d.Get(mwEndTimeInSecondsKey).(int)),
+			RelevantCustomerTags:            getStringSlice(d, mwRelevantCustomerTagsKey),
+			RelevantHostTags:                getStringSlice(d, mwRelevantHostTagsKey),
+			RelevantHostNames:               getStringSlice(d, mwRelevantHostNamesKey),
+			RelevantHostTagsAnded:           d.Get(mwRelevantHostTagsAndedKey).(bool),
+			HostTagGroupHostNamesGroupAnded: d.Get(mwHostTagGroupHostNamesGroupAndedKey).(bool),
 		})
 	if err != nil {
 		return fmt.Errorf(
@@ -117,35 +117,35 @@ func resourceMaintenanceWindowRead(
 			d.Id(),
 			err)
 	}
-	if err := d.Set(reasonKey, mw.Reason); err != nil {
+	if err := d.Set(mwReasonKey, mw.Reason); err != nil {
 		return err
 	}
-	if err := d.Set(titleKey, mw.Title); err != nil {
+	if err := d.Set(mwTitleKey, mw.Title); err != nil {
 		return err
 	}
-	if err := d.Set(startTimeInSecondsKey, int(mw.StartTimeInSeconds)); err != nil {
+	if err := d.Set(mwStartTimeInSecondsKey, int(mw.StartTimeInSeconds)); err != nil {
 		return err
 	}
-	if err := d.Set(endTimeInSecondsKey, int(mw.EndTimeInSeconds)); err != nil {
+	if err := d.Set(mwEndTimeInSecondsKey, int(mw.EndTimeInSeconds)); err != nil {
 		return err
 	}
-	err = setStringSlice(d, relevantCustomerTagsKey, mw.RelevantCustomerTags)
+	err = setStringSlice(d, mwRelevantCustomerTagsKey, mw.RelevantCustomerTags)
 	if err != nil {
 		return err
 	}
-	err = setStringSlice(d, relevantHostTagsKey, mw.RelevantHostTags)
+	err = setStringSlice(d, mwRelevantHostTagsKey, mw.RelevantHostTags)
 	if err != nil {
 		return err
 	}
-	err = setStringSlice(d, relevantHostNamesKey, mw.RelevantHostNames)
+	err = setStringSlice(d, mwRelevantHostNamesKey, mw.RelevantHostNames)
 	if err != nil {
 		return err
 	}
-	err = d.Set(relevantHostTagsAndedKey, mw.RelevantHostTagsAnded)
+	err = d.Set(mwRelevantHostTagsAndedKey, mw.RelevantHostTagsAnded)
 	if err != nil {
 		return err
 	}
-	return d.Set(hostTagGroupHostNamesGroupAndedKey, mw.HostTagGroupHostNamesGroupAnded)
+	return d.Set(mwHostTagGroupHostNamesGroupAndedKey, mw.HostTagGroupHostNamesGroupAnded)
 }
 
 func resourceMaintenanceWindowUpdate(
@@ -163,32 +163,32 @@ func resourceMaintenanceWindowUpdate(
 			err)
 	}
 	options := mw.Options()
-	if d.HasChange(reasonKey) {
-		options.Reason = d.Get(reasonKey).(string)
+	if d.HasChange(mwReasonKey) {
+		options.Reason = d.Get(mwReasonKey).(string)
 	}
-	if d.HasChange(titleKey) {
-		options.Title = d.Get(titleKey).(string)
+	if d.HasChange(mwTitleKey) {
+		options.Title = d.Get(mwTitleKey).(string)
 	}
-	if d.HasChange(startTimeInSecondsKey) {
-		options.StartTimeInSeconds = int64(d.Get(startTimeInSecondsKey).(int))
+	if d.HasChange(mwStartTimeInSecondsKey) {
+		options.StartTimeInSeconds = int64(d.Get(mwStartTimeInSecondsKey).(int))
 	}
-	if d.HasChange(endTimeInSecondsKey) {
-		options.EndTimeInSeconds = int64(d.Get(endTimeInSecondsKey).(int))
+	if d.HasChange(mwEndTimeInSecondsKey) {
+		options.EndTimeInSeconds = int64(d.Get(mwEndTimeInSecondsKey).(int))
 	}
-	if d.HasChange(relevantCustomerTagsKey) {
-		options.RelevantCustomerTags = getStringSlice(d, relevantCustomerTagsKey)
+	if d.HasChange(mwRelevantCustomerTagsKey) {
+		options.RelevantCustomerTags = getStringSlice(d, mwRelevantCustomerTagsKey)
 	}
-	if d.HasChange(relevantHostTagsKey) {
-		options.RelevantHostTags = getStringSlice(d, relevantHostTagsKey)
+	if d.HasChange(mwRelevantHostTagsKey) {
+		options.RelevantHostTags = getStringSlice(d, mwRelevantHostTagsKey)
 	}
-	if d.HasChange(relevantHostNamesKey) {
-		options.RelevantHostNames = getStringSlice(d, relevantHostNamesKey)
+	if d.HasChange(mwRelevantHostNamesKey) {
+		options.RelevantHostNames = getStringSlice(d, mwRelevantHostNamesKey)
 	}
-	if d.HasChange(relevantHostTagsAndedKey) {
-		options.RelevantHostTagsAnded = d.Get(relevantHostTagsAndedKey).(bool)
+	if d.HasChange(mwRelevantHostTagsAndedKey) {
+		options.RelevantHostTagsAnded = d.Get(mwRelevantHostTagsAndedKey).(bool)
 	}
-	if d.HasChange(hostTagGroupHostNamesGroupAndedKey) {
-		options.HostTagGroupHostNamesGroupAnded = d.Get(hostTagGroupHostNamesGroupAndedKey).(bool)
+	if d.HasChange(mwHostTagGroupHostNamesGroupAndedKey) {
+		options.HostTagGroupHostNamesGroupAnded = d.Get(mwHostTagGroupHostNamesGroupAndedKey).(bool)
 	}
 	_, err = maintenanceWindows.Update(mw.ID, options)
 	if err != nil {
