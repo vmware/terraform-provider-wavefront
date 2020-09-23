@@ -1,3 +1,13 @@
+## 2.6.0 (September 23, 2020)
+
+BUG FIXES:
+
+* When user changes external_id, destroy and re-create the AWS cloud integration resource rather than trying to change external_id in a PUT request.
+
+FEATURES:
+
+* **New Resource:** `wavefront_maintenance_window`
+
 ## 2.5.1 (September 16, 2020)
 
 BUG FIXES:
