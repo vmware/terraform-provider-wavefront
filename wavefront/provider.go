@@ -47,6 +47,7 @@ func Provider() *schema.Provider {
 			"wavefront_dashboard":                            resourceDashboard(),
 			"wavefront_dashboard_json":                       resourceDashboardJSON(),
 			"wavefront_derived_metric":                       resourceDerivedMetric(),
+			"wavefront_external_link":                        resourceExternalLink(),
 			"wavefront_maintenance_window":                   resourceMaintenanceWindow(),
 			"wavefront_service_account":                      resourceServiceAccount(),
 			"wavefront_role":                                 resourceRole(),
