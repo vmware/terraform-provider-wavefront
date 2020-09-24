@@ -6,17 +6,18 @@ import (
 )
 
 type ExternalLink struct {
-	ID                    *string           `json:"id"`
+	ID                    *string           `json:"id,omitempty"`
 	Name                  string            `json:"name"`
 	Description           string            `json:"description"`
-	CreatorId             string            `json:"creatorId"`
-	UpdaterId             string            `json:"updaterId"`
-	UpdatedEpochMillis    int               `json:"updatedEpochMillis"`
-	CreatedEpochMillis    int               `json:"createdEpochMillis"`
+	CreatorId             string            `json:"creatorId,omitempty"`
+	UpdaterId             string            `json:"updaterId,omitempty"`
+	UpdatedEpochMillis    int               `json:"updatedEpochMillis,omitempty"`
+	CreatedEpochMillis    int               `json:"createdEpochMillis,omitempty"`
 	Template              string            `json:"template"`
 	MetricFilterRegex     string            `json:"metricFilterRegex,omitempty"`
-	SourceFilterRegex     string            `json:"SourceFilterRegex,omitempty"`
-	PointTagFilterRegexes map[string]string `json:"PointTagFilterRegexes,omitempty"`
+	SourceFilterRegex     string            `json:"sourceFilterRegex,omitempty"`
+	PointTagFilterRegexes map[string]string `json:"pointTagFilterRegexes,omitempty"`
+	IsLogIntegration      bool              `json:"isLogIntegration,omitempty"`
 }
 
 const baseExtLinkPath = "/api/v2/extlink"
@@ -59,27 +60,40 @@ func (e ExternalLinks) Find(conditions []*SearchCondition) ([]*ExternalLink, err
 }
 
 func (e ExternalLinks) Get(link *ExternalLink) error {
-	if *link.ID == "" {
+	if link.ID == nil || *link.ID == "" {
 		return fmt.Errorf("id must be specified")
 	}
 
-	return basicCrud(e.client, "GET", fmt.Sprintf("%s/%s", baseExtLinkPath, *link.ID), link, nil)
+	return doRest(
+		"GET",
+		fmt.Sprintf("%s/%s", baseExtLinkPath, *link.ID),
+		e.client,
+		doResponse(link))
 }
 
 func (e ExternalLinks) Create(link *ExternalLink) error {
 	if link.Name == "" || link.Description == "" || link.Template == "" {
 		return fmt.Errorf("externa link name, description, and template must be specified")
 	}
-
-	return basicCrud(e.client, "POST", baseExtLinkPath, link, nil)
+	return doRest(
+		"POST",
+		baseExtLinkPath,
+		e.client,
+		doPayload(link),
+		doResponse(link))
 }
 
 func (e ExternalLinks) Update(link *ExternalLink) error {
-	if *link.ID == "" {
+	if link.ID == nil || *link.ID == "" {
 		return fmt.Errorf("id must be specified")
 	}
 
-	return basicCrud(e.client, "PUT", fmt.Sprintf("%s/%s", baseExtLinkPath, *link.ID), link, nil)
+	return doRest(
+		"PUT",
+		fmt.Sprintf("%s/%s", baseExtLinkPath, *link.ID),
+		e.client,
+		doPayload(link),
+		doResponse(link))
 }
 
 func (e ExternalLinks) Delete(link *ExternalLink) error {
@@ -87,12 +101,16 @@ func (e ExternalLinks) Delete(link *ExternalLink) error {
 		return fmt.Errorf("id must be specified")
 	}
 
-	err := basicCrud(e.client, "DELETE", fmt.Sprintf("%s/%s", baseExtLinkPath, *link.ID), link, nil)
+	err := doRest(
+		"DELETE",
+		fmt.Sprintf("%s/%s", baseExtLinkPath, *link.ID),
+		e.client)
 	if err != nil {
 		return err
 	}
 
 	// Clear out the id to prevent re-submission
-	*link.ID = ""
+	empty := ""
+	link.ID = &empty
 	return nil
 }
