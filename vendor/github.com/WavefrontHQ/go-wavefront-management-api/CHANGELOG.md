@@ -2,6 +2,33 @@
 
 Changelog for go-wavefront-management-api.
 
+## [1.12.0]
+
+*Add IsLogIntegration field to ExternalLink type*
+
+Bug fixes:
+- Fix json encoding / decoding of ExternalLink instances.
+
+Enhancements:
+- CRUD operations changed to be more efficient and to modify structs in ways
+that are compatible with the assignment operator.
+
+## [1.11.0]
+
+*Add Support for Maintenance Windows*
+
+Bug fixes:
+- ScatterPlotSource field can be omitted when creating a dashboard
+- fix all lint errors
+- Make example code show up in godoc tools
+- Account for ID field of user struct being nil
+- NewClient to make defensive copy of config instance
+- Users rewritten for performance improvement
+
+## [1.10.0]
+
+*Add support for Service Accounts* 
+
 ## [1.9.0]
 
 *Adds support for roles* 
