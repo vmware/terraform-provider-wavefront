@@ -55,3 +55,23 @@ func getStringSlice(d *schema.ResourceData, key string) []string {
 	}
 	return result
 }
+
+// setStringMap stores a map[string]string under a particular key.
+func setStringMap(
+	d *schema.ResourceData, key string, strMap map[string]string) error {
+	result := make(map[string]interface{}, len(strMap))
+	for k, v := range strMap {
+		result[k] = v
+	}
+	return d.Set(key, result)
+}
+
+// getStringMap retrieves a map[string]string under a particular key
+func getStringMap(d *schema.ResourceData, key string) map[string]string {
+	interfaceMap := d.Get(key).(map[string]interface{})
+	result := make(map[string]string, len(interfaceMap))
+	for k, v := range interfaceMap {
+		result[k] = v.(string)
+	}
+	return result
+}
