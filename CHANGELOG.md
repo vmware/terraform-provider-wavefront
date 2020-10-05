@@ -1,3 +1,9 @@
+## 2.7.0 (October 5, 2020)
+
+FEATURES:
+
+* **New Resource:** `wavefront_external_link`
+
 ## 2.6.0 (September 23, 2020)
 
 BUG FIXES:
