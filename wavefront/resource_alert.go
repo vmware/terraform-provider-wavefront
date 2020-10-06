@@ -74,9 +74,9 @@ func resourceAlert() *schema.Resource {
 				Optional: true,
 			},
 			"severity": {
-				Type:             schema.TypeString,
-				Optional:         true,
-				DiffSuppressFunc: suppressCase,
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
 			},
 			"tags": {
 				Type:     schema.TypeSet,
