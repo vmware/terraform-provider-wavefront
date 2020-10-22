@@ -236,6 +236,14 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
                 "fixedLegendFilterField": "CURRENT",
                 "plainMarkdownContent": "markdown content"
               },
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 4,
+                  "h": 7
+                }
+              },
               "summarization": "MEAN"
             }
           ],
@@ -349,6 +357,14 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
                 "fixedLegendFilterLimit": 1,
                 "fixedLegendFilterField": "CURRENT",
                 "plainMarkdownContent": "markdown content"
+              },
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 4,
+                  "h": 7
+                }
               },
               "summarization": "MEAN"
             }

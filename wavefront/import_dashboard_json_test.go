@@ -102,6 +102,14 @@ resource "wavefront_dashboard_json" "json_foobar" {
                 "fixedLegendFilterField": "CURRENT",
                 "plainMarkdownContent": "markdown content"
               },
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 4,
+                  "h": 7
+                }
+              },
               "summarization": "MEAN"
             }
           ],
