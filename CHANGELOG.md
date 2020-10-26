@@ -1,3 +1,13 @@
+## 2.7.1 (October 26, 2020)
+
+BUG FIXES:
+
+* Changes in alert severity no longer trigger a terraform update.
+
+ENHANCEMENTS:
+
+* Now chart attributes in dashboards can be set.
+
 ## 2.7.0 (October 5, 2020)
 
 FEATURES:
