@@ -1,3 +1,13 @@
+## 2.7.2 (December 2, 2020)
+
+BUG FIXES:
+
+* Send sparkline_decimal_precision for dashboards even if 0
+
+ENHANCEMENTS:
+
+* Chart attributes can be set in both dashboard and dashboard json resources.
+
 ## 2.7.1 (October 26, 2020)
 
 BUG FIXES:
