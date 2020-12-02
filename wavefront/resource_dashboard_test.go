@@ -222,6 +222,7 @@ func TestBuildCharts(t *testing.T) {
 			"type": "linear",
 		},
 	}
+	chart0["chart_attribute"] = "null"
 
 	chart1 := make(map[string]interface{})
 	chart1["name"] = "chart 1"
@@ -234,6 +235,7 @@ func TestBuildCharts(t *testing.T) {
 			"type": "linear",
 		},
 	}
+	chart1["chart_attribute"] = `{ "dashboardLayout": { "x": 0, "y": 0, "w": 8, "h": 7} }`
 
 	charts := []interface{}{
 		chart0,

@@ -1,6 +1,7 @@
 package wavefront
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"sort"
@@ -383,7 +384,14 @@ func resourceDashboard() *schema.Resource {
 					Required:    true,
 					Description: "Summarization strategy for the chart. MEAN is default = ['MEAN', 'MEDIAN', 'MIN', 'MAX', 'SUM', 'COUNT', 'LAST', 'FIRST']",
 				},
-				"source":        source,
+				"source": source,
+				"chart_attribute": {
+					Type:             schema.TypeString,
+					Optional:         true,
+					Default:          "null",
+					DiffSuppressFunc: isJSONForFieldTheSame,
+					ValidateFunc:     validateChartAttributeJSON,
+				},
 				"chart_setting": chartSetting,
 			},
 		},
@@ -575,6 +583,7 @@ func buildTerraformChart(wavefrontChart wavefront.Chart) map[string]interface{} 
 	}
 	chart["source"] = sources
 	chart["summarization"] = wavefrontChart.Summarization
+	chart["chart_attribute"] = string(wavefrontChart.ChartAttributes)
 	chart["chart_setting"] = []interface{}{buildTerraformChartSettings(wavefrontChart.ChartSettings)}
 	return chart
 }
@@ -697,12 +706,13 @@ func buildCharts(terraformCharts *[]interface{}) *[]wavefront.Chart {
 		terraformChartSettings := t["chart_setting"].([]interface{})
 
 		wavefrontCharts[i] = wavefront.Chart{
-			Name:          t["name"].(string),
-			Sources:       *buildSources(&terraformSources),
-			Description:   t["description"].(string),
-			Units:         t["units"].(string),
-			Summarization: t["summarization"].(string),
-			ChartSettings: *buildChartSettings(&terraformChartSettings),
+			Name:            t["name"].(string),
+			Sources:         *buildSources(&terraformSources),
+			Description:     t["description"].(string),
+			Units:           t["units"].(string),
+			Summarization:   t["summarization"].(string),
+			ChartAttributes: json.RawMessage(t["chart_attribute"].(string)),
+			ChartSettings:   *buildChartSettings(&terraformChartSettings),
 		}
 	}
 
@@ -1177,4 +1187,14 @@ func resourceDashboardDelete(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.SetId("")
 	return nil
+}
+
+func validateChartAttributeJSON(val interface{}, _ string) ([]string, []error) {
+	chartAttributeJSONString := val.(string)
+	var chartAttributeJSON interface{}
+	err := json.Unmarshal([]byte(chartAttributeJSONString), &chartAttributeJSON)
+	if err != nil {
+		return nil, []error{err}
+	}
+	return nil, nil
 }
