@@ -9,8 +9,8 @@ cloud.google.com/go/bigquery v1.0.1/go.mod h1:i/xbL2UlR5RvWAURpBYZTtm/cXjCha9lbf
 cloud.google.com/go/datastore v1.0.0/go.mod h1:LXYbyblFSglQ5pkeyhO+Qmw7ukd3C+pD7TKLgZqpHYE=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/WavefrontHQ/go-wavefront-management-api v1.13.0 h1:tKyqDrPAHNHjrFKfMHZzoVUTvNjaK41IkQspg/4x7Ew=
-github.com/WavefrontHQ/go-wavefront-management-api v1.13.0/go.mod h1:4qDg8JAt4Lc64LjXtncbukFt9W9WB1+S/FN5u01tQWQ=
+github.com/WavefrontHQ/go-wavefront-management-api v1.13.1 h1:aKy3hns9rWXVfsMGXKgRBCge7mGq6gtT64OOVPB23rk=
+github.com/WavefrontHQ/go-wavefront-management-api v1.13.1/go.mod h1:4qDg8JAt4Lc64LjXtncbukFt9W9WB1+S/FN5u01tQWQ=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agext/levenshtein v1.2.2 h1:0S/Yg6LYmFJ5stwQeRp6EeOcCbj7xiqQSdNelsXvaqE=
 github.com/agext/levenshtein v1.2.2/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
