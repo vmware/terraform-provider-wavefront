@@ -112,6 +112,7 @@ The `chart` mapping supports the following:
 * `summarization` - (Required) Summarization strategy for the chart. MEAN is default. Valid options are, `MEAN`, 
 `MEDIAN`, `MIN`, `MAX`, `SUM`, `COUNT`, `LAST`, `FIRST`
 * `description` - (Optional) Description of the chart
+* `base` - (Optional) The base of logarithmic scale charts. Omit or set to 0 for the default linear scale. Usually set to 10 for the traditional logarithmic scale.
 
 ### Chart Source Queries 
 
