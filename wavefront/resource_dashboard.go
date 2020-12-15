@@ -369,6 +369,11 @@ func resourceDashboard() *schema.Resource {
 					Required:    true,
 					Description: "Name of the Chart",
 				},
+				"base": {
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Description: "Base of logarithmic scale, default is 0 for linear scale",
+				},
 				"description": {
 					Type:        schema.TypeString,
 					Optional:    true,
@@ -575,6 +580,7 @@ func buildTerraformChart(wavefrontChart wavefront.Chart) map[string]interface{} 
 	chart := map[string]interface{}{}
 	chart["name"] = wavefrontChart.Name
 	chart["description"] = wavefrontChart.Description
+	chart["base"] = wavefrontChart.Base
 
 	chart["units"] = wavefrontChart.Units
 	sources := []map[string]interface{}{}
@@ -707,6 +713,7 @@ func buildCharts(terraformCharts *[]interface{}) *[]wavefront.Chart {
 
 		wavefrontCharts[i] = wavefront.Chart{
 			Name:            t["name"].(string),
+			Base:            t["base"].(int),
 			Sources:         *buildSources(&terraformSources),
 			Description:     t["description"].(string),
 			Units:           t["units"].(string),
