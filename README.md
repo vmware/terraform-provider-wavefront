@@ -10,7 +10,7 @@ A Terraform Provider to manage resources in Wavefront. Currently supports Alerts
 
 ## Installing the Plugin
 
-We release darwin and linux amd64 packages on the [releases page](https://github.com/WavefrontHQ/terraform-provider-wavefront/releases). If you require a different architecture you will need to build the plugin from source, see below for more details:
+We release darwin and linux amd64 packages on the [releases page](https://github.com/vmware/terraform-provider-wavefront/releases). If you require a different architecture you will need to build the plugin from source, see below for more details:
 
 Once you have the plugin you should remove the `_os_arch` from the end of the file name and place it in `~/.terraform.d/plugins` which is where `terraform init` will look for plugins.
 
