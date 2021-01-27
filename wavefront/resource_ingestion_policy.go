@@ -50,7 +50,7 @@ func resourceIngestionPolicyCreate(
 			"failed to create ingestion policy, %s", err)
 	}
 
-	d.SetId(*policy.ID)
+	d.SetId(policy.ID)
 
 	return resourceIngestionPolicyRead(d, meta)
 }
@@ -59,7 +59,7 @@ func resourceIngestionPolicyRead(
 	d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*wavefrontClient).client.IngestionPolicies()
 	id := d.Id()
-	policy := wavefront.IngestionPolicy{ID: &id}
+	policy := wavefront.IngestionPolicy{ID: id}
 	err := client.Get(&policy)
 
 	if wavefront.NotFound(err) {
@@ -86,7 +86,7 @@ func resourceIngestionPolicyUpdate(
 	d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*wavefrontClient).client.IngestionPolicies()
 	id := d.Id()
-	policy := wavefront.IngestionPolicy{ID: &id}
+	policy := wavefront.IngestionPolicy{ID: id}
 	err := client.Get(&policy)
 
 	if wavefront.NotFound(err) {
@@ -118,7 +118,7 @@ func resourceIngestionPolicyDelete(
 	d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*wavefrontClient).client.IngestionPolicies()
 	id := d.Id()
-	policy := wavefront.IngestionPolicy{ID: &id}
+	policy := wavefront.IngestionPolicy{ID: id}
 	err := client.Delete(&policy)
 
 	if err != nil && !wavefront.NotFound(err) {

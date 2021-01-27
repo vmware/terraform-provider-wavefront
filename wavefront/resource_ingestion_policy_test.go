@@ -54,7 +54,7 @@ func testAccCheckWavefrontIngestionPolicyDestroy(s *terraform.State) error {
 		}
 
 		id := rs.Primary.ID
-		policy := wavefront.IngestionPolicy{ID: &id}
+		policy := wavefront.IngestionPolicy{ID: id}
 		err := client.Get(&policy)
 
 		if wavefront.NotFound(err) {
@@ -86,7 +86,7 @@ func testAccCheckWavefrontIngestionPolicyExists(
 
 		client := testAccProvider.Meta().(*wavefrontClient).client.IngestionPolicies()
 		id := rs.Primary.ID
-		*policy = wavefront.IngestionPolicy{ID: &id}
+		*policy = wavefront.IngestionPolicy{ID: id}
 		err := client.Get(policy)
 
 		if wavefront.NotFound(err) {
@@ -121,6 +121,6 @@ func testAccWavefrontIngestionPolicyEquals(
 
 func ingestionPolicyZeroExtraFields(policy *wavefront.IngestionPolicy) *wavefront.IngestionPolicy {
 	policyCopy := *policy
-	policyCopy.ID = nil
+	policyCopy.ID = ""
 	return &policyCopy
 }
