@@ -1,7 +1,9 @@
 package wavefront
 
 import (
+	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -13,6 +15,19 @@ func suppressCase(k, old, new string, d *schema.ResourceData) bool {
 
 func suppressSpaces(k, old, new string, d *schema.ResourceData) bool {
 	return strings.TrimSpace(old) == strings.TrimSpace(new)
+}
+
+func isJSONForFieldTheSame(_, old, new string, _ *schema.ResourceData) bool {
+	var oldJSON interface{}
+	var newJSON interface{}
+
+	if err := json.Unmarshal([]byte(old), &oldJSON); err != nil {
+		return false
+	}
+	if err := json.Unmarshal([]byte(new), &newJSON); err != nil {
+		return false
+	}
+	return reflect.DeepEqual(oldJSON, newJSON)
 }
 
 func trimSpaces(d interface{}) string {
