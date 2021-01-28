@@ -6,7 +6,7 @@ cloud.google.com/go/internal/optional
 cloud.google.com/go/internal/trace
 cloud.google.com/go/internal/version
 cloud.google.com/go/storage
-# github.com/WavefrontHQ/go-wavefront-management-api v1.13.1
+# github.com/WavefrontHQ/go-wavefront-management-api v1.14.0
 github.com/WavefrontHQ/go-wavefront-management-api
 # github.com/agext/levenshtein v1.2.2
 github.com/agext/levenshtein
