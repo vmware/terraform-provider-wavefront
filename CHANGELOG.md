@@ -1,3 +1,18 @@
+## 2.8.0 (January 29, 2021)
+
+BUG FIXES:
+
+* Fix broken releases paage link in README.md
+* Fix broken make command in README.md
+
+ENHANCEMENTS:
+
+* Support ingestion policies in service accounts
+
+FEATURES:
+
+* **New Resource:** `wavefront_ingestion_policy`
+
 ## 2.7.3 (December 16, 2020)
 
 ENHANCEMENTS:
