@@ -45,22 +45,26 @@ func resourceServiceAccount() *schema.Resource {
 				Computed: true,
 				Set:      schema.HashString,
 			},
+			"ingestion_policy": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 		},
 	}
 }
 
-func resourceServiceAccountCreate(
-	d *schema.ResourceData, meta interface{}) error {
+func resourceServiceAccountCreate(d *schema.ResourceData, meta interface{}) error {
 	serviceAccounts := meta.(*wavefrontClient).client.ServiceAccounts()
 	tokens := meta.(*wavefrontClient).client.Tokens()
 
 	serviceAccount, err := serviceAccounts.Create(
 		&wavefront.ServiceAccountOptions{
-			ID:          d.Get("identifier").(string),
-			Active:      d.Get("active").(bool),
-			Description: d.Get("description").(string),
-			Permissions: getStringSlice(d, "permissions"),
-			UserGroups:  getStringSlice(d, "user_groups"),
+			ID:                d.Get("identifier").(string),
+			Active:            d.Get("active").(bool),
+			Description:       d.Get("description").(string),
+			Permissions:       getStringSlice(d, "permissions"),
+			UserGroups:        getStringSlice(d, "user_groups"),
+			IngestionPolicyID: d.Get("ingestion_policy").(string),
 		})
 	if err != nil {
 		return fmt.Errorf(
@@ -78,8 +82,7 @@ func resourceServiceAccountCreate(
 	return resourceServiceAccountRead(d, meta)
 }
 
-func resourceServiceAccountRead(
-	d *schema.ResourceData, meta interface{}) error {
+func resourceServiceAccountRead(d *schema.ResourceData, meta interface{}) error {
 	serviceAccounts := meta.(*wavefrontClient).client.ServiceAccounts()
 	serviceAccount, err := serviceAccounts.GetByID(d.Id())
 	if wavefront.NotFound(err) {
@@ -99,6 +102,9 @@ func resourceServiceAccountRead(
 		return err
 	}
 	if err := d.Set("description", serviceAccount.Description); err != nil {
+		return err
+	}
+	if err := d.Set("ingestion_policy", serviceAccount.IngestionPolicyId()); err != nil {
 		return err
 	}
 	err = setStringSlice(d, "permissions", serviceAccount.Permissions)
@@ -134,6 +140,9 @@ func resourceServiceAccountUpdate(
 	}
 	if d.HasChange("user_groups") {
 		options.UserGroups = getStringSlice(d, "user_groups")
+	}
+	if d.HasChange("ingestion_policy") {
+		options.IngestionPolicyID = d.Get("ingestion_policy").(string)
 	}
 	_, err = serviceAccounts.Update(options)
 	if err != nil {
