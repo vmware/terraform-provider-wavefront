@@ -29,6 +29,7 @@ The following arguments are supported:
 `agent_management`, `alerts_management`, `dashboard_management`, `embedded_charts`, `events_management`, `external_links_management`,
 `host_tag_management`, `metrics_management`, `user_management`
 * `user_groups` - (Optional) List of user groups for this service account
+* `ingestion_policy` - (Optional) ID of ingestion policy
 
 ### Example
 
@@ -37,6 +38,11 @@ The following arguments are supported:
 resource "wavefront_user_group" "test_group" {
   name        = "Test Group"
   description = "Test Group"
+}
+
+resource "wavefront_ingestion_policy" "test_ingestion" {
+  name = "test_ingestion"
+  description = "An ingestion policy for testing"
 }
 
 resource "wavefront_service_account" "basic" {
@@ -50,6 +56,7 @@ resource "wavefront_service_account" "basic" {
   user_groups = [
     wavefront_user_group.test_group.id
   ]
+  ingestion_policy = wavefront_ingestion_policy.test_ingestion.id
 }
 ```
 
