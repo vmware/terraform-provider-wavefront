@@ -1,3 +1,9 @@
+## 2.8.1 (February 1, 2021)
+
+BUG FIXES:
+
+* Update documentation
+
 ## 2.8.0 (January 29, 2021)
 
 BUG FIXES:
