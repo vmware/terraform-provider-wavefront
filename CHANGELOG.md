@@ -1,3 +1,9 @@
+## 2.8.3 (March 1, 2021)
+
+BUG FIXES:
+
+* Fix typo on main page of the Wavefront terraform provider documentation.
+
 ## 2.8.2 (March 1, 2021)
 
 BUG FIXES:
