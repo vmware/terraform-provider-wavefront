@@ -14,7 +14,7 @@ Provides a Wavefront Alert resource.  This allows alerts to be created, updated,
 ```hcl
 resource "wavefront_alert" "foobar" {
   name = "Test Alert"
-  target = "target:alert-target-id"
+  target = "test@example.com,target:alert-target-id"
   condition = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
   display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
   minutes = 5
@@ -65,7 +65,7 @@ If absent or <= 0, no re-triggering occur.
 ```hcl
 resource "wavefront_alert" "test_alert" {
   name = "Terraform Test Alert"
-  target = "target:alert-target-id"
+  target = "test@example.com,target:alert-target-id"
   condition = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
   additional_information = "This is a Terraform Test Alert"
   display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
