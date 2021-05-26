@@ -14,7 +14,7 @@ Provides a Wavefront Alert resource.  This allows alerts to be created, updated,
 ```hcl
 resource "wavefront_alert" "foobar" {
   name = "Test Alert"
-  target = "test@example.com"
+  target = "test@example.com,target:alert-target-id"
   condition = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
   display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
   minutes = 5
@@ -38,7 +38,8 @@ or `THRESHOLD`
 * `minutes` - (Required) The number of consecutive minutes that a series matching the condition query must 
 evaluate to "true" (non-zero value) before the alert fires.
 * `target` - (Optional) A comma-separated list of the email address or integration endpoint 
-(such as PagerDuty or web hook) to notify when the alert status changes.
+(such as PagerDuty or web hook) to notify when the alert status changes. Multiple target types can be in the list.
+Alert target format: ({email}|pd:{pd_key}|target:{alert-target-id}).
 * `condition` - (Optional) A Wavefront query that is evaluated at regular intervals (default 1m).
 The alert fires and notifications are triggered when data series matching this query evaluates 
 to a non-zero value for a set number of consecutive minutes. 
@@ -64,7 +65,7 @@ If absent or <= 0, no re-triggering occur.
 ```hcl
 resource "wavefront_alert" "test_alert" {
   name = "Terraform Test Alert"
-  target = "test@example.com"
+  target = "test@example.com,target:alert-target-id"
   condition = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
   additional_information = "This is a Terraform Test Alert"
   display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
