@@ -13,7 +13,7 @@ func resourceCloudIntegrationAwsExternalID() *schema.Resource {
 		Read:   resourceCloudIntegrationAwsExternalIDRead,
 		Delete: resourceCloudIntegrationAwsExternalIDDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{},
 	}

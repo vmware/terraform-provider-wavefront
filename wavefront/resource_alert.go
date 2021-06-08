@@ -15,7 +15,7 @@ func resourceAlert() *schema.Resource {
 		Update: resourceAlertUpdate,
 		Delete: resourceAlertDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {

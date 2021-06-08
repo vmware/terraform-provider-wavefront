@@ -15,7 +15,7 @@ func resourceTarget() *schema.Resource {
 		Update: resourceTargetUpdate,
 		Delete: resourceTargetDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {

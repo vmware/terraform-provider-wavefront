@@ -16,7 +16,7 @@ func resourceDashboardJSON() *schema.Resource {
 		Update: resourceDashboardJSONUpdate,
 		Delete: resourceDashboardJSONDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 
 		Schema: map[string]*schema.Schema{

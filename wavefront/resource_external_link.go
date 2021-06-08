@@ -24,7 +24,7 @@ func resourceExternalLink() *schema.Resource {
 		Update: resourceExternalLinkUpdate,
 		Delete: resourceExternalLinkDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			elNameKey: {

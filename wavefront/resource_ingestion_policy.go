@@ -19,7 +19,7 @@ func resourceIngestionPolicy() *schema.Resource {
 		Update: resourceIngestionPolicyUpdate,
 		Delete: resourceIngestionPolicyDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			ipNameKey: {

@@ -15,7 +15,7 @@ func resourceDerivedMetric() *schema.Resource {
 		Update: resourceDerivedMetricUpdate,
 		Delete: resourceDerivedMetricDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
