@@ -1,6 +1,6 @@
 package wavefront
 
-import "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 // compareStringSliceAnyOrder compares two string slices in any order. It returns
 // all the strings appearing only in the left slice followed by all the strings

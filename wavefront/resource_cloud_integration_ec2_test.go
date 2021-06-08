@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 func TestAccWavefrontCloudIntegrationEc2_Basic(t *testing.T) {

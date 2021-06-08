@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceServiceAccount() *schema.Resource {

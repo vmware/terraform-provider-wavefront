@@ -1,6 +1,6 @@
 package wavefront
 
-import "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 func resourceCloudIntegrationGcpBilling() *schema.Resource {
 	return &schema.Resource{
