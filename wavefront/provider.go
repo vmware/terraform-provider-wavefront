@@ -4,8 +4,7 @@ import (
 	"fmt"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/mutexkv"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 type wavefrontClient struct {
@@ -78,7 +77,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 
 }
 
-var wfMutexKV = mutexkv.NewMutexKV()
+var wfMutexKV = NewMutexKV()
 
 const (
 	wfAppDynamics      string = "APPDYNAMICS"

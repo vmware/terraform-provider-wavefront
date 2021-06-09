@@ -7,8 +7,8 @@ import (
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 func TestAccWavefrontIngestionPolicy_Basic(t *testing.T) {

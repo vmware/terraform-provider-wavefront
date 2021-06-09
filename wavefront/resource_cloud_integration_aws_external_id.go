@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceCloudIntegrationAwsExternalID() *schema.Resource {
@@ -13,7 +13,7 @@ func resourceCloudIntegrationAwsExternalID() *schema.Resource {
 		Read:   resourceCloudIntegrationAwsExternalIDRead,
 		Delete: resourceCloudIntegrationAwsExternalIDDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{},
 	}

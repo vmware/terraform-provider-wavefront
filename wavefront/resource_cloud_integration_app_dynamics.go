@@ -1,7 +1,7 @@
 package wavefront
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func resourceCloudIntegrationAppDynamics() *schema.Resource {
@@ -11,7 +11,7 @@ func resourceCloudIntegrationAppDynamics() *schema.Resource {
 		Update: resourceCloudIntegrationUpdate,
 		Delete: resourceCloudIntegrationDelete,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
