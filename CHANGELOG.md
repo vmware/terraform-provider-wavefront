@@ -1,3 +1,12 @@
+## 3.0.0 (June 10, 2021)
+
+NOTES:
+
+* Upgrade to the new terraform SDK v2.6.1 from v1 as v1 is reaching end of life.
+With this change there is no more support for Terraform 0.11 and below.
+* Minor documentation updates showing that multiple alert targets can be
+specified at once in the alert target field.
+
 ## 2.8.3 (March 1, 2021)
 
 BUG FIXES:
