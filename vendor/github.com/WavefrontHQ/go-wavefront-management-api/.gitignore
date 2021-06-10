@@ -1,8 +1,0 @@
-# Ignore binary
-cmd/wavefront/wavefront
-# Ignore vendored library packages
-vendor/*/
-.idea/*
-
-# Vim swap files
-.*.swp
