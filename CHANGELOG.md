@@ -1,3 +1,9 @@
+## 3.1.0 (December 22, 2021)
+
+FEATURES:
+
+* **New Resource:** `no_default_events`
+
 ## 3.0.0 (June 10, 2021)
 
 NOTES:
