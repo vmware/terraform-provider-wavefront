@@ -1,7 +1,8 @@
+.envrc
 .terraform/
+.terraform.lock.hcl
 terraform.tfstate*
 terraform-provider-wavefront*
 crash.log
-main.tf
 .idea/*
 dist/

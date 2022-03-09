@@ -39,7 +39,7 @@ func resourceAlert() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				StateFunc:        trimSpaces,
-				DiffSuppressFunc: suppressSpaces,
+				DiffSuppressFunc: suppressAlertConditionOnType,
 			},
 			"conditions": {
 				Type:     schema.TypeMap,
@@ -59,6 +59,7 @@ func resourceAlert() *schema.Resource {
 			"display_expression": {
 				Type:             schema.TypeString,
 				Optional:         true,
+				StateFunc:        trimSpaces,
 				DiffSuppressFunc: suppressSpaces,
 			},
 			"minutes": {
@@ -117,6 +118,20 @@ func validateAlertTarget(val interface{}, key string) (warnings []string, errors
 	}
 
 	return warnings, errors
+}
+
+func suppressAlertConditionOnType(k, old, new string, d *schema.ResourceData) bool {
+	alertType := strings.ToUpper(d.Get("alert_type").(string))
+
+	// after v2 alerts, `condition` has been force sync with `display_expression`
+	// in multi-threshold alert
+	// terraform does not support to infer attribute value from other attributes
+	// thus we suppress the diff check for `condition` in multi-threshold alert.
+	if alertType == wavefront.AlertTypeThreshold {
+		return true
+	}
+
+	return suppressSpaces(k, old, new, d)
 }
 
 func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
@@ -262,6 +277,11 @@ func validateAlertConditions(a *wavefront.Alert, d *schema.ResourceData) error {
 	alertType := strings.ToUpper(d.Get("alert_type").(string))
 	if alertType == wavefront.AlertTypeThreshold {
 		a.AlertType = wavefront.AlertTypeThreshold
+
+		// v2 alerts now force sync `condition` the same as `display_expression`
+		// for multi-threshold alerts
+		a.Condition = d.Get("display_expression").(string)
+
 		if conditions, ok := d.GetOk("conditions"); ok {
 			a.Conditions = trimSpacesMap(conditions.(map[string]interface{}))
 			err := validateThresholdLevels(a.Conditions)
