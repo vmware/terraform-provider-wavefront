@@ -242,7 +242,9 @@ func TestAccWavefrontAlert_ThresholdWithCondition(t *testing.T) {
 						"wavefront_alert.test_threshold_alert_change_condition", &record),
 					testAccCheckWavefrontThresholdAlertAttributes(&record),
 
-					//Check against state that the attributes are as we expect
+					// Check against state that the attributes are as we expect
+					// TODO: figure out why verification on `condition` using `resource.TestCheckResourceAttr` does not
+					//  work.
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_threshold_alert_change_condition", "conditions.%", "3"),
 					resource.TestCheckResourceAttr(
