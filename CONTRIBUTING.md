@@ -15,6 +15,7 @@ Steps
 
 * This is a good [blog post](https://www.terraform.io/guides/writing-custom-terraform-providers.html?) by Hashicorp to get started.
 * Looking at how existing [Providers](https://github.com/terraform-providers) work can be useful.
+* This is a good [blog post](https://opencredo.com/blogs/running-a-terraform-provider-with-a-debugger/) to get some details on how to debug custom terraform provider.
 
 ## Setup
 
@@ -58,7 +59,7 @@ The `WAVEFRONT_ADDRESS` and `WAVEFRONT_TOKEN` environment variables are required
 export WAVEFRONT_ADDRESS=<your-account>.wavefront.com
 export WAVEFRONT_TOKEN=<your-wavefront-token>
 
-make acceptance
+make testacc
 ```
 
 ## Formatting

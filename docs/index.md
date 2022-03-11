@@ -7,6 +7,8 @@ description: |-
 
 # Wavefront Provider
 
+> Version 3.0.1 addresses a compatibility issue with the new alerting experience.
+
 The Wavefront provider is used to interact with the Wavefront monitoring service. The
 provider needs to be configured with the proper credentials before it can be used.
 

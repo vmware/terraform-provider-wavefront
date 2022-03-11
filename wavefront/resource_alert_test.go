@@ -226,6 +226,35 @@ func TestAccWavefrontAlert_Threshold(t *testing.T) {
 	})
 }
 
+func TestAccWavefrontAlert_ThresholdWithCondition(t *testing.T) {
+	var record wavefront.Alert
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckWavefrontAlertDestroy,
+		Steps: []resource.TestStep{
+			// change the condition and verify the condition change is ignored.
+			{
+				Config: testAccCheckWavefrontAlertThresholdChangeCondition(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckWavefrontAlertExists(
+						"wavefront_alert.test_threshold_alert_change_condition", &record),
+					testAccCheckWavefrontThresholdAlertAttributes(&record),
+
+					// Check against state that the attributes are as we expect
+					// TODO: figure out why verification on `condition` using `resource.TestCheckResourceAttr` does not
+					//  work.
+					resource.TestCheckResourceAttr(
+						"wavefront_alert.test_threshold_alert_change_condition", "conditions.%", "3"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert.test_threshold_alert_change_condition", "threshold_targets.%", "1"),
+				),
+			},
+		},
+	})
+}
+
 func TestResourceAlert_validateAlertConditions(t *testing.T) {
 
 	cases := []struct {
@@ -368,12 +397,16 @@ func testAccCheckWavefrontAlertAttributes(alert *wavefront.Alert) resource.TestC
 func testAccCheckWavefrontThresholdAlertAttributes(alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
+		if alert.Condition != "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )" {
+			return fmt.Errorf("bad value: %s", alert.Condition)
+		}
+
 		if val, ok := alert.Conditions["severe"]; ok {
 			if val != "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80" {
 				return fmt.Errorf("bad value: %s", alert.Conditions["severe"])
 			}
 		} else {
-			return fmt.Errorf("target not set")
+			return fmt.Errorf("multi-threshold alert's conditions are not set")
 		}
 
 		return nil
@@ -623,6 +656,51 @@ resource "wavefront_alert" "test_threshold_alert" {
 	"severe" = "target:${wavefront_alert_target.test_target.id}"
   }
   
+  tags = [
+    "terraform"
+  ]
+}
+`
+}
+
+func testAccCheckWavefrontAlertThresholdChangeCondition() string {
+	return `
+resource "wavefront_alert_target" "test_target" {
+  name = "Terraform Test Target"
+  description = "Test target"
+  method = "EMAIL"
+  recipient = "test@example.com"
+  email_subject = "This is a test"
+  is_html_content = true
+  template = "{}"
+  triggers = [
+    "ALERT_OPENED",
+    "ALERT_RESOLVED"
+  ]
+}
+
+
+resource "wavefront_alert" "test_threshold_alert_change_condition" {
+  name = "Terraform Test Alert"
+  alert_type = "THRESHOLD"
+  additional_information = "This is a Terraform Test Alert"
+  # change in condition for multi-threshold alert takes no effect, wavefront backend will force sync the condition
+  # with display_expression
+  condition = "change_condition"
+  display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
+  minutes = 5
+  resolve_after_minutes = 5
+
+  conditions = {
+    "severe" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
+    "warn" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 60"
+    "info" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 50"
+  }
+
+  threshold_targets = {
+	"severe" = "target:${wavefront_alert_target.test_target.id}"
+  }
+
   tags = [
     "terraform"
   ]

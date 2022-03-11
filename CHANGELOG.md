@@ -1,3 +1,9 @@
+## 3.0.1 (March 10, 2021)
+BUG FIXES:
+
+* Fix incompatibility issue between threshold alerts and new alert experience.
+* Update command in CONTRIBUTING.md.
+
 ## 3.0.0 (June 10, 2021)
 
 NOTES:
