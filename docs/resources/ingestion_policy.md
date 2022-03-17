@@ -22,8 +22,8 @@ resource "wavefront_ingestion_policy" "basic" {
 
 The following arguments are supported:
 
-* `name` - (Required) The name of the ingestion policy
-* `description` - (Required) The description of the ingestion policy
+* `name` - (Required) The name of the ingestion policy.
+* `description` - (Required) The description of the ingestion policy.
 
 ### Example
 
@@ -37,7 +37,7 @@ resource "wavefront_ingestion_policy" "basic" {
 
 ## Import
 
-ingestion policies can be imported using the `id`, e.g.
+ingestion policies can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_ingestion_policy.basic test_ingestion-1611946841064

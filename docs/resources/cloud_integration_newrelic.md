@@ -2,13 +2,13 @@
 layout: "wavefront"
 page_title: "Wavefront: Cloud Integration NewRelic"
 description: |-
-  Provides a Wavefront Cloud Integration for NewRelic. This allows NewRelic cloud integrations to be created,
+  Provides a Wavefront Cloud Integration for New Relic. This allows New Relic cloud integrations to be created,
   updated, and deleted.
 ---
 
 # Resource : wavefront_cloud_integration_newrelic
 
-Provides a Wavefront Cloud Integration for NewRelic. This allows NewRelic cloud integrations to be created,
+Provides a Wavefront Cloud Integration for New Relic. This allows New Relic cloud integrations to be created,
 updated, and deleted.
 
 ## Example usage
@@ -24,22 +24,22 @@ resource "wavefront_cloud_integration_newrelic" "newrelic" {
 
 The following arguments are supported:
 
-* `service` - (Required) A value denoting which cloud service this service integrates with
-* `name` - (Required) The human-readable name of this integration
-* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present
-* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
-* `api_key` - (Required) NewRelic REST api key
-* `app_filter_regex` - (Optional) A regular expression that an application name must match (case-insensitively) iun order to collect metrics
-* `host_filter_regex` - (Optional) A regular expression that a host name must match (case-insensitively) in order to collect metrics 
-* `metric_filter` - (Optional) See [Metric Filter](#metric-filter)
+* `service` - (Required) A value denoting which cloud service this service integrates with.
+* `name` - (Required) The human-readable name of this integration.
+* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service.
+* `api_key` - (Required) New Relic REST API key.
+* `app_filter_regex` - (Optional) A regular expression that an application name must match (case-insensitively) in order to collect metrics.
+* `host_filter_regex` - (Optional) A regular expression that a host name must match (case-insensitively) in order to collect metrics.
+* `metric_filter` - (Optional) See [Metric Filter](#metric-filter).
 
 ### Metric Filter
 
 The `metric_filter` mapping supports the following:
 
-* `app_name` - (Required) The name of a NewRelic App
-* `metric_filter_regex` - (Required) A regular expression that a metric name must match (case-insensitively) in order to be ingested
+* `app_name` - (Required) The name of a NewRelic App.
+* `metric_filter_regex` - (Required) A regular expression that a metric name must match (case-insensitively) in order to be ingested.
 
 ### Example
 
@@ -68,7 +68,7 @@ resource "wavefront_cloud_integration_newrelic" "newrelic" {
 
 ## Import
 
-NewRelic Integrations can be imported using the `id`, e.g.
+NewRelic Integrations can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_cloud_integration_newrelic.newrelic a411c16b-3cf7-4f03-bf11-8ca05aab898d

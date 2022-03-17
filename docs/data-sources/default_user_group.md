@@ -20,4 +20,4 @@ data "wavefront_default_user_group" "everyone_group" {
 ## Attribute Reference
 
 * `group_id` - Set to the Group ID of the `Everyone` group, suitable for referencing
-in other resources that support group memberships. s
+in other resources that support group memberships.

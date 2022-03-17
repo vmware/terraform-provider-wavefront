@@ -2,13 +2,13 @@
 layout: "wavefront"
 page_title: "Wavefront: Cloud Integration Tesla"
 description: |-
-  Provides a Wavefront Cloud Integration for Tesla. This allows NewRelic cloud integrations to be created,
+  Provides a Wavefront Cloud Integration for Tesla. This allows Tesla cloud integrations to be created,
   updated, and deleted.
 ---
 
 # Resource : wavefront_tesla
 
-Provides a Wavefront Cloud Integration for Tesla. This allows NewRelic cloud integrations to be created,
+Provides a Wavefront Cloud Integration for Tesla. This allows Tesla cloud integrations to be created,
 updated, and deleted.
 
 ## Example usage
@@ -25,13 +25,13 @@ resource "wavefront_cloud_integration_tesla" "tesla" {
 
 The following arguments are supported:
 
-* `service` - (Required) A value denoting which cloud service this service integrates with
-* `name` - (Required) The human-readable name of this integration
-* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present
-* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
-* `email` - (Required) Email address for the Tesla account login
-* `password` - (Required) Password for the Tesla account login 
+* `service` - (Required) A value denoting which cloud service this service integrates with.
+* `name` - (Required) The human-readable name of this integration.
+* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service.
+* `email` - (Required) A Tesla account login email address.
+* `password` - (Required) The Tesla account login password.
 
 ### Example
 
@@ -51,7 +51,7 @@ resource "wavefront_cloud_integration_tesla" "tesla" {
 
 ## Import
 
-Tesla Integrations can be imported using the `id`, e.g.
+Tesla Integrations can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_cloud_integration_tesla.tesla a411c16b-3cf7-4f03-bf11-8ca05aab898d

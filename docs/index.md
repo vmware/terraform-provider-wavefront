@@ -12,7 +12,7 @@ description: |-
 The Wavefront provider is used to interact with the Wavefront monitoring service. The
 provider needs to be configured with the proper credentials before it can be used.
 
-Use the navigation to the left to read about the available resources. 
+Use the navigation on the left to read about the available resources. 
 
 ## Example Usage
 
@@ -38,15 +38,14 @@ resource "wavefront_alert" "test_alert" {
 
 ## Authentication
 
-The Wavefront provider offers two means of providing credentials for authentication.
+The Wavefront provider offers two ways of providing credentials for authentication.
 
 * Static credentials
 * Environment variables
 
 ### Static credentials
-!> **Warning:** Hard-coding credentials into any Terraform configuration is not
-recommended, and risks secret leakage should this file ever be committed to a 
-public version control system.
+!> **Warning:** It is not recommended to hard-code credentials into any Terraform configuration.
+There's a risk of secret leakage if this file is ever committed to a public version control system.
  
 Static credentials can be provided by adding an `address` and `token` in-line in 
 the Wavefront provider block. 
@@ -60,8 +59,8 @@ provider "wavefront" {
 
 ### Environment Variables
 
-You can provide your credentials via the `WAVEFRONT_ADDRESS` and `WAVEFRONT_TOKEN`
-, environment variables.  
+You can provide your credentials by using the `WAVEFRONT_ADDRESS` and `WAVEFRONT_TOKEN`,
+environment variables.
 
 ```hcl
 provider "wavefront" {}
@@ -80,11 +79,11 @@ In addition to [generic `provider` arguments](https://www.terraform.io/docs/conf
 (e.g. `alias` and `version`), the following arguments are supported in the Wavefront 
 `provider` block:
 
-* `address` - (Optional) this is the URL of your cluster that you access Wavefront from without the 
+* `address` - (Optional) The URL of your Wavefront cluster that you access Wavefront from without the 
 leading `https://` or trailing `/` (e.g. `https://longboard.wavefront.com/` becomes `longboard.wavefront.com`)
 
-* `token` - (Optional) this is a either a Users token or Service Account token with permissions necessary 
+* `token` - (Optional) Either a User Account token or Service Account token with the permissions necessary 
 to manage your Wavefront account. 
 
-* `http_proxy` - (Optional) The proxy type is determined by the URL scheme. `http`, `https`, and `socks5` are supported.  
+* `http_proxy` - (Optional) The proxy type is determined by the URL scheme. `http`, `https`, and `socks5` are supported.
 If the scheme is empty `http` is assumed.

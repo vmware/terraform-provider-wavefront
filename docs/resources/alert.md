@@ -34,28 +34,28 @@ The following arguments are supported:
 * `name` - (Required) The name of the alert as it is displayed in Wavefront.
 * `tags` - (Required) A set of tags to assign to this resource.
 * `alert_type` - (Optional) The type of alert in Wavefront.  Either `CLASSIC` (default) 
-or `THRESHOLD`
+or `THRESHOLD`.
 * `minutes` - (Required) The number of consecutive minutes that a series matching the condition query must 
 evaluate to "true" (non-zero value) before the alert fires.
 * `target` - (Optional) A comma-separated list of the email address or integration endpoint 
-(such as PagerDuty or web hook) to notify when the alert status changes. Multiple target types can be in the list.
+(such as PagerDuty or webhook) to notify when the alert status changes. Multiple target types can be in the list.
 Alert target format: ({email}|pd:{pd_key}|target:{alert-target-id}).
-* `condition` - (Optional) A Wavefront query that is evaluated at regular intervals (default 1m).
-The alert fires and notifications are triggered when data series matching this query evaluates 
+* `condition` - (Optional) A Wavefront query that is evaluated at regular intervals (default is 1 minute).
+The alert fires and notifications are triggered when a data series matching this query evaluates 
 to a non-zero value for a set number of consecutive minutes. 
 * `conditions` - (Optional, `THRESHOLD` alerts only) a string->string map of `severity` to `condition` 
 for which this alert will trigger.
 * `threshold_targets` - (Optional, `THRESHOLD` alerts only) Targets for severity
 * `additional_information` - (Optional) User-supplied additional explanatory information for this alert.
-Useful for linking runbooks, migrations...etc
+Useful for linking runbooks, migrations, etc.
 * `display_expression` - (Optional) A second query whose results are displayed in the alert user
 interface instead of the condition query.  This field is often used to display a version
 of the condition query with Boolean operators removed so that numerical values are plotted.
 * `resolve_after_minutes` - (Optional) The number of consecutive minutes that a firing series matching the condition
-query must evaluate to "false" (zero value) before the alert resolves.  When unset, this default sto
+query must evaluate to "false" (zero value) before the alert resolves.  When unset, this default to
 the same value as `minutes`.
 * `notification_resend_frequency_minutes` - (Optional) How often to re-trigger a continually failing alert. 
-If absent or <= 0, no re-triggering occur.  
+If absent or <= 0, no re-triggering occurs.  
 * `severity` - (Optional) - Severity of the alert, valid values are `INFO`, `SMOKE`, `WARN`, `SEVERE`.
 * `can_view` - (Optional) A list of users or groups that can view this resource.
 * `can_modify` - (Optional) A list of users or groups that can modify this resource.
