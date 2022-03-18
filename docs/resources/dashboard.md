@@ -168,7 +168,7 @@ reenable it when the ctrl-key is pressed).
 * `fixed_legend_enabled` - (Optional) Whether to enable a fixed tabular legend adjacent to the chart.
 * `fixed_legend_use_raw_stats` - (Optional) If `true`, the legend uses non-summarized stats instead of summarized.
 * `fixed_legend_position` - (Optional)  Where the fixed legend should be displayed with respect to the chart.
-Valid options are `RIGHt`, `TOP`, `LEFT`, `BOTTOM`.
+Valid options are `RIGHT`, `TOP`, `LEFT`, `BOTTOM`.
 * `fixed_legend_display_stats` - (Optional) For a chart with a fixed legend, a list of statistics to display in the legend.
 * `fixed_legend_filter_sort` - (Optional) Whether to display `TOP` or `BOTTOM` ranked series in a fixed legend. Valid options
 are `TOP`, and `BOTTOM`.

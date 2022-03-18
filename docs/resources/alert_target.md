@@ -33,7 +33,7 @@ resource "wavefront_alert_target" "test_target" {
 
 The following arguments are supported:
 
-* `name` - (Required) The name of the alert target as it is displayed in Wavefront
+* `name` - (Required) The name of the alert target as it is displayed in Wavefront.
 * `description` - (Required) Description describing this alert target.
 * `triggers` - (Required) A list of occurrences on which this webhook will be fired. Valid values are `ALERT_OPENED`,
 `ALERT_UPDATED`, `ALERT_RESOLVED`, `ALERT_MAINTENANCE`, `ALERT_SNOOZED`, `ALERT_NO_DATA`, `ALERT_NO_DATA_RESOLVED`, `ALERT_NO_DATA_MAINTENANCE`.

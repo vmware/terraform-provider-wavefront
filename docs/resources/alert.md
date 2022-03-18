@@ -52,7 +52,7 @@ Useful for linking runbooks, migrations, etc.
 interface instead of the condition query.  This field is often used to display a version
 of the condition query with Boolean operators removed so that numerical values are plotted.
 * `resolve_after_minutes` - (Optional) The number of consecutive minutes that a firing series matching the condition
-query must evaluate to "false" (zero value) before the alert resolves.  When unset, this default to
+query must evaluate to "false" (zero value) before the alert resolves.  When unset, this defaults to
 the same value as `minutes`.
 * `notification_resend_frequency_minutes` - (Optional) How often to re-trigger a continually failing alert. 
 If absent or <= 0, no re-triggering occurs.  
