@@ -35,7 +35,7 @@ The following arguments are supported:
 * `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service.
 * `role_arn` - (Required) The external ID corresponding to the Role ARN.
 * `external_id` - (Required) The Role ARN that the customer has created in AWS IAM to allow access to Wavefront.
-* `hostname_tags` - (Optional) A list of AWS instance tags that when found will be used as the `source` name
+* `hostname_tags` - (Optional) A list of AWS instance tags to use as the `source` name
 in a series. Default is `["hostname", "host", "name"]`. If no tag in the list is found, the series source
 is set to the instance id.
 
