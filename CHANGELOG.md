@@ -1,4 +1,4 @@
-## 3.0.2 (March 18, 2021)
+## 3.0.2 (March 23, 2021)
 
 DOCUMENTATION:
 
