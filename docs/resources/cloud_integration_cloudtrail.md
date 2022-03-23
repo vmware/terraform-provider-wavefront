@@ -30,16 +30,16 @@ resource "wavefront_cloud_integration_cloudtrail" "cloudtrail" {
 
 The following arguments are supported:
 
-* `service` - (Required) A value denoting which cloud service this service integrates with
-* `name` - (Required) The human-readable name of this integration
-* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present
-* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
-* `role_arn` - (Required) The external id corresponding to the Role ARN
-* `external_id` - (Required) The Role ARN that the customer has created in AWS IAM to allow access to Wavefront
-* `region` - (Required) The AWS region of the S3 bucket where CloudTrail logs are stored
-* `bucket_name` - (Required) Name of the S3 bucket where CloudTrail logs are stored
-* `filter_rule` - (Optional) Rule to filter CloudTrail log event
+* `service` - (Required) A value denoting which cloud service this service integrates with.
+* `name` - (Required) The human-readable name of this integration.
+* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service.
+* `role_arn` - (Required) The external ID corresponding to the Role ARN.
+* `external_id` - (Required) The Role ARN that the customer has created in AWS IAM to allow access to Wavefront.
+* `region` - (Required) The AWS region of the S3 bucket where CloudTrail logs are stored.
+* `bucket_name` - (Required) Name of the S3 bucket where CloudTrail logs are stored.
+* `filter_rule` - (Optional) Rule to filter CloudTrail log event.
 * `prefix` - (Optional) The common prefix, if any, appended to all CloudTrail log files.
 
 ### Example
@@ -65,7 +65,7 @@ resource "wavefront_cloud_integration_cloudtrail" "cloudtrail" {
 
 ## Import
 
-CloudTrail Cloud Integrations can be imported using the `id`, e.g.
+CloudTrail Cloud Integrations can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_cloud_integration_cloudtrail.cloudtrail a411c16b-3cf7-4f03-bf11-8ca05aab898d

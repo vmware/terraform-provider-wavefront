@@ -119,12 +119,12 @@ EOF
 
 The following arguments are supported:
 
-* `dashboard_json` - (Required) See [Wavefront API Documentation](https://docs.wavefront.com/wavefront_api.html#api-documentation-wavefront-instance) 
+* `dashboard_json` - (Required) See the [Wavefront API Documentation](https://docs.wavefront.com/wavefront_api.html#api-documentation-wavefront-instance) 
 for instructions on how to get to your API documentation for more details. 
 
 ## Import
 
-Dashboard JSON can be imported using the `id`, e.g.
+Dashboard JSON can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_dashboard_json.dashboard_json tftestimport

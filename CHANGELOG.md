@@ -1,3 +1,9 @@
+## 3.0.2 (March 23, 2021)
+
+DOCUMENTATION:
+
+* Fixed a variety of typos, punctuation, and grammatical errors.
+
 ## 3.0.1 (March 10, 2021)
 BUG FIXES:
 

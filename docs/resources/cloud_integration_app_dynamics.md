@@ -8,7 +8,7 @@ description: |-
 
 # Resource : wavefront_cloud_integration_app_dynamics
 
-Provides a Wavefront Cloud Integration for App Dynamics. This allows app dynamics cloud integrations to be created, 
+Provides a Wavefront Cloud Integration for AppDynamics. This allows AppDynamics cloud integrations to be created, 
 updated, and deleted.
 
 ## Example usage
@@ -26,25 +26,25 @@ resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
 
 The following arguments are supported:
 
-* `service` - (Required) A value denoting which cloud service this service integrates with
-* `name` - (Required) The human-readable name of this integration
-* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present
-* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
-* `user_name` - (Required) Username is a combination of userName and the account name
-* `controller_name` - (Required) Name of the SaaS controller
-* `encrypted_password` - (Required) Password for AppDynamics user
-* `app_filter_regex` - (Optional)  List of regular expressions that a application name must match (case-insensitively) 
-in order to be ingested
+* `service` - (Required) A value denoting which cloud service this service integrates with.
+* `name` - (Required) The human-readable name of this integration.
+* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service.
+* `user_name` - (Required) Username is a combination of userName and the account name.
+* `controller_name` - (Required) Name of the SaaS controller.
+* `encrypted_password` - (Required) Password for AppDynamics user.
+* `app_filter_regex` - (Optional)  List of regular expressions that an application name must match (case-insensitively) 
+in order to be ingested.
 * `enable_rollup` - (Optional) Set this to `false` to get separate results for all values within the time range, 
-by default it is `true` 
-* `enable_error_metrics` - (Optional) Boolean flag to control Error metric injection
-* `enable_business_trx_metrics` - (Optional) Boolean flag to control Business Transaction metric injection 
-* `enable_backend_metrics` - (Optional) Boolean flag to control Backend metric injection
-* `enable_overall_perf_metrics` - (Optional) Boolean flag to control Overall Performance metric injection
-* `enable_individual_node_metrics` - (Optional) Boolean flag to control Individual Node metric injection
-* `enable_app_infra_metrics` - (Optional) Boolean flag to control Application Infrastructure metric injection
-* `enable_service_endpoint_metrics` - (Optional) Boolean flag to control Service End point metric injection
+by default it is `true`.
+* `enable_error_metrics` - (Optional) Boolean flag to control Error metric ingestion.
+* `enable_business_trx_metrics` - (Optional) Boolean flag to control Business Transaction metric ingestion.
+* `enable_backend_metrics` - (Optional) Boolean flag to control Backend metric ingestion.
+* `enable_overall_perf_metrics` - (Optional) Boolean flag to control Overall Performance metric ingestion.
+* `enable_individual_node_metrics` - (Optional) Boolean flag to control Individual Node metric ingestion.
+* `enable_app_infra_metrics` - (Optional) Boolean flag to control Application Infrastructure metric ingestion.
+* `enable_service_endpoint_metrics` - (Optional) Boolean flag to control Service End point metric ingestion.
 
 
 ### Example
@@ -73,7 +73,7 @@ resource "wavefront_cloud_integration_app_dynamics" "app_dynamics" {
 
 ## Import
 
-App Dynamic Cloud Integrations can be imported using the `id`, e.g.
+AppDynamic Cloud Integrations can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_cloud_integration_app_dynamics.app_dynamics a411c16b-3cf7-4f03-bf11-8ca05aab898d
