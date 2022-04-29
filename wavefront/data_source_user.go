@@ -7,47 +7,29 @@ import (
 )
 
 const (
-	userIdKey              = "id"
+	idKey                  = "id"
 	identifierKey          = "identifier"
 	customerKey            = "customer"
-	lastSuccessfulLoginKey = "lastSuccessfulLogin"
+	lastSuccessfulLoginKey = "last_successful_login"
+	// only in getUsers? ssoIdKey  = "ssoId"
 	//groupsKey = "groups"
 	//userGroupsKey = "userGroups"
 	//ingestionPoliciesKey = "ingestionPolicies"
 	//rolesKey = "roles"
 )
 
-func DataSourceUser() *schema.Resource {
+func dataSourceUser() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceUserRead,
-		Schema: map[string]*schema.Schema{
-			// Query Parameters
-			userIdKey: {
-				Type:     schema.TypeString,
-				Optional: false,
-			},
-			// Computed Values
-			identifierKey: {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			customerKey: {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			lastSuccessfulLoginKey: {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
-		},
+		Read:   dataSourceUserRead,
+		Schema: dataSourceUserSchema(),
 	}
 }
 
 func dataSourceUserRead(d *schema.ResourceData, m interface{}) error {
 	userClient := m.(*wavefrontClient).client.Users()
-	id, ok := d.GetOk(userIdKey)
+	id, ok := d.GetOk(idKey)
 	if !ok {
-		return fmt.Errorf("required parameter '%s' not set", userIdKey)
+		return fmt.Errorf("required parameter '%s' not set", idKey)
 	}
 	idStr := fmt.Sprintf("%s", id)
 	user := wavefront.User{ID: &idStr}
@@ -70,4 +52,45 @@ func userAttributes(d *schema.ResourceData, user wavefront.User) error {
 		return err
 	}
 	return nil
+}
+
+func dataSourceUserSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		// Query Values
+		idKey: {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		// Computed Values
+		identifierKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		customerKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		lastSuccessfulLoginKey: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+	}
+}
+
+func userSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		// Computed Values
+		identifierKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		customerKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		lastSuccessfulLoginKey: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+	}
 }
