@@ -49,6 +49,7 @@ func Provider() *schema.Provider {
 			"wavefront_external_link":                        resourceExternalLink(),
 			"wavefront_ingestion_policy":                     resourceIngestionPolicy(),
 			"wavefront_maintenance_window":                   resourceMaintenanceWindow(),
+			"wavefront_metrics_policy":                       resourceMetricsPolicy(),
 			"wavefront_service_account":                      resourceServiceAccount(),
 			"wavefront_role":                                 resourceRole(),
 			"wavefront_user":                                 resourceUser(),
