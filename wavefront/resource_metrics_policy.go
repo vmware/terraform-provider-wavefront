@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"log"
 )
 
 const (
@@ -14,7 +15,7 @@ const (
 	prefixesKey           = "prefixes"
 	tagsAndedKey          = "tags_anded"
 	accessTypeKey         = "access_type"
-	userGroupsKey         = "user_groups"
+	userGroupsKey         = "user_group_ids"
 	policyRulesKey        = "policy_rules"
 )
 
@@ -75,32 +76,26 @@ func flattenPolicyRule(policy *wavefront.PolicyRule) map[string]interface{} {
 	return tfMap
 }
 
-func flattenUserGroups(user []wavefront.UserGroup) []map[string]interface{} {
-	tfMaps := make([]map[string]interface{}, len(user))
-	for i, v := range user {
-		tfMaps[i] = flattenUserGroup(&v)
+func flattenUserGroups(user []wavefront.UserGroup) []string {
+	var groupIds []string
+	for _, v := range user {
+		groupIds = append(groupIds, *v.ID)
 	}
-	return tfMaps
-}
-
-func flattenUserGroup(userG *wavefront.UserGroup) map[string]interface{} {
-	tfMap := make(map[string]interface{})
-	tfMap[nameKey] = userG.Name
-	tfMap[idKey] = userG.ID
-	tfMap[descriptionKey] = userG.Description
-	return tfMap
+	return groupIds
 }
 
 func resourceMetricsPolicySchema() map[string]*schema.Schema {
 	policyRulesSchema := policyRulesSchema()
 	return map[string]*schema.Schema{
+		// User specified value
 		policyRulesKey: {
 			Type:     schema.TypeList,
-			Computed: true,
+			Required: true,
 			Elem: &schema.Resource{
 				Schema: policyRulesSchema,
 			},
 		},
+		// Computed Values
 		customerKey: {
 			Type:     schema.TypeString,
 			Computed: true,
@@ -117,109 +112,163 @@ func resourceMetricsPolicySchema() map[string]*schema.Schema {
 }
 
 func policyRulesSchema() map[string]*schema.Schema {
-	userGroupSchema := userGroupSchema()
 	return map[string]*schema.Schema{
 		accountsKey: {
 			Type:     schema.TypeList,
-			Computed: true,
+			Optional: true,
+			ForceNew: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		userGroupsKey: {
 			Type:     schema.TypeList,
-			Computed: true,
-			Elem:     &schema.Resource{Schema: userGroupSchema},
+			Required: true,
+			ForceNew: true,
+			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		rolesKey: {
 			Type:     schema.TypeList,
-			Computed: true,
+			Optional: true,
+			ForceNew: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		nameKey: {
 			Type:     schema.TypeString,
-			Computed: true,
+			Required: true,
+			ForceNew: true,
 		},
 		tagsKey: {
 			Type:     schema.TypeList,
-			Computed: true,
+			Optional: true,
+			ForceNew: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		descriptionKey: {
 			Type:     schema.TypeString,
-			Computed: true,
+			Required: true,
+			ForceNew: true,
 		},
 		prefixesKey: {
 			Type:     schema.TypeList,
-			Computed: true,
+			Required: true,
+			ForceNew: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		tagsAndedKey: {
 			Type:     schema.TypeBool,
-			Computed: true,
+			Required: true,
+			ForceNew: true,
 		},
 		accessTypeKey: {
 			Type:     schema.TypeString,
-			Computed: true,
-		},
-	}
-}
-
-func userGroupSchema() map[string]*schema.Schema {
-	return map[string]*schema.Schema{
-		nameKey: {
-			Type:     schema.TypeString,
 			Required: true,
-		},
-		idKey: {
-			Type:     schema.TypeString,
-			Required: true,
-		},
-		descriptionKey: {
-			Type:     schema.TypeString,
-			Required: true,
+			ForceNew: true,
 		},
 	}
 }
 
 func resourceMetricsPolicyUpdate(d *schema.ResourceData, meta interface{}) error {
 	metrics := meta.(*wavefrontClient).client.MetricsPolicyAPI()
-	// todo do we need to parse / validate metrics policy to give better error? Maybe add validation to tf
-	customRules := d.Get(policyRulesKey).([]wavefront.PolicyRule)
-	if len(customRules) < 1 {
+	rawPolicy := d.Get(policyRulesKey)
+	log.Printf("recieved: %v", rawPolicy)
+	policy := parsePolicyRules(rawPolicy)
+	if len(policy) < 1 {
 		return fmt.Errorf("error updating Metrics Policy, no valid Policy Rules set")
 	}
 	newPolicyRules := &wavefront.UpdateMetricsPolicyRequest{
-		PolicyRules: customRules,
+		PolicyRules: policy,
 	}
 	updatedPolicy, err := metrics.Update(newPolicyRules)
 	if err != nil {
-		return fmt.Errorf("error updating metrics policy: %d", err)
+		return fmt.Errorf("error updating metrics policy: %v", err)
 	}
 	d.SetId(string(rune(updatedPolicy.UpdatedEpochMillis)))
 
 	return resourceMetricsPolicyRead(d, meta)
 }
 
+func parsePolicyRules(raw interface{}) []wavefront.PolicyRuleRequest {
+	var rules []wavefront.PolicyRuleRequest
+
+	rawArr := raw.([]interface{})
+	for _, r := range rawArr {
+		rule := r.(map[string]interface{})
+		log.Printf("rule: %v", rule)
+
+		newRule := wavefront.PolicyRuleRequest{
+			Accounts:     parseStrArr(rule[accountsKey]),
+			UserGroupIds: parseStrArr(rule[userGroupsKey]),
+			Roles:        parseStrArr(rule[rolesKey]),
+			Name:         rule[nameKey].(string),
+			Tags:         parseStrArr(rule[tagsKey]),
+			Description:  rule[descriptionKey].(string),
+			Prefixes:     parseStrArr(rule[prefixesKey]),
+			TagsAnded:    rule[tagsAndedKey].(bool),
+			AccessType:   rule[accessTypeKey].(string),
+		}
+
+		rules = append(rules, newRule)
+	}
+	log.Printf("new policy rules: %v", rules)
+	return rules
+}
+
+func parseStrArr(raw interface{}) []string {
+	var arr []string
+	if len(raw.([]interface{})) > 0 {
+		for _, v := range raw.([]interface{}) {
+			arr = append(arr, v.(string))
+		}
+
+	}
+	return arr
+}
+
+func parseUserGroup(raw interface{}) wavefront.UserGroup {
+	rawMap := raw.(map[string]interface{})
+	id := rawMap[idKey].(string)
+	return wavefront.UserGroup{
+		ID:          &id,
+		Name:        rawMap[nameKey].(string),
+		Description: rawMap[descriptionKey].(string),
+	}
+}
+
 // resourceMetricsPolicyDelete reverts metrics policy to default predefined policy rule allowing access to all metrics for everyone
 func resourceMetricsPolicyDelete(d *schema.ResourceData, meta interface{}) error {
+	// needed to lookup default 'everyone' group assignment
+	groups := meta.(*wavefrontClient).client.UserGroups()
+	groupResults, err := groups.Find(
+		[]*wavefront.SearchCondition{
+			{
+				Key:            "name",
+				Value:          "Everyone",
+				MatchingMethod: "EXACT",
+			},
+		},
+	)
+	if err != nil {
+		return fmt.Errorf("error reading Default UserGroup 'Everyone' in Wavefront, %s", err)
+	}
+
+	if len(groupResults) != 1 {
+		return fmt.Errorf("error finding default UserGroup 'Everyone' in Wavefront")
+	}
+
+	defaultGroup := groupResults[0]
+
 	metrics := meta.(*wavefrontClient).client.MetricsPolicyAPI()
 
 	defaultPolicyRules := &wavefront.UpdateMetricsPolicyRequest{
-		PolicyRules: []wavefront.PolicyRule{{
-			//Accounts: []string{}, TODO validate unneeded
-			UserGroups: []wavefront.UserGroup{{
-				Name:        "Everyone",
-				Description: "System group which contains all users",
-			}},
-			//Roles:       []string{},TODO validate unneeded
-			Name: "Allow All Metrics",
-			//Tags:        []string{},TODO validate unneeded
-			Description: "Predefined policy rule. Allows access to all metrics (timeseries, histograms, and counters) for all accounts. If this rule is removed, all accounts can access all metrics if there are no matching blocking rules.",
-			Prefixes:    []string{"*"},
-			TagsAnded:   false,
-			AccessType:  "ALLOW",
+		PolicyRules: []wavefront.PolicyRuleRequest{{
+			UserGroupIds: []string{*defaultGroup.ID},
+			Name:         "Allow All Metrics",
+			Description:  "Predefined policy rule. Allows access to all metrics (timeseries, histograms, and counters) for all accounts. If this rule is removed, all accounts can access all metrics if there are no matching blocking rules.",
+			Prefixes:     []string{"*"},
+			TagsAnded:    false,
+			AccessType:   "ALLOW",
 		}},
 	}
-	_, err := metrics.Update(defaultPolicyRules)
+	_, err = metrics.Update(defaultPolicyRules)
 	if err != nil {
 		return fmt.Errorf("error deleting custom metrics policy: %d", err)
 	}

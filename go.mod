@@ -6,6 +6,6 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.6.1
 )
 
-replace github.com/WavefrontHQ/go-wavefront-management-api => github.com/ssnorrizaurous/go-wavefront-management-api v1.14.3-0.20220429210844-fbe1fc9f2de7
+replace github.com/WavefrontHQ/go-wavefront-management-api => github.com/ssnorrizaurous/go-wavefront-management-api v1.14.3-0.20220503202859-6ed10b1ec6a5
 
 go 1.16
