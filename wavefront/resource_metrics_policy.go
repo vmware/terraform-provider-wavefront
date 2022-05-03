@@ -208,7 +208,6 @@ func parsePolicyRules(raw interface{}) []wavefront.PolicyRuleRequest {
 
 		rules = append(rules, newRule)
 	}
-	log.Printf("new policy rules: %v", rules)
 	return rules
 }
 
@@ -221,16 +220,6 @@ func parseStrArr(raw interface{}) []string {
 
 	}
 	return arr
-}
-
-func parseUserGroup(raw interface{}) wavefront.UserGroup {
-	rawMap := raw.(map[string]interface{})
-	id := rawMap[idKey].(string)
-	return wavefront.UserGroup{
-		ID:          &id,
-		Name:        rawMap[nameKey].(string),
-		Description: rawMap[descriptionKey].(string),
-	}
 }
 
 // resourceMetricsPolicyDelete reverts metrics policy to default predefined policy rule allowing access to all metrics for everyone
