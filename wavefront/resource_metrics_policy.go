@@ -1,22 +1,27 @@
 package wavefront
 
 import (
+	"errors"
 	"fmt"
 	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"log"
 )
 
 const (
 	updaterIdKey          = "updater_id"
 	updatedEpochMillisKey = "updated_epoch_millis"
-	accountsKey           = "accounts"
+	accountsKey           = "account_ids"
 	tagsKey               = "tags"
 	prefixesKey           = "prefixes"
 	tagsAndedKey          = "tags_anded"
 	accessTypeKey         = "access_type"
 	userGroupsKey         = "user_group_ids"
 	policyRulesKey        = "policy_rules"
+	policyTagKey          = "key"
+	policyTagValue        = "value"
+	roleIdsTagKey         = "role_ids"
 )
 
 func resourceMetricsPolicy() *schema.Resource {
@@ -64,11 +69,11 @@ func flattenPolicyRules(policy []wavefront.PolicyRule) []map[string]interface{} 
 
 func flattenPolicyRule(policy *wavefront.PolicyRule) map[string]interface{} {
 	tfMap := make(map[string]interface{})
-	tfMap[accountsKey] = policy.Accounts
-	tfMap[userGroupsKey] = flattenUserGroups(policy.UserGroups)
-	tfMap[rolesKey] = policy.Roles
+	tfMap[accountsKey] = flattenAccounts(policy.Accounts)
+	tfMap[userGroupsKey] = flattenPolicyUserGroups(policy.UserGroups)
+	tfMap[roleIdsTagKey] = flattenPolicyRole(policy.Roles)
 	tfMap[nameKey] = policy.Name
-	tfMap[tagsKey] = policy.Tags
+	tfMap[tagsKey] = flattenPolicyTags(policy.Tags)
 	tfMap[descriptionKey] = policy.Description
 	tfMap[prefixesKey] = policy.Prefixes
 	tfMap[tagsAndedKey] = policy.TagsAnded
@@ -76,12 +81,39 @@ func flattenPolicyRule(policy *wavefront.PolicyRule) map[string]interface{} {
 	return tfMap
 }
 
-func flattenUserGroups(user []wavefront.UserGroup) []string {
+func flattenAccounts(accounts []wavefront.PolicyUser) []string {
+	var accountIds []string
+	for _, v := range accounts {
+		accountIds = append(accountIds, v.ID)
+	}
+	return accountIds
+}
+
+func flattenPolicyUserGroups(users []wavefront.PolicyUserGroup) []string {
 	var groupIds []string
-	for _, v := range user {
-		groupIds = append(groupIds, *v.ID)
+	for _, v := range users {
+		groupIds = append(groupIds, v.ID)
 	}
 	return groupIds
+}
+
+func flattenPolicyRole(roles []wavefront.Role) []string {
+	var roleIds []string
+	for _, v := range roles {
+		roleIds = append(roleIds, v.ID)
+	}
+	return roleIds
+}
+
+func flattenPolicyTags(tags []wavefront.PolicyTag) []map[string]interface{} {
+	tfMaps := make([]map[string]interface{}, 0)
+	for _, tag := range tags {
+		tfMap := make(map[string]interface{})
+		tfMap[policyTagKey] = tag.Key
+		tfMap[policyTagValue] = tag.Value
+		tfMaps = append(tfMaps, tfMap)
+	}
+	return tfMaps
 }
 
 func resourceMetricsPolicySchema() map[string]*schema.Schema {
@@ -121,11 +153,11 @@ func policyRulesSchema() map[string]*schema.Schema {
 		},
 		userGroupsKey: {
 			Type:     schema.TypeList,
-			Required: true,
+			Optional: true,
 			ForceNew: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
-		rolesKey: {
+		roleIdsTagKey: {
 			Type:     schema.TypeList,
 			Optional: true,
 			ForceNew: true,
@@ -140,7 +172,20 @@ func policyRulesSchema() map[string]*schema.Schema {
 			Type:     schema.TypeList,
 			Optional: true,
 			ForceNew: true,
-			Elem:     &schema.Schema{Type: schema.TypeString},
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					policyTagKey: {
+						Type:     schema.TypeString,
+						Required: true,
+						ForceNew: true,
+					},
+					policyTagValue: {
+						Type:     schema.TypeString,
+						Required: true,
+						ForceNew: true,
+					},
+				},
+			},
 		},
 		descriptionKey: {
 			Type:     schema.TypeString,
@@ -159,18 +204,37 @@ func policyRulesSchema() map[string]*schema.Schema {
 			ForceNew: true,
 		},
 		accessTypeKey: {
-			Type:     schema.TypeString,
-			Required: true,
-			ForceNew: true,
+			Type:             schema.TypeString,
+			Required:         true,
+			ForceNew:         true,
+			ValidateDiagFunc: validateAccessTypeVal,
 		},
 	}
+}
+
+func validateAccessTypeVal(v interface{}, p cty.Path) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	accessType := fmt.Sprintf("%v", v)
+	switch accessType {
+	case "BLOCK", "ALLOW":
+	default:
+		diags = append(diags, diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  fmt.Sprintf("%s is an invalid access_type", accessType),
+			Detail:   "access_type must be either 'BLOCK' or 'ALLOW'",
+		})
+	}
+	return diags
 }
 
 func resourceMetricsPolicyUpdate(d *schema.ResourceData, meta interface{}) error {
 	metrics := meta.(*wavefrontClient).client.MetricsPolicyAPI()
 	rawPolicy := d.Get(policyRulesKey)
-	log.Printf("recieved: %v", rawPolicy)
-	policy := parsePolicyRules(rawPolicy)
+	policy, err := parsePolicyRules(rawPolicy)
+	if err != nil {
+		return err
+	}
 	if len(policy) < 1 {
 		return fmt.Errorf("error updating Metrics Policy, no valid Policy Rules set")
 	}
@@ -186,20 +250,27 @@ func resourceMetricsPolicyUpdate(d *schema.ResourceData, meta interface{}) error
 	return resourceMetricsPolicyRead(d, meta)
 }
 
-func parsePolicyRules(raw interface{}) []wavefront.PolicyRuleRequest {
+func parsePolicyRules(raw interface{}) ([]wavefront.PolicyRuleRequest, error) {
 	var rules []wavefront.PolicyRuleRequest
 
 	rawArr := raw.([]interface{})
 	for _, r := range rawArr {
 		rule := r.(map[string]interface{})
-		log.Printf("rule: %v", rule)
+
+		accountIds := parseStrArr(rule[accountsKey])
+		userGroupIds := parseStrArr(rule[userGroupsKey])
+		roleIds := parseStrArr(rule[roleIdsTagKey])
+
+		if err := validatePolicySelectorSet(accountIds, userGroupIds, roleIds); err != nil {
+			return nil, err
+		}
 
 		newRule := wavefront.PolicyRuleRequest{
-			Accounts:     parseStrArr(rule[accountsKey]),
-			UserGroupIds: parseStrArr(rule[userGroupsKey]),
-			Roles:        parseStrArr(rule[rolesKey]),
+			AccountIds:   accountIds,
+			UserGroupIds: userGroupIds,
+			RoleIds:      roleIds,
 			Name:         rule[nameKey].(string),
-			Tags:         parseStrArr(rule[tagsKey]),
+			Tags:         parsePolicyTagsArr(rule[tagsKey]),
 			Description:  rule[descriptionKey].(string),
 			Prefixes:     parseStrArr(rule[prefixesKey]),
 			TagsAnded:    rule[tagsAndedKey].(bool),
@@ -208,16 +279,28 @@ func parsePolicyRules(raw interface{}) []wavefront.PolicyRuleRequest {
 
 		rules = append(rules, newRule)
 	}
-	return rules
+	return rules, nil
 }
 
-func parseStrArr(raw interface{}) []string {
-	var arr []string
-	if len(raw.([]interface{})) > 0 {
-		for _, v := range raw.([]interface{}) {
-			arr = append(arr, v.(string))
-		}
+func validatePolicySelectorSet(accountIds, userGroupIds, roleIds []string) error {
+	if len(accountIds)+len(userGroupIds)+len(roleIds) < 1 {
+		return errors.New("policy_rule must have at least one associated account, user group, or role")
+	}
+	return nil
+}
 
+func parsePolicyTagsArr(raw interface{}) []wavefront.PolicyTag {
+	var arr []wavefront.PolicyTag
+	if raw != nil && len(raw.([]interface{})) > 0 {
+		for _, v := range raw.([]interface{}) {
+			kv := v.(map[string]interface{})
+			key := kv[policyTagKey].(string)
+			value := kv[policyTagValue].(string)
+			arr = append(arr, wavefront.PolicyTag{
+				Key:   key,
+				Value: value,
+			})
+		}
 	}
 	return arr
 }

@@ -15,6 +15,49 @@ func dataSourceUsers() *schema.Resource {
 	}
 }
 
+func dataSourceUsersSchema() map[string]*schema.Schema {
+	userSchema := userSchema()
+	return map[string]*schema.Schema{
+		usersKey: {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: userSchema,
+			},
+		},
+	}
+}
+
+func userSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		// Computed Values
+		emailKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		permissionsKey: {
+			Type:     schema.TypeList,
+			Optional: true,
+			ForceNew: true,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+		},
+		userGroupsKey: {
+			Type:     schema.TypeList,
+			Optional: true,
+			ForceNew: true,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+		},
+		customerKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		lastSuccessfulLoginKey: {
+			Type:     schema.TypeInt,
+			Computed: true,
+		},
+	}
+}
+
 //func dataSourceUsersSchema() map[string]*schema.Schema {
 //	return map[string]*schema.Schema{
 //		usersKey: {
@@ -46,19 +89,6 @@ func dataSourceUsers() *schema.Resource {
 //	}
 //	return ids
 //}
-
-func dataSourceUsersSchema() map[string]*schema.Schema {
-	userSchema := userSchema()
-	return map[string]*schema.Schema{
-		usersKey: {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem: &schema.Resource{
-				Schema: userSchema,
-			},
-		},
-	}
-}
 
 func dataSourceUsersRead(d *schema.ResourceData, m interface{}) error {
 	userClient := m.(*wavefrontClient).client.Users()
