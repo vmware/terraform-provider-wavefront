@@ -17,6 +17,11 @@ data "wavefront_roles" "roles" {}
 data "wavefront_user" "user_1" {
   email = "sean.norris@woven-planet.global"
 }
+
+data "wavefront_users" "users" {}
+
+data "wavefront_user_groups" "groups" {}
+
 #// 27230d83-6ea1-49c3-892c-1e8686756047
 #resource "wavefront_role" "tf-test-role" {
 #  name = "tf-test-role"
@@ -81,18 +86,20 @@ data "wavefront_user" "user_1" {
 #  value = data.wavefront_default_user_group.everyone_group.group_id
 #}
 #
-output "user_1" {
-  value = data.wavefront_user.user_1
-}
+#output "user_1" {
+#  value = data.wavefront_user.user_1
+#}
 
 #output "all_users" {
-#  value = data.wavefront_users.users.users
+#  value = data.wavefront_users.users
 #}
+
+output "all_groups" {
+  value = data.wavefront_user_groups.groups
+}
+
 
 #output "all_roles" {
-#  value = data.wavefront_roles.roles.roles
+#  value = data.wavefront_roles.roles
 #}
 
-#output "all_rules" {
-#  value = data.wavefront_metrics_policy.policies
-#}

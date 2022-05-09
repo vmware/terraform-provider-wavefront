@@ -37,14 +37,12 @@ func userSchema() map[string]*schema.Schema {
 		},
 		permissionsKey: {
 			Type:     schema.TypeList,
-			Optional: true,
-			ForceNew: true,
+			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		userGroupsKey: {
 			Type:     schema.TypeList,
-			Optional: true,
-			ForceNew: true,
+			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		customerKey: {
@@ -57,38 +55,6 @@ func userSchema() map[string]*schema.Schema {
 		},
 	}
 }
-
-//func dataSourceUsersSchema() map[string]*schema.Schema {
-//	return map[string]*schema.Schema{
-//		usersKey: {
-//			Type:     schema.TypeList,
-//			Computed: true,
-//			Elem:     &schema.Schema{Type: schema.TypeString},
-//		},
-//	}
-//}
-//
-//func dataSourceUsersRead(d *schema.ResourceData, m interface{}) error {
-//	userClient := m.(*wavefrontClient).client.Users()
-//
-//	users, err := userClient.Find(nil)
-//	if err != nil {
-//		return err
-//	}
-//	d.SetId(time.Now().UTC().String())
-//	if err := d.Set(usersKey, flattenUsers(users)); err != nil {
-//		return err
-//	}
-//	return nil
-//}
-//
-//func flattenUsers(users []*wavefront.User) []string {
-//	var ids []string
-//	for _, user := range users {
-//		ids = append(ids, *user.ID)
-//	}
-//	return ids
-//}
 
 func dataSourceUsersRead(d *schema.ResourceData, m interface{}) error {
 	userClient := m.(*wavefrontClient).client.Users()
@@ -114,12 +80,11 @@ func flattenUsers(users []*wavefront.User) []map[string]interface{} {
 
 func flattenUser(user *wavefront.User) map[string]interface{} {
 	tfMap := make(map[string]interface{})
-	tfMap[identifierKey] = user.ID
+	tfMap[emailKey] = *user.ID
+	tfMap[permissionsKey] = user.Permissions
+	tfMap[userGroupsKey] = flattenUserGroupsToIds(user.Groups)
 	tfMap[customerKey] = user.Customer
-	tfMap[lastSuccessfulLoginKey] = user.LastSuccessfulLogin
-	// TODO do we need this? see https://github.com/hashicorp/terraform-provider-aws/blob/611b4737168f4f0051bb63ef221f0e76f156f392/internal/service/lakeformation/data_lake_settings.go#L271
-	//if user == nil {
-	//	return tfMap
-	//}
+	tfMap[lastSuccessfulLoginKey] = int(user.LastSuccessfulLogin)
+
 	return tfMap
 }

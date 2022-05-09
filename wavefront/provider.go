@@ -60,6 +60,7 @@ func Provider() *schema.Provider {
 			"wavefront_metrics_policy":     dataSourceMetricsPolicy(),
 			"wavefront_roles":              dataSourceRoles(),
 			"wavefront_user":               dataSourceUser(),
+			"wavefront_user_groups":        dataSourceUserGroups(),
 			"wavefront_users":              dataSourceUsers(),
 		},
 		ConfigureFunc: providerConfigure,

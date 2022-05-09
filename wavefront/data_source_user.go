@@ -10,7 +10,6 @@ import (
 const (
 	emailKey               = "email"
 	idKey                  = "id"
-	identifierKey          = "identifier"
 	customerKey            = "customer"
 	lastSuccessfulLoginKey = "last_successful_login"
 )
@@ -32,14 +31,12 @@ func dataSourceUserSchema() map[string]*schema.Schema {
 		// Computed Values
 		permissionsKey: {
 			Type:     schema.TypeList,
-			Optional: true,
-			ForceNew: true,
+			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		userGroupsKey: {
 			Type:     schema.TypeList,
-			Optional: true,
-			ForceNew: true,
+			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 		customerKey: {
@@ -76,7 +73,7 @@ func setUserAttributes(d *schema.ResourceData, user wavefront.User) error {
 	if err := d.Set(permissionsKey, user.Permissions); err != nil {
 		return err
 	}
-	if err := d.Set(userGroupsKey, flattenUserGroups(user.Groups)); err != nil {
+	if err := d.Set(userGroupsKey, flattenUserGroupsToIds(user.Groups)); err != nil {
 		return err
 	}
 	if err := d.Set(customerKey, user.Customer); err != nil {
@@ -89,7 +86,7 @@ func setUserAttributes(d *schema.ResourceData, user wavefront.User) error {
 }
 
 // flattenUserGroups extracts user_group Ids from list of user_group objects
-func flattenUserGroups(groups wavefront.UserGroupsWrapper) []string {
+func flattenUserGroupsToIds(groups wavefront.UserGroupsWrapper) []string {
 	var ids []string
 	for _, group := range groups.UserGroups {
 		ids = append(ids, *group.ID)

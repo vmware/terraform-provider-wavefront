@@ -8,19 +8,12 @@ import (
 )
 
 const (
-	pageSize                = 100
-	rolesKey                = "roles"
-	createdEpochMillisKey   = "created_epoch_millis"
-	lastUpdatedMsKey        = "last_updated_ms"
-	sampleLinkedGroupsKey   = "sample_linked_groups"
-	sampleLinkedAccountsKey = "sample_linked_accounts"
-	linkedGroupsCountKey    = "linked_groups_count"
-	linkedAccountsCountKey  = "linked_accounts_count"
-	lastUpdatedAccountIdKey = "last_updated_account_id"
-	nameKey                 = "name"
-	permissionsKey          = "permissions"
-	descriptionKey          = "description"
-	exactMatching           = "EXACT"
+	pageSize       = 100
+	descriptionKey = "description"
+	exactMatching  = "EXACT"
+	nameKey        = "name"
+	permissionsKey = "permissions"
+	rolesKey       = "roles"
 )
 
 func dataSourceRoles() *schema.Resource {
@@ -45,9 +38,9 @@ func dataSourceRolesRead(d *schema.ResourceData, m interface{}) error {
 	var allRoles []*wavefront.Role
 	userClient := m.(*wavefrontClient).client.Roles()
 
-	contPaging := true
+	cont := true
 	offset := 0
-	for contPaging {
+	for cont {
 		filter := []*wavefront.SearchCondition{
 			{Key: "limit", Value: string(rune(pageSize)), MatchingMethod: exactMatching},
 			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
@@ -62,7 +55,7 @@ func dataSourceRolesRead(d *schema.ResourceData, m interface{}) error {
 		}
 
 		if len(roles) < pageSize {
-			contPaging = false
+			cont = false
 		} else {
 			offset += pageSize
 		}
@@ -87,29 +80,11 @@ func flattenRoles(roles []*wavefront.Role) []map[string]interface{} {
 func flattenRole(role *wavefront.Role) map[string]interface{} {
 	tfMap := make(map[string]interface{})
 	tfMap[idKey] = role.ID
-	tfMap[createdEpochMillisKey] = role.CreatedEpochMillis
-	tfMap[lastUpdatedMsKey] = role.LastUpdatedMs
-	//tfMap[sampleLinkedGroupsKey] = role.SampleLinkedGroups TODO impl
-	if role.SampleLinkedAccounts != nil {
-		tfMap[sampleLinkedAccountsKey] = *role.SampleLinkedAccounts //todo fix?
-	}
-	tfMap[linkedGroupsCountKey] = role.LinkedGroupsCount
-	tfMap[linkedAccountsCountKey] = role.LinkedAccountsCount
-	tfMap[customerKey] = role.Customer
-	tfMap[lastUpdatedAccountIdKey] = role.LastUpdatedAccountId
 	tfMap[nameKey] = role.Name
-	tfMap[permissionsKey] = role.Permissions
 	tfMap[descriptionKey] = role.Description
+	tfMap[permissionsKey] = role.Permissions
 	return tfMap
 }
-
-//func mapStrList(strs []*string) []string {
-//	var mapped []string
-//	for _, v := range strs {
-//		mapped = append(mapped, *v)
-//	}
-//	return mapped
-//}
 
 func rolesSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
@@ -118,41 +93,11 @@ func rolesSchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		createdEpochMillisKey: {
-			Type:     schema.TypeInt,
-			Computed: true,
-		},
-		lastUpdatedMsKey: {
-			Type:     schema.TypeInt,
-			Computed: true,
-		},
-		//SampleLinkedGroupsKey: { //TODO look into existing impl
-		//	Type:     schema.TypeList,
-		//	Computed: true,
-		//	Elem:
-		//},
-		sampleLinkedAccountsKey: {
-			Type:     schema.TypeList,
-			Computed: true,
-			Elem:     &schema.Schema{Type: schema.TypeString},
-		},
-		linkedGroupsCountKey: {
-			Type:     schema.TypeInt,
-			Computed: true,
-		},
-		linkedAccountsCountKey: {
-			Type:     schema.TypeInt,
-			Computed: true,
-		},
-		customerKey: {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		lastUpdatedAccountIdKey: {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
 		nameKey: {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		descriptionKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
@@ -160,10 +105,6 @@ func rolesSchema() map[string]*schema.Schema {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
-		},
-		descriptionKey: {
-			Type:     schema.TypeString,
-			Computed: true,
 		},
 	}
 }
