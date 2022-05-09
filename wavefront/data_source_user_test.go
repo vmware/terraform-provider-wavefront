@@ -1,4 +1,6 @@
-//package wavefront
+package wavefront
+
+// TODO write tests
 //
 //import (
 //	"fmt"
