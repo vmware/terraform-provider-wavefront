@@ -108,7 +108,7 @@ func testAccGetUpdatedPolicy() ([]wavefront.PolicyRule, error) {
 		[]*wavefront.SearchCondition{
 			{
 				Key:            "id",
-				Value:          "sean.norris@woven-planet.global", // TODO revert "example@example.com",
+				Value:          "example@example.com",
 				MatchingMethod: "EXACT",
 			},
 		},
@@ -256,17 +256,15 @@ func testAccCheckWavefrontMetricsPolicyUpdate() string {
 	return `
 data "wavefront_default_user_group" "everyone" {}
 
-data "wavefront_user" "example" {
-  id = "sean.norris@woven-planet.global"
+
+resource "wavefront_user" "example" {
+ email = "example@example.com"
+ user_groups = [data.wavefront_default_user_group.everyone.group_id]
 }
-//resource "wavefront_user" "example" {
-//  email = "example@example.com"
-//  user_groups = [data.wavefront_default_user_group.everyone.group_id]
-//}
 
 resource "wavefront_role" "test" {
   name = "test-role"
-  assignees = [data.wavefront_user.example.id]
+  assignees = [wavefront_user.example.id]
 }
 
 resource "wavefront_metrics_policy" "main" {
@@ -293,7 +291,7 @@ resource "wavefront_metrics_policy" "main" {
 	
     tags_anded  = true
     access_type = "BLOCK"
-    account_ids    = [data.wavefront_user.example.id]
+    account_ids    = [wavefront_user.example.id]
   }
   policy_rules {
     name        = "Allow All Metrics"

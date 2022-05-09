@@ -1,8 +1,8 @@
 ---
 layout: "wavefront"
-page_title: "Wavefront: Policy "
+page_title: "Wavefront: Metrics Policy"
 description: |-
-Provides a Wavefront User Resource. This allows user accounts to be created, updated, and deleted.
+Provides a Wavefront Metrics Policy Resource. This allows management of Metrics Policy to control access to time series, histograms, and delta counters
 ---
 
 # Resource : wavefront_metrics_policy
