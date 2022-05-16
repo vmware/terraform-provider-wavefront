@@ -100,6 +100,19 @@ resource "wavefront_metrics_policy" "main" {
 * `updater_id` - The account_id who applied the current policy.
 * `updated_epoch_millis` - When the policy was applied in epoch_millis.
 
+## Data Source
+Provides a Wavefront Metrics Policy Data Source. This allows looking up the current policy and associated rules.
+
+### Example
+
+```hcl
+data "wavefront_metrics_policy" "policy" {}
+
+output "policy" {
+  value = data.wavefront_metrics_policy.policy
+}
+```
+
 ## Import
 
 Users can be imported by using the `updated_epoch_millis`, e.g.:

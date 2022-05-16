@@ -6,10 +6,6 @@ import (
 	"time"
 )
 
-const (
-	userGroupsListKey = "user_groups"
-)
-
 func dataSourceUserGroups() *schema.Resource {
 	return &schema.Resource{
 		Read:   dataSourceUserGroupsRead,

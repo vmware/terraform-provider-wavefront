@@ -36,14 +36,13 @@ func dataSourceMetricsPolicyRead(d *schema.ResourceData, meta interface{}) error
 }
 
 func dataSourceMetricsPolicySchema() map[string]*schema.Schema {
-	policyRulesSchema := dataSourcePolicyRulesSchema()
 	return map[string]*schema.Schema{
 		// Computed Values
 		policyRulesKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
-				Schema: policyRulesSchema,
+				Schema: dataSourcePolicyRulesSchema(),
 			},
 		},
 		customerKey: {

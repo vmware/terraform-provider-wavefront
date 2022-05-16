@@ -7,15 +7,6 @@ import (
 	"time"
 )
 
-const (
-	pageSize       = 100
-	descriptionKey = "description"
-	exactMatching  = "EXACT"
-	nameKey        = "name"
-	permissionsKey = "permissions"
-	rolesKey       = "roles"
-)
-
 func dataSourceRoles() *schema.Resource {
 	return &schema.Resource{
 		Read:   dataSourceRolesRead,

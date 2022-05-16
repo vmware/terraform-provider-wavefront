@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-const usersKey = "users"
-
 func dataSourceUsers() *schema.Resource {
 	return &schema.Resource{
 		Read:   dataSourceUsersRead,

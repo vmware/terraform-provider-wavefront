@@ -7,21 +7,7 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-)
-
-const (
-	updaterIdKey          = "updater_id"
-	updatedEpochMillisKey = "updated_epoch_millis"
-	accountsKey           = "account_ids"
-	tagsKey               = "tags"
-	prefixesKey           = "prefixes"
-	tagsAndedKey          = "tags_anded"
-	accessTypeKey         = "access_type"
-	userGroupsKey         = "user_group_ids"
-	policyRulesKey        = "policy_rules"
-	policyTagKey          = "key"
-	policyTagValue        = "value"
-	roleIdsTagKey         = "role_ids"
+	"strconv"
 )
 
 func resourceMetricsPolicy() *schema.Resource {
@@ -43,7 +29,7 @@ func resourceMetricsPolicyRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return fmt.Errorf("error retrieving metrics policy: %d", err)
 	}
-	d.SetId(string(rune(metricsPolicy.UpdatedEpochMillis)))
+	d.SetId(strconv.Itoa(metricsPolicy.UpdatedEpochMillis))
 	if err := d.Set(policyRulesKey, flattenPolicyRules(metricsPolicy.PolicyRules)); err != nil {
 		return err
 	}

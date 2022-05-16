@@ -7,13 +7,6 @@ import (
 	"time"
 )
 
-const (
-	emailKey               = "email"
-	idKey                  = "id"
-	customerKey            = "customer"
-	lastSuccessfulLoginKey = "last_successful_login"
-)
-
 func dataSourceUser() *schema.Resource {
 	return &schema.Resource{
 		Read:   dataSourceUserRead,

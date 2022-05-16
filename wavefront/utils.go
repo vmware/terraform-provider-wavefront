@@ -2,6 +2,33 @@ package wavefront
 
 import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+const (
+	accessTypeKey          = "access_type"
+	accountsKey            = "account_ids"
+	customerKey            = "customer"
+	descriptionKey         = "description"
+	emailKey               = "email"
+	exactMatching          = "EXACT"
+	idKey                  = "id"
+	lastSuccessfulLoginKey = "last_successful_login"
+	nameKey                = "name"
+	pageSize               = 100
+	permissionsKey         = "permissions"
+	prefixesKey            = "prefixes"
+	policyRulesKey         = "policy_rules"
+	policyTagKey           = "key"
+	policyTagValue         = "value"
+	roleIdsTagKey          = "role_ids"
+	rolesKey               = "roles"
+	tagsAndedKey           = "tags_anded"
+	tagsKey                = "tags"
+	updatedEpochMillisKey  = "updated_epoch_millis"
+	updaterIdKey           = "updater_id"
+	userGroupsKey          = "user_group_ids"
+	userGroupsListKey      = "user_groups"
+	usersKey               = "users"
+)
+
 // compareStringSliceAnyOrder compares two string slices in any order. It returns
 // all the strings appearing only in the left slice followed by all the strings
 // appearing only in the right slice.
