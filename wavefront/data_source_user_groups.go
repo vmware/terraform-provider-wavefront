@@ -68,15 +68,13 @@ func dataSourceUserGroupsRead(d *schema.ResourceData, m interface{}) error {
 			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
 		}
 
-		roles, err := groupsClient.Find(filter)
+		groups, err := groupsClient.Find(filter)
 		if err != nil {
 			return err
 		}
-		for _, v := range roles {
-			allGroups = append(allGroups, v)
-		}
+		allGroups = append(allGroups, groups...)
 
-		if len(roles) < pageSize {
+		if len(groups) < pageSize {
 			cont = false
 		} else {
 			offset += pageSize

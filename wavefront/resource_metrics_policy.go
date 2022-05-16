@@ -36,7 +36,7 @@ func resourceMetricsPolicyRead(d *schema.ResourceData, meta interface{}) error {
 	if err := d.Set(customerKey, metricsPolicy.Customer); err != nil {
 		return err
 	}
-	if err := d.Set(updaterIdKey, metricsPolicy.UpdaterId); err != nil {
+	if err := d.Set(updaterIDKey, metricsPolicy.UpdaterId); err != nil {
 		return err
 	}
 	if err := d.Set(updatedEpochMillisKey, metricsPolicy.UpdatedEpochMillis); err != nil {
@@ -118,7 +118,7 @@ func resourceMetricsPolicySchema() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		updaterIdKey: {
+		updaterIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},

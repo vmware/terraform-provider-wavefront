@@ -41,9 +41,7 @@ func dataSourceRolesRead(d *schema.ResourceData, m interface{}) error {
 		if err != nil {
 			return err
 		}
-		for _, v := range roles {
-			allRoles = append(allRoles, v)
-		}
+		allRoles = append(allRoles, roles...)
 
 		if len(roles) < pageSize {
 			cont = false

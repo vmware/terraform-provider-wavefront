@@ -23,7 +23,7 @@ const (
 	tagsAndedKey           = "tags_anded"
 	tagsKey                = "tags"
 	updatedEpochMillisKey  = "updated_epoch_millis"
-	updaterIdKey           = "updater_id"
+	updaterIDKey           = "updater_id"
 	userGroupsKey          = "user_group_ids"
 	userGroupsListKey      = "user_groups"
 	usersKey               = "users"
