@@ -232,7 +232,7 @@ func resourceMetricsPolicyUpdate(d *schema.ResourceData, meta interface{}) error
 	if err != nil {
 		return fmt.Errorf("error updating metrics policy: %v", err)
 	}
-	d.SetId(string(rune(updatedPolicy.UpdatedEpochMillis)))
+	d.SetId(strconv.Itoa(updatedPolicy.UpdatedEpochMillis))
 
 	return resourceMetricsPolicyRead(d, meta)
 }
@@ -248,8 +248,8 @@ func parsePolicyRules(raw interface{}) ([]wavefront.PolicyRuleRequest, error) {
 		userGroupIds := parseStrArr(rule[userGroupsKey])
 		roleIds := parseStrArr(rule[roleIdsTagKey])
 
-		if err := validatePolicySelectorSet(accountIds, userGroupIds, roleIds); err != nil {
-			return nil, err
+		if len(accountIds)+len(userGroupIds)+len(roleIds) < 1 {
+			return nil, errors.New("policy_rule must have at least one associated account, user group, or role")
 		}
 
 		newRule := wavefront.PolicyRuleRequest{
@@ -267,13 +267,6 @@ func parsePolicyRules(raw interface{}) ([]wavefront.PolicyRuleRequest, error) {
 		rules = append(rules, newRule)
 	}
 	return rules, nil
-}
-
-func validatePolicySelectorSet(accountIds, userGroupIds, roleIds []string) error {
-	if len(accountIds)+len(userGroupIds)+len(roleIds) < 1 {
-		return errors.New("policy_rule must have at least one associated account, user group, or role")
-	}
-	return nil
 }
 
 func parsePolicyTagsArr(raw interface{}) []wavefront.PolicyTag {
