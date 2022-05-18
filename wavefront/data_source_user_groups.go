@@ -1,9 +1,10 @@
 package wavefront
 
 import (
+	"time"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"time"
 )
 
 func dataSourceUserGroups() *schema.Resource {
@@ -55,6 +56,7 @@ func userGroupSchema() map[string]*schema.Schema {
 }
 
 func dataSourceUserGroupsRead(d *schema.ResourceData, m interface{}) error {
+	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 	var allGroups []*wavefront.UserGroup
 	groupsClient := m.(*wavefrontClient).client.UserGroups()

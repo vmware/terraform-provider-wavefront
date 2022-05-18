@@ -2,8 +2,9 @@ package wavefront
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"time"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceMetricsPolicy() *schema.Resource {
@@ -19,6 +20,7 @@ func dataSourceMetricsPolicyRead(d *schema.ResourceData, meta interface{}) error
 	if err != nil {
 		return fmt.Errorf("error retrieving metrics policy: %d", err)
 	}
+	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 	if err := d.Set(policyRulesKey, flattenPolicyRules(metricsPolicy.PolicyRules)); err != nil {
 		return err

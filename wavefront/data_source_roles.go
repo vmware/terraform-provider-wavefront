@@ -1,10 +1,11 @@
 package wavefront
 
 import (
-	"github.com/WavefrontHQ/go-wavefront-management-api"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"log"
 	"time"
+
+	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func dataSourceRoles() *schema.Resource {
@@ -15,12 +16,11 @@ func dataSourceRoles() *schema.Resource {
 }
 
 func dataSourceRolesSchema() map[string]*schema.Schema {
-	rolesSchema := rolesSchema()
 	return map[string]*schema.Schema{
 		rolesKey: {
 			Type:     schema.TypeList,
 			Computed: true,
-			Elem:     &schema.Resource{Schema: rolesSchema},
+			Elem:     &schema.Resource{Schema: rolesSchema()},
 		},
 	}
 }
@@ -49,7 +49,7 @@ func dataSourceRolesRead(d *schema.ResourceData, m interface{}) error {
 			offset += pageSize
 		}
 	}
-
+	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 	log.Printf("found_roles: %v", allRoles)
 	if err := d.Set(rolesKey, flattenRoles(allRoles)); err != nil {

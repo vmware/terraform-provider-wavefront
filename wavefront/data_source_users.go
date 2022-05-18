@@ -1,9 +1,10 @@
 package wavefront
 
 import (
+	"time"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"time"
 )
 
 func dataSourceUsers() *schema.Resource {
@@ -14,13 +15,12 @@ func dataSourceUsers() *schema.Resource {
 }
 
 func dataSourceUsersSchema() map[string]*schema.Schema {
-	userSchema := userSchema()
 	return map[string]*schema.Schema{
 		usersKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
-				Schema: userSchema,
+				Schema: userSchema(),
 			},
 		},
 	}
@@ -61,6 +61,7 @@ func dataSourceUsersRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
+	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 	if err := d.Set(usersKey, flattenUsers(users)); err != nil {
 		return err

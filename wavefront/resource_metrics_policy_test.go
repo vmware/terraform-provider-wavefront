@@ -2,11 +2,12 @@ package wavefront
 
 import (
 	"fmt"
+	"regexp"
+	"testing"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-	"regexp"
-	"testing"
 )
 
 func TestAccWavefrontPolicy_Basic(t *testing.T) {

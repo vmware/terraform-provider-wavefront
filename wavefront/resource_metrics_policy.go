@@ -3,11 +3,12 @@ package wavefront
 import (
 	"errors"
 	"fmt"
+	"strconv"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"strconv"
 )
 
 func resourceMetricsPolicy() *schema.Resource {

@@ -2,9 +2,10 @@ package wavefront
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"time"
 )
 
 func dataSourceUser() *schema.Resource {
@@ -54,7 +55,7 @@ func dataSourceUserRead(d *schema.ResourceData, m interface{}) error {
 	if err := userClient.Get(&user); err != nil {
 		return err
 	}
-
+	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 	return setUserAttributes(d, user)
 }
