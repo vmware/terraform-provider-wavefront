@@ -1,3 +1,8 @@
+## 3.1.0 (May 23, 2022)
+ENHANCEMENT:
+
+* Support for Metrics Policy & Various Data Sources
+
 ## 3.0.2 (March 23, 2021)
 
 DOCUMENTATION:
