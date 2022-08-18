@@ -111,6 +111,33 @@ func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 	})
 }
 
+func TestAccWavefrontUser_BasicUserChangeEmailUserId(t *testing.T) {
+	var record wavefront.User
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckWavefrontUserDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccCheckWavefrontUserEmail(),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
+					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
+
+					// Check against state that the attributes are as we expect
+					resource.TestCheckResourceAttr(
+						"wavefront_user.basic", "id", "testingtf@example.com"),
+					resource.TestCheckResourceAttr(
+						"wavefront_user.basic", "permissions.#", "2"),
+					resource.TestCheckResourceAttr(
+						"wavefront_user.basic", "customer", "sample_customer"),
+				),
+			},
+		},
+	})
+}
+
 func testAccCheckWavefrontUserDestroy(s *terraform.State) error {
 
 	users := testAccProvider.Meta().(*wavefrontClient).client.Users()
@@ -227,6 +254,18 @@ func testAccCheckWavefrontUserChangeEmail() string {
 	return `
 resource "wavefront_user" "basic" {
 	email       = "test+tftesting2@example.com"
+	permissions = [
+		"agent_management",
+		"alerts_management",
+	]
+}`
+}
+
+func testAccCheckWavefrontUserEmail() string {
+	return `
+resource "wavefront_user" "basic" {
+	email       = "testingtf@example.com"
+	customer    = "sample_customer"
 	permissions = [
 		"agent_management",
 		"alerts_management",

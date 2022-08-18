@@ -2,6 +2,7 @@ package wavefront
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -94,7 +95,10 @@ func resourceUserRead(d *schema.ResourceData, meta interface{}) error {
 
 	user := results[0]
 
-	d.Set("email", user.ID)
+	emailChunks := strings.Split(*user.ID, fmt.Sprintf("+%s", user.Customer))
+	email := fmt.Sprintf("%s%s", emailChunks[0], emailChunks[1])
+
+	d.Set("email", email)
 	d.Set("customer", user.Customer)
 
 	encodePermissions(d, user)
