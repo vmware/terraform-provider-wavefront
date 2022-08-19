@@ -136,6 +136,7 @@ func TestAccWavefrontUser_BasicUserChangeEmailUserId(t *testing.T) {
 			},
 		},
 	})
+
 }
 
 func testAccCheckWavefrontUserDestroy(s *terraform.State) error {
