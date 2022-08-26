@@ -56,7 +56,7 @@ func TestAccWavefrontRole_AdvancedRole(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "name", "Test Role"),
 					resource.TestCheckResourceAttr(resourceName, "description", "Test Role Description"),
 					resource.TestCheckResourceAttr(resourceName, "permissions.#", "2"),
-					resource.TestCheckNoResourceAttr(resourceName, "assignees"),
+					resource.TestCheckResourceAttr(resourceName, "assignees.#", "0"),
 				),
 			},
 		},
