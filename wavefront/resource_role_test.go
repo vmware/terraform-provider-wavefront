@@ -99,7 +99,6 @@ resource "wavefront_user_group" "user_group" {
   description = "User Group Description"
 }
 
-
 resource "wavefront_role" "role" {
   name        = "Test Role"
   description = "Test Role Description"
