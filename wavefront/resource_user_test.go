@@ -236,20 +236,21 @@ type Status struct {
 func getCustomerName() string {
 	var isAccTestsEnabled string
 	var wfToken string
-	var systemUrl string
+	var systemURL string
 	var customerName string
 
 	isAccTestsEnabled = os.Getenv("TF_ACC")
 	wfToken = os.Getenv("WAVEFRONT_TOKEN")
-	systemUrl = os.Getenv("WAVEFRONT_ADDRESS")
+	systemURL = os.Getenv("WAVEFRONT_ADDRESS")
 	customerName = ""
 
 	if isAccTestsEnabled == "1" {
 
-		var url string = fmt.Sprintf("https://%s/api/v2/account/user", systemUrl)
+		var url string = fmt.Sprintf("https://%s/api/v2/account/user", systemURL)
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			fmt.Errorf("error creating new request to find Customer name")
+			e := fmt.Errorf("error creating new request to find Customer name")
+			fmt.Printf("an error occured %s", e)
 		}
 
 		// Header -> Authorization: Bearer <TOKEN>
@@ -261,7 +262,8 @@ func getCustomerName() string {
 		resp, err := client.Do(req)
 
 		if err != nil {
-			fmt.Errorf("error finding Customer name")
+			e := fmt.Errorf("error finding Customer name")
+			fmt.Printf("an error occured %s", e)
 		}
 
 		defer resp.Body.Close()
@@ -269,7 +271,8 @@ func getCustomerName() string {
 		if resp.StatusCode == http.StatusOK {
 			bodyBytes, err := io.ReadAll(resp.Body)
 			if err != nil {
-				fmt.Errorf("error reading Response Body for User")
+				e := fmt.Errorf("error reading Response Body for Use with error %s", err)
+				fmt.Printf("an error occured %s", e)
 			}
 
 			var m ResponseObj
