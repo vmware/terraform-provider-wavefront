@@ -250,7 +250,7 @@ func getCustomerName() string {
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
 			e := fmt.Errorf("error creating new request to find Customer name")
-			fmt.Printf("an error occured %s", e)
+			fmt.Printf("an error occurred %s", e)
 		}
 
 		// Header -> Authorization: Bearer <TOKEN>
@@ -263,7 +263,7 @@ func getCustomerName() string {
 
 		if err != nil {
 			e := fmt.Errorf("error finding Customer name")
-			fmt.Printf("an error occured %s", e)
+			fmt.Printf("an error occurred %s", e)
 		}
 
 		defer resp.Body.Close()
@@ -272,7 +272,7 @@ func getCustomerName() string {
 			bodyBytes, err := io.ReadAll(resp.Body)
 			if err != nil {
 				e := fmt.Errorf("error reading Response Body for Use with error %s", err)
-				fmt.Printf("an error occured %s", e)
+				fmt.Printf("an error occurred %s", e)
 			}
 
 			var m ResponseObj
