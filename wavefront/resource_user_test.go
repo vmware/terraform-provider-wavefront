@@ -249,7 +249,7 @@ func getCustomerName() string {
 		var url string = fmt.Sprintf("https://%s/api/v2/account/user", systemUrl)
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			fmt.Errorf("error Creating New Request to find Customer Name!")
+			fmt.Errorf("error creating new request to find Customer name")
 		}
 
 		// Header -> Authorization: Bearer <TOKEN>
@@ -261,7 +261,7 @@ func getCustomerName() string {
 		resp, err := client.Do(req)
 
 		if err != nil {
-			fmt.Errorf("error Finding Customer Name!")
+			fmt.Errorf("error finding Customer name")
 		}
 
 		defer resp.Body.Close()
@@ -269,7 +269,7 @@ func getCustomerName() string {
 		if resp.StatusCode == http.StatusOK {
 			bodyBytes, err := io.ReadAll(resp.Body)
 			if err != nil {
-				fmt.Errorf("Error")
+				fmt.Errorf("error reading Response Body for User")
 			}
 
 			var m ResponseObj
