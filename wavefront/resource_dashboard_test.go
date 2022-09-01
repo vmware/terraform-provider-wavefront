@@ -2,6 +2,8 @@ package wavefront
 
 import (
 	"fmt"
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -310,13 +312,20 @@ func TestBuildParameterDetails(t *testing.T) {
 func TestAccWavefrontDashboard_Basic(t *testing.T) {
 	var record wavefront.Dashboard
 
+	config := testAccCheckWavefrontDashboardBasic()
+	if os.Getenv("TF_ACC") == "1" {
+		replace := "tftesting"
+		newCustomer := getCustomerName()
+		config = strings.Replace(config, replace, newCustomer, 1)
+	}
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardBasic(),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboard", &record),
 					testAccCheckWavefrontDashboardAttributes(&record),
@@ -375,13 +384,20 @@ func TestAccWavefrontDashboard_Basic(t *testing.T) {
 func TestAccWavefrontDashboard_Updated(t *testing.T) {
 	var record wavefront.Dashboard
 
+	config := testAccCheckWavefrontDashboardBasic()
+	if os.Getenv("TF_ACC") == "1" {
+		replace := "tftesting"
+		newCustomer := getCustomerName()
+		config = strings.Replace(config, replace, newCustomer, 1)
+	}
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontDashboardBasic(),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboard", &record),
 					testAccCheckWavefrontDashboardAttributes(&record),

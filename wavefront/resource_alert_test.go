@@ -2,6 +2,8 @@ package wavefront
 
 import (
 	"fmt"
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -45,13 +47,20 @@ func TestValidateAlertTarget(t *testing.T) {
 func TestAccWavefrontAlert_Basic(t *testing.T) {
 	var record wavefront.Alert
 
+	config := testAccCheckWavefrontAlertBasic()
+	if os.Getenv("TF_ACC") == "1" {
+		replace := "tftesting"
+		newCustomer := getCustomerName()
+		config = strings.Replace(config, replace, newCustomer, 1)
+	}
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlertBasic(),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
@@ -119,13 +128,20 @@ func TestAccWavefrontAlert_RequiredAttributes(t *testing.T) {
 func TestAccWavefrontAlert_Updated(t *testing.T) {
 	var record wavefront.Alert
 
+	config := testAccCheckWavefrontAlertBasic()
+	if os.Getenv("TF_ACC") == "1" {
+		replace := "tftesting"
+		newCustomer := getCustomerName()
+		config = strings.Replace(config, replace, newCustomer, 1)
+	}
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontAlertBasic(),
+				Config: config,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
