@@ -1,7 +1,11 @@
 package wavefront
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
 	"sort"
 	"testing"
 
@@ -12,6 +16,9 @@ import (
 
 func TestAccWavefrontUser_BasicUser(t *testing.T) {
 	var record wavefront.User
+	config1, customerName1 := testAccCheckWavefrontUserBasic()
+
+	fmt.Printf("Record is %v \n", record)
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -19,14 +26,14 @@ func TestAccWavefrontUser_BasicUser(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUserBasic(),
+				Config: config1,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
 
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "id", "test+tftesting@example.com"),
+						"wavefront_user.basic", "id", fmt.Sprintf("test+%s@example.com", customerName1)),
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "permissions.#", "2"),
 				),
@@ -38,33 +45,36 @@ func TestAccWavefrontUser_BasicUser(t *testing.T) {
 func TestAccWavefrontUser_BasicUserChangeGroups(t *testing.T) {
 	var record wavefront.User
 
+	config1, customerName1 := testAccCheckWavefrontUserBasic()
+	config2, customerName2 := testAccCheckWavefrontUserChangeGroups()
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontUserDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUserBasic(),
+				Config: config1,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
 
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "id", "test+tftesting@example.com"),
+						"wavefront_user.basic", "id", fmt.Sprintf("test+%s@example.com", customerName1)),
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "permissions.#", "2"),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontUserChangeGroups(),
+				Config: config2,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "events_management"}, []string{}),
 
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "id", "test+tftesting@example.com"),
+						"wavefront_user.basic", "id", fmt.Sprintf("test+%s@example.com", customerName2)),
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "permissions.#", "2"),
 				),
@@ -75,6 +85,8 @@ func TestAccWavefrontUser_BasicUserChangeGroups(t *testing.T) {
 
 func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 	var record wavefront.User
+	config1, customerName1 := testAccCheckWavefrontUserBasic()
+	config2, customerName2 := testAccCheckWavefrontUserChangeEmail()
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -82,27 +94,27 @@ func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontUserDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckWavefrontUserBasic(),
+				Config: config1,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
 
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "id", "test+tftesting@example.com"),
+						"wavefront_user.basic", "id", fmt.Sprintf("test+%s@example.com", customerName1)),
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "permissions.#", "2"),
 				),
 			},
 			{
-				Config: testAccCheckWavefrontUserChangeEmail(),
+				Config: config2,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 					testAccCheckWavefrontUserAttributes(&record, []string{"agent_management", "alerts_management"}, []string{}),
 
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_user.basic", "id", "test+tftesting2@example.com"),
+						"wavefront_user.basic", "id", fmt.Sprintf("test+%s@example.com", customerName2)),
 					resource.TestCheckResourceAttr(
 						"wavefront_user.basic", "permissions.#", "2"),
 				),
@@ -201,35 +213,118 @@ func testAccCheckWavefrontUserAttributes(user *wavefront.User, permissions []str
 	}
 }
 
-func testAccCheckWavefrontUserBasic() string {
-	return `
-resource "wavefront_user" "basic" {
-	email       = "test+tftesting@example.com"
-	permissions = [
-		"agent_management",
-		"alerts_management",
-	]
-}`
+type User struct {
+	Identifier          string   `json:"identifier"`
+	Customer            string   `json:"customer"`
+	LastSuccessfulLogin int      `json:"lastSuccessfulLogin"`
+	Groups              []string `json:"groups"`
+	IngestionPolicies   []string `json:"ingestionPolicies"`
+	Roles               []string `json:"roles"`
 }
 
-func testAccCheckWavefrontUserChangeGroups() string {
-	return `
-resource "wavefront_user" "basic" {
-	email       = "test+tftesting@example.com"
-	permissions = [
-		"agent_management",
-		"events_management",
-	]
-}`
+type ResponseObj struct {
+	Status   Status `json:"status"`
+	Response []User `json:"response"`
 }
 
-func testAccCheckWavefrontUserChangeEmail() string {
-	return `
-resource "wavefront_user" "basic" {
-	email       = "test+tftesting2@example.com"
-	permissions = [
-		"agent_management",
-		"alerts_management",
-	]
-}`
+type Status struct {
+	Result  string `json:"result"`
+	Message string `json:"message"`
+	Code    int    `json:"code"`
+}
+
+func getCustomerName() string {
+	var isAccTestsEnabled string
+	var wfToken string
+	var systemURL string
+	var customerName string
+
+	isAccTestsEnabled = os.Getenv("TF_ACC")
+	wfToken = os.Getenv("WAVEFRONT_TOKEN")
+	systemURL = os.Getenv("WAVEFRONT_ADDRESS")
+	customerName = ""
+
+	if isAccTestsEnabled == "1" {
+
+		var url string = fmt.Sprintf("https://%s/api/v2/account/user", systemURL)
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			e := fmt.Errorf("error creating new request to find Customer name")
+			fmt.Printf("an error occurred %s", e)
+		}
+
+		// Header -> Authorization: Bearer <TOKEN>
+		// URL: https://cluster.wavefront.com/api/v2/account/user
+
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", wfToken))
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+
+		if err != nil {
+			e := fmt.Errorf("error finding Customer name")
+			fmt.Printf("an error occurred %s", e)
+		}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode == http.StatusOK {
+			bodyBytes, err := io.ReadAll(resp.Body)
+			if err != nil {
+				e := fmt.Errorf("error reading Response Body for Use with error %s", err)
+				fmt.Printf("an error occurred %s", e)
+			}
+
+			var m ResponseObj
+			if err = json.Unmarshal(bodyBytes, &m); err != nil {
+				panic(err)
+			}
+
+			return m.Response[0].Customer
+		}
+
+	}
+
+	return customerName
+}
+
+func testAccCheckWavefrontUserBasic() (string, string) {
+	var customerName string
+	var tfResource string
+	var tempCustomer string = getCustomerName()
+
+	customerName = "tftesting"
+
+	if len(tempCustomer) > 0 {
+		customerName = tempCustomer
+	}
+
+	tfResource = fmt.Sprintf("resource \"wavefront_user\" \"basic\" { \n email = \"test+%s@example.com\" \n permissions = [ \n \"agent_management\", \n \"alerts_management\", \n ] \n} \n", customerName)
+	return tfResource, customerName
+}
+
+func testAccCheckWavefrontUserChangeGroups() (string, string) {
+	var customerName string
+	var tfResource string
+
+	customerName = getCustomerName()
+	if len(customerName) == 0 {
+		customerName = "tftesting"
+	}
+
+	tfResource = fmt.Sprintf("resource \"wavefront_user\" \"basic\" { \n email = \"test+%s@example.com\" \n permissions = [ \n \"agent_management\", \n \"events_management\", \n] \n} \n", customerName)
+	return tfResource, customerName
+}
+
+func testAccCheckWavefrontUserChangeEmail() (string, string) {
+	var customerName string
+	var tfResource string
+
+	customerName = getCustomerName()
+	if len(customerName) == 0 {
+		customerName = "tftesting2"
+	}
+
+	tfResource = fmt.Sprintf("resource \"wavefront_user\" \"basic\" { \n email = \"test+%s@example.com\" \n permissions = [ \n \"agent_management\", \n \"alerts_management\", \n ] \n} \n", customerName)
+	return tfResource, customerName
 }
