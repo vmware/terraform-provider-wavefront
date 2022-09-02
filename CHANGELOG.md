@@ -1,3 +1,10 @@
+## 3.2.0 (September 2, 2022)
+ENHANCEMENT:
+
+* Upgraded Terraform-plugin-sdk/v2 from 2.6.1 to 2.21.0 for security vulnerabilty fix.
+* Upgraded go version from 1.16 to 1.17 for security vulnerabilty fix.
+* Using email instead of id for wavefront_user.
+
 ## 3.1.0 (May 23, 2022)
 ENHANCEMENT:
 
