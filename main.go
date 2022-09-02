@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"log"
 
@@ -17,17 +16,11 @@ func main() {
 	flag.Parse()
 
 	opts := &plugin.ServeOpts{
+		Debug:        debugMode,
+		ProviderAddr: "vmware/wavefront",
 		ProviderFunc: func() *schema.Provider {
 			return wavefront.Provider()
 		},
-	}
-
-	if debugMode {
-		err := plugin.Debug(context.Background(), "vmware/wavefront", opts)
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-		return
 	}
 
 	logFlags := log.Flags()
