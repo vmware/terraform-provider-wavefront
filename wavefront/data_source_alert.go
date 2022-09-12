@@ -144,7 +144,6 @@ func dataSourceAlertSchema() map[string]*schema.Schema {
 }
 
 func dataSourceAlertRead(d *schema.ResourceData, m interface{}) error {
-	fmt.Printf("\n ********* Inside Read Method")
 	alertClient := m.(*wavefrontClient).client.Alerts()
 	id, ok := d.GetOk("id")
 	if !ok {
@@ -152,7 +151,6 @@ func dataSourceAlertRead(d *schema.ResourceData, m interface{}) error {
 	}
 
 	idStr := fmt.Sprintf("%s", id)
-	fmt.Printf("\n ********* IDStr is %s", idStr)
 	alert := wavefront.Alert{ID: &idStr}
 	if err := alertClient.Get(&alert); err != nil {
 		return err

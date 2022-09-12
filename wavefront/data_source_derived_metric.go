@@ -141,7 +141,7 @@ func dataSourceDerivedMetricRead(d *schema.ResourceData, m interface{}) error {
 	derivedMetricClient := m.(*wavefrontClient).client.DerivedMetrics()
 	id, ok := d.GetOk("id")
 	if !ok {
-		return fmt.Errorf("required parameter '%s' not set", emailKey)
+		return fmt.Errorf("required parameter '%s' not set", idKey)
 	}
 
 	idStr := fmt.Sprintf("%s", id)
