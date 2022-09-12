@@ -109,8 +109,8 @@ func flattenAlert(alert *wavefront.Alert) map[string]interface{} {
 	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes
 	tfMap["evaluate_realtime_data"] = alert.EvaluateRealtimeData
 	tfMap["include_obsolete_metrics"] = alert.IncludeObsoleteMetrics
-	tfMap["failing_host_label_pairs"] = alert.FailingHostLabelPairs
-	tfMap["in_maintenance_host_label_pairs"] = alert.InMaintenanceHostLabelPairs
+	tfMap["failing_host_label_pairs"] = flattenHostLabelPairs(alert.FailingHostLabelPairs)
+	tfMap["in_maintenance_host_label_pairs"] = flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)
 
 	return tfMap
 }

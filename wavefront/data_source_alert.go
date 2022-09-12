@@ -227,12 +227,27 @@ func setAlertAttributes(d *schema.ResourceData, alert wavefront.Alert) error {
 	if err := d.Set("include_obsolete_metrics", alert.IncludeObsoleteMetrics); err != nil {
 		return err
 	}
-	if err := d.Set("failing_host_label_pairs", alert.FailingHostLabelPairs); err != nil {
+	if err := d.Set("failing_host_label_pairs", flattenHostLabelPairs(alert.FailingHostLabelPairs)); err != nil {
 		return err
 	}
-	if err := d.Set("in_maintenance_host_label_pairs", alert.InMaintenanceHostLabelPairs); err != nil {
+	if err := d.Set("in_maintenance_host_label_pairs", flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func flattenHostLabelPairs(pairs []wavefront.SourceLabelPair) interface{} {
+	tfMaps := make([]map[string]interface{}, len(pairs))
+	for i, v := range pairs {
+		tfMaps[i] = flattenHostLabelPair(v)
+	}
+	return tfMaps
+}
+
+func flattenHostLabelPair(pair wavefront.SourceLabelPair) map[string]interface{} {
+	tfMap := make(map[string]interface{})
+	tfMap["firing"] = pair.Firing
+	tfMap["host"] = pair.Host
+	return tfMap
 }
