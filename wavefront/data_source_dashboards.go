@@ -1,9 +1,10 @@
 package wavefront
 
 import (
+	"time"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"time"
 )
 
 func dataSourceDashboards() *schema.Resource {
@@ -96,8 +97,8 @@ func flattenDashboard(dashboard *wavefront.Dashboard) map[string]interface{} {
 	tfMap[hiddenKey] = dashboard.Hidden
 	tfMap[numChartsKey] = dashboard.NumCharts
 	tfMap[numFavoritesKey] = dashboard.NumFavorites
-	tfMap[creatorIdKey] = dashboard.CreatorId
-	tfMap[updaterIdKey] = dashboard.UpdaterId
+	tfMap[creatorIDKey] = dashboard.CreatorId
+	tfMap[updaterIDKey] = dashboard.UpdaterId
 	tfMap[systemOwnedKey] = dashboard.SystemOwned
 	tfMap[viewsLastMonthKey] = dashboard.ViewsLastMonth
 	tfMap[viewsLastWeekKey] = dashboard.ViewsLastWeek

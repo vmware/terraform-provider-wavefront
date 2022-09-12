@@ -73,12 +73,12 @@ func derivedMetricSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 
-		createUserIdKey: {
+		createUserIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
 
-		updateUserIdKey: {
+		updateUserIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
@@ -202,8 +202,8 @@ func flattenDerivedMetric(derivedMetric *wavefront.DerivedMetric) map[string]int
 	tfMap[queryFailingKey] = derivedMetric.QueryFailing
 	tfMap[lastErrorMessageKey] = derivedMetric.LastErrorMessage
 	tfMap[lastFailedTimeKey] = derivedMetric.LastFailedTime
-	tfMap[updateUserIdKey] = derivedMetric.UpdateUserId
-	tfMap[createUserIdKey] = derivedMetric.CreateUserId
+	tfMap[updateUserIDKey] = derivedMetric.UpdateUserId
+	tfMap[createUserIDKey] = derivedMetric.CreateUserId
 	tfMap[additionalInformationKey] = derivedMetric.AdditionalInformation
 	tfMap[statusKey] = derivedMetric.Status
 	tfMap[hostsUsedKey] = derivedMetric.HostsUsed

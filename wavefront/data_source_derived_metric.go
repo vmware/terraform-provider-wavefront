@@ -61,12 +61,12 @@ func derivedMetricResponseSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 
-		createUserIdKey: {
+		createUserIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
 
-		updateUserIdKey: {
+		updateUserIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
@@ -182,10 +182,10 @@ func setDerivedMetricAttributes(d *schema.ResourceData, derivedMetric wavefront.
 	if err := d.Set(lastFailedTimeKey, derivedMetric.LastFailedTime); err != nil {
 		return err
 	}
-	if err := d.Set(createUserIdKey, derivedMetric.CreateUserId); err != nil {
+	if err := d.Set(createUserIDKey, derivedMetric.CreateUserId); err != nil {
 		return err
 	}
-	if err := d.Set(updateUserIdKey, derivedMetric.UpdateUserId); err != nil {
+	if err := d.Set(updateUserIDKey, derivedMetric.UpdateUserId); err != nil {
 		return err
 	}
 	if err := d.Set(additionalInformationKey, derivedMetric.AdditionalInformation); err != nil {

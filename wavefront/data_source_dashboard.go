@@ -3,9 +3,10 @@ package wavefront
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"time"
 )
 
 const (
@@ -24,8 +25,8 @@ const (
 	hiddenKey                             = "hidden"
 	numChartsKey                          = "num_charts"
 	numFavoritesKey                       = "num_favorites"
-	creatorIdKey                          = "creator_id"
-	updaterIdKey                          = "updater_id"
+	creatorIDKey                          = "creator_id"
+	updaterIDKey                          = "updater_id"
 	systemOwnedKey                        = "system_owned"
 	viewsLastDayKey                       = "views_last_day"
 	viewsLastMonthKey                     = "views_last_month"
@@ -241,12 +242,12 @@ func dataSourceDashboardSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 
-		creatorIdKey: {
+		creatorIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
 
-		updaterIdKey: {
+		updaterIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
@@ -858,7 +859,7 @@ func setDashboardAttributes(d *schema.ResourceData, dashboard wavefront.Dashboar
 	if err := d.Set(numFavoritesKey, dashboard.NumFavorites); err != nil {
 		return err
 	}
-	if err := d.Set(creatorIdKey, dashboard.CreatorId); err != nil {
+	if err := d.Set(creatorIDKey, dashboard.CreatorId); err != nil {
 		return err
 	}
 	if err := d.Set(updaterIDKey, dashboard.UpdaterId); err != nil {
@@ -906,8 +907,10 @@ func convertStructToMap(parameters struct{}) map[string]interface{} {
 
 	paramsStruct := parameters
 	data, _ := json.Marshal(paramsStruct)
-	json.Unmarshal(data, &mapResult)
-
+	err := json.Unmarshal(data, &mapResult)
+	if err != nil {
+		panic(err)
+	}
 	return mapResult
 }
 
@@ -994,13 +997,13 @@ func flattenChart(chart wavefront.Chart) map[string]interface{} {
 	tfMap[noDefaultEventsKey] = chart.NoDefaultEvents
 	tfMap[summarizationKey] = chart.Summarization
 	tfMap[unitsKey] = chart.Units
-	tfMap[chartAttributesKey] = marshalJson(chart.ChartAttributes)
+	tfMap[chartAttributesKey] = marshalJSON(chart.ChartAttributes)
 	tfMap[chartSettingsKey] = flattenChartSettings(chart.ChartSettings)
 	tfMap[sourcesKey] = flattenChartSources(chart.Sources)
 	return tfMap
 }
 
-func marshalJson(attributes json.RawMessage) string {
+func marshalJSON(attributes json.RawMessage) string {
 	value, err := json.Marshal(&attributes)
 	if err != nil {
 		panic(err)
