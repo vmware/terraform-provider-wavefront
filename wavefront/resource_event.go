@@ -49,10 +49,11 @@ func resourceEvent() *schema.Resource {
 func resourceEventRead(d *schema.ResourceData, meta interface{}) error {
 
 	events := meta.(*wavefrontClient).client.Events()
+	var err error
 
 	eventID := d.Id()
 	tmpEvent := &wavefront.Event{ID: &eventID}
-	tmpEvent, err := events.FindByID(eventID)
+	tmpEvent, err = events.FindByID(eventID)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
@@ -98,10 +99,10 @@ func resourceEventCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceEventUpdate(d *schema.ResourceData, meta interface{}) error {
 	events := meta.(*wavefrontClient).client.Events()
-
+	var err error
 	eventID := d.Id()
 	newEvent := &wavefront.Event{ID: &eventID}
-	newEvent, err := events.FindByID(eventID)
+	newEvent, err = events.FindByID(eventID)
 
 	if err != nil {
 		d.SetId("")
@@ -137,10 +138,11 @@ func resourceEventUpdate(d *schema.ResourceData, meta interface{}) error {
 func resourceEventDelete(d *schema.ResourceData, meta interface{}) error {
 
 	events := meta.(*wavefrontClient).client.Events()
+	var err error
 
 	eventID := d.Id()
 	newEvent := &wavefront.Event{ID: &eventID}
-	newEvent, err := events.FindByID(eventID)
+	newEvent, err = events.FindByID(eventID)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
