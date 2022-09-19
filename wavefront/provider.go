@@ -54,6 +54,7 @@ func Provider() *schema.Provider {
 			"wavefront_role":                                 resourceRole(),
 			"wavefront_user":                                 resourceUser(),
 			"wavefront_user_group":                           resourceUserGroup(),
+			"wavefront_event":                                resourceEvent(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"wavefront_default_user_group": dataSourceDefaultUserGroup(),
