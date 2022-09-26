@@ -95,6 +95,10 @@ func resourceAlert() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Computed: true,
 			},
+			"process_rate_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -147,6 +151,7 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 		ResolveAfterMinutes:                d.Get("resolve_after_minutes").(int),
 		NotificationResendFrequencyMinutes: d.Get("notification_resend_frequency_minutes").(int),
 		Tags:                               tags,
+		CheckingFrequencyInMinutes:         d.Get("process_rate_minutes").(int),
 	}
 
 	err := validateAlertConditions(a, d)
@@ -203,6 +208,7 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("threshold_targets", tmpAlert.Targets)
 	d.Set("can_view", tmpAlert.ACL.CanView)
 	d.Set("can_modify", tmpAlert.ACL.CanModify)
+	d.Set("process_rate_minutes", tmpAlert.CheckingFrequencyInMinutes)
 
 	return nil
 }
@@ -230,6 +236,7 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	a.ResolveAfterMinutes = d.Get("resolve_after_minutes").(int)
 	a.NotificationResendFrequencyMinutes = d.Get("notification_resend_frequency_minutes").(int)
 	a.Tags = tags
+	a.CheckingFrequencyInMinutes = d.Get("process_rate_minutes").(int)
 
 	err = validateAlertConditions(&a, d)
 	if err != nil {
