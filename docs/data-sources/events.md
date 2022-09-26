@@ -2,31 +2,32 @@
 layout: "wavefront"
 page_title: "Wavefront: Events"
 description: |-
-Get the information for all events from Wavefront
+Get the information about all Wavefront events.
 ---
 
 # Data Source: wavefront_events
 
-Use this data source to get information for all events from Wavefront.
+Use this data source to get information about all Wavefront events.
 
 ## Example Usage
 
 ```hcl
-# Get the info for all derived metrics
+# Get the information about all events
 data "wavefront_events" "example" {
 }
 ```
 
 ## Attribute Reference
 
-* `events` - List of all events in Wavefront.
-    * `name` - The name of the Event in Wavefront.
-    * `id` - The id of the Derived Metric in Wavefront.
-    * `start_time`- The start time of the Event in epoch milliseconds.
-    * `end_time` - The end time of the Event in epoch milliseconds.
-    * `severity` - The severity category of the Event.
-    * `type` - The type of Event.
-    * `details` - The description about the Event.
-    * `is_ephemeral` - A boolean flag, if true, creates a point-in-time Event( i.e. with no duration)
-    * `annotations` - Annotations associated with the Event.
-    * `tags` - A set of tags assigned to the Event.
+* `events` -List of all events in Wavefront. For each event you will see a list of attributes.
+  * `name` - The name of the event in Wavefront.
+  * `id` - The ID of the event in Wavefront.
+  * `start_time`- The start time of the event in epoch milliseconds.
+  * `end_time` - The end time of the event in epoch milliseconds.
+  * `severity` - The severity category of the event.
+  * `type` - The type of the event.
+  * `details` - The description of the event.
+  * `is_ephemeral` - A Boolean flag. If set to `true`, creates a point-in-time event( i.e. with no duration).
+  * `annotations` - Annotations associated with the event.
+  * `tags` - A set of tags assigned to the event.
+
