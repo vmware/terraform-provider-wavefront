@@ -30,6 +30,6 @@ data "wavefront_event" "example" {
 * `severity` - The severity category of the event.
 * `type` - The type of the event.
 * `details` - The description of the event.
-* `is_ephemeral` - A Boolean flag. If set to `true`, creates a point-in-time event( i.e. with no duration).
+* `is_ephemeral` - A Boolean flag. If set to `true`, creates a point-in-time event(i.e. with no duration).
 * `annotations` - Annotations associated with the event.
 * `tags` - A set of tags assigned to the event.

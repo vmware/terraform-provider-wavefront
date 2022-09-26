@@ -10,7 +10,7 @@ Get the information about a certain Wavefront derived metric by its ID.
 Use this data source to get information about a certain Wavefront derived metric by its ID.
 
 ## Argument Reference
-* `id` - (Required) The id associated with the derived metric data to be fetched.
+* `id` - (Required) The ID associated with the derived metric data to be fetched.
 
 ## Example Usage
 

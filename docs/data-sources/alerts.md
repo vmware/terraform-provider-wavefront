@@ -24,7 +24,7 @@ data "wavefront_alerts" "example" {
   * `id` - The ID of the alert in Wavefront.
   * `alert_type`- The type of alert in Wavefront.
   * `additional_information` - User-supplied additional explanatory information about this alert.
-  * `target` - A email address or integration endpoint (such as PagerDuty or webhook) to notify when the alert status changes.
+  * `target` - An email address or integration endpoint (such as PagerDuty or webhook) to notify when the alert status changes.
   * `targets` - A comma-separated list of the email addresses or integration endpoints (such as PagerDuty or webhook) to notify when the alert status changes. Multiple target types can be in the list.
   * `condition` - A Wavefront query that is evaluated at regular intervals (default is 1 minute). The alert fires and notifications are triggered when a data series matching this query evaluates to a non-zero value for a set number of consecutive minutes.
   * `conditions` - A map of severity to condition for which this alert will trigger.

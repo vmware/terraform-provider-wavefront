@@ -96,7 +96,7 @@ The `chart_setting` mapping supports the following:
 * `tag_mode` - For the tabular view, which mode to use to determine which point tags to display. Valid options are `all`, `top`, or `custom`.
 * `num_tags` - For the tabular view defines how many point tags to display.
 * `custom_tags` - For the tabular view, a list of point tags to display when using the `custom` tag display mode.
-* `group_by_source` - For the tabular view, whether to group multi metrics into a single row by a common source. If `false`, each source is displayed in its own row.  if `true`, multiple metrics for the same host are displayed as different columns in the same row.
+* `group_by_source` - For the tabular view, whether to group multi metrics into a single row by a common source. If set to `false`, each source is displayed in its own row. If set to `true`, multiple metrics for the same host are displayed as different columns in the same row.
 * `sort_values_descending` - For the tabular view, whether to display values in descending order. Default is `false`.
 * `y1max` - For plots with multiple Y-axes, max value for the right side Y-axis. Set null for auto.
 * `y1min` - For plots with multiple Y-axes, min value for the right side Y-axis. Set null for auto.
@@ -132,11 +132,11 @@ The `chart_setting` mapping supports the following:
 * `plain_markdown_content` - The markdown content for a Markdown display, in plain text.
 * `sparkline_fill_color` - For the single stat view, the color of the background fill. Values should be in RGBA format.
 * `sparkline_value_color_map_colors` - For the single stat view, a list of colors that differing query values map to. Must contain one more element than `sparkline_value_color_map_values_v2`. Values should be in RGBA format.
-* `sparkline_value_color_map_values_v2` - For the single stat view, a list of boundaries for mapping different query values to colors.  Must contain one element less than `sparkline_value_color_map_colors`.
+* `sparkline_value_color_map_values_v2` - For the single stat view, a list of boundaries for mapping different query values to colors. Must contain one element less than `sparkline_value_color_map_colors`.
 * `sparkline_value_color_map_values` - This setting is deprecated.
 * `sparkline_value_color_map_apply_to` - For the single stat view, whether to apply dynamic color settings to the displayed `TEXT` or `BACKGROUND`. Valid options are `TEXT` or `BACKGROUND`.
 * `sparkline_decimal_precision` - For the single stat view, the decimal precision of the displayed number.
-* `sparkline_value_text_map_text` - For the single stat view, a list of display text values that different query values map to.  Must contain one more element than `sparkline_value_text_map_thresholds`.
+* `sparkline_value_text_map_text` - For the single stat view, a list of display text values that different query values map to. Must contain one more element than `sparkline_value_text_map_thresholds`.
 * `sparkline_value_text_map_thresholds` - For the single stat view, a list of threshold boundaries for mapping different query values to display text. Must contain one element less than `sparkline_value_text_map_text`.
 * `expected_data_spacing` - Threshold (in seconds) for time delta between consecutive points in a series above which a dotted line will replace a solid in line plots. Default is 60.
 
