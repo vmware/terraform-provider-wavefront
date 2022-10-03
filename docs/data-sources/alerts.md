@@ -2,7 +2,7 @@
 layout: "wavefront"
 page_title: "Wavefront: Alerts"
 description: |-
-Get the information about all Wavefront alerts.
+    Get the information about all Wavefront alerts.
 ---
 
 # Data Source: wavefront_alerts

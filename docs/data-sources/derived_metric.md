@@ -2,7 +2,7 @@
 layout: "wavefront"
 page_title: "Wavefront: Derived Metric"
 description: |-
-Get the information about a certain Wavefront derived metric by its ID.
+    Get the information about a certain Wavefront derived metric by its ID.
 ---
 
 # Data Source: wavefront_derived_metrics

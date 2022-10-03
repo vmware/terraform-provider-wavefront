@@ -2,7 +2,7 @@
 layout: "wavefront"
 page_title: "Wavefront: Event"
 description: |-
-Get the information about a certain Wavefront event.
+    Get the information about a certain Wavefront event.
 ---
 
 # Data Source: wavefront_event

@@ -2,7 +2,7 @@
 layout: "wavefront"
 page_title: "Wavefront: Event"
 description: |-
-Provides a Wavefront Event resource. This allows events to be created, updated, and deleted.
+    Provides a Wavefront Event resource. This allows events to be created, updated, and deleted.
 ---
 
 # Resource : wavefront_event

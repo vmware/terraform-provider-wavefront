@@ -2,7 +2,7 @@
 layout: "wavefront"
 page_title: "Wavefront: Dashboards"
 description: |-
-Get the information about all Wavefront dashboards.
+    Get the information about all Wavefront dashboards.
 ---
 
 # Data Source: wavefront_dashboards
