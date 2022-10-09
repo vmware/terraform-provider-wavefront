@@ -1,6 +1,7 @@
 package wavefront
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -22,6 +23,14 @@ func dataSourceEventsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: dataSourceEventEntitySchema(),
 			},
+		},
+		latestStartTimeEpochMillis: {
+			Type:     schema.TypeInt,
+			Required: true,
+		},
+		earliestStartTimeEpochMillis: {
+			Type:     schema.TypeInt,
+			Required: true,
 		},
 	}
 }
@@ -94,11 +103,26 @@ func dataSourceEventsRead(d *schema.ResourceData, m interface{}) error {
 
 	cont := true
 	offset := 0
-	earliestStartTimeEpochMillis := d.Get("earliestStartTimeEpochMillis").(int64)
-	latestStartTimeEpochMillis := d.Get("latestStartTimeEpochMillis").(int64)
+
+	earliestStartTimeEpochMillis, ok1 := d.GetOk("earliest_start_time_epoch_millis")
+	if !ok1 {
+		return fmt.Errorf("required parameter earliest_start_time_epoch_millis not set")
+	}
+
+	latestStartTimeEpochMillis, ok2 := d.GetOk("latest_start_time_epoch_millis")
+	if !ok2 {
+		return fmt.Errorf("required parameter latest_start_time_epoch_millis not set")
+	}
+
+	var earliestStartTimeEpochMillisInt64 int64
+	var latestStartTimeEpochMillisInt64 int64
+
+	earliestStartTimeEpochMillisInt64 = int64(earliestStartTimeEpochMillis.(int))
+	latestStartTimeEpochMillisInt64 = int64(latestStartTimeEpochMillis.(int))
+
 	timeRange := wavefront.TimeRange{
-		StartTime: earliestStartTimeEpochMillis,
-		EndTime:   latestStartTimeEpochMillis,
+		StartTime: earliestStartTimeEpochMillisInt64,
+		EndTime:   latestStartTimeEpochMillisInt64,
 	}
 
 	for cont {
@@ -121,9 +145,10 @@ func dataSourceEventsRead(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	if err := d.Set("alerts", flattenEvents(allEvents)); err != nil {
+	if err := d.Set("events", flattenEvents(allEvents)); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -147,5 +172,6 @@ func flattenEvent(event *wavefront.Event) map[string]interface{} {
 	tfMap[isEphemeralKey] = event.Instantaneous
 	tfMap[annotationsKey] = event.Annotations
 	tfMap[tagsKey] = event.Tags
+
 	return tfMap
 }

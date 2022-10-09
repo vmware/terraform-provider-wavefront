@@ -19,7 +19,7 @@ data "wavefront_events" "example" {
 
 ## Attribute Reference
 
-* `events` -List of all events in Wavefront. For each event you will see a list of attributes.
+* `events` - List of all events in Wavefront. For each event you will see a list of attributes.
   * `name` - The name of the event in Wavefront.
   * `id` - The ID of the event in Wavefront.
   * `start_time`- The start time of the event in epoch milliseconds.
@@ -30,4 +30,6 @@ data "wavefront_events" "example" {
   * `is_ephemeral` - A Boolean flag. If set to `true`, creates a point-in-time event (i.e. with no duration).
   * `annotations` - Annotations associated with the event.
   * `tags` - A set of tags assigned to the event.
+* `latest_start_time_epoch_millis` - Latest start time in epoch milliseconds.
+* `earliest_start_time_epoch_millis` - Earliest start time in epoch milliseconds.
 
