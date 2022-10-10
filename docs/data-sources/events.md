@@ -22,6 +22,10 @@ Use this data source to get information about all Wavefront events.
 ```hcl
 # Get the information about all events
 data "wavefront_events" "example" {
+  limit = 10
+  offset = 0
+  latest_start_time_epoch_millis = 1665427195
+  earliest_start_time_epoch_millis = 1665427195
 }
 ```
 

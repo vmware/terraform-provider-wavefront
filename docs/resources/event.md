@@ -19,7 +19,7 @@ resource "wavefront_event" "event" {
     type = "event type"
     details = "description"
   }
-  tag = [
+  tags = [
     "eventTag1"
   ]
 }

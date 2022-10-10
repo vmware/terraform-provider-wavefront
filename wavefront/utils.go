@@ -2,7 +2,6 @@ package wavefront
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -168,7 +167,7 @@ func searchAll(limit int, offset int, typ string, timeRange *wavefront.TimeRange
 	searchResponse, err = searchClient.Execute()
 
 	if err != nil {
-		fmt.Errorf("Failed to search for dashboards")
+		panic(err)
 	}
 
 	return searchResponse.Response.Items
