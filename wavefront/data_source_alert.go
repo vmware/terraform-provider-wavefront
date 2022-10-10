@@ -231,6 +231,9 @@ func setAlertAttributes(d *schema.ResourceData, alert wavefront.Alert) error {
 	if err := d.Set("in_maintenance_host_label_pairs", flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)); err != nil {
 		return err
 	}
+	if err := d.Set("process_rate_minutes", alert.CheckingFrequencyInMinutes); err != nil {
+		return err
+	}
 
 	return nil
 }

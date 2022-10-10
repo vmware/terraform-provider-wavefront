@@ -1,6 +1,12 @@
 package wavefront
 
-import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+)
 
 const (
 	accessTypeKey                = "access_type"
@@ -58,6 +64,9 @@ const (
 	eventsKey                    = "events"
 	latestStartTimeEpochMillis   = "latest_start_time_epoch_millis"
 	earliestStartTimeEpochMillis = "earliest_start_time_epoch_millis"
+	limitKey                     = "limit"
+	offsetKey                    = "offset"
+	dashboardsKey                = "dashboards"
 )
 
 // compareStringSliceAnyOrder compares two string slices in any order. It returns
@@ -143,4 +152,24 @@ func parseStrArr(raw interface{}) []string {
 		}
 	}
 	return arr
+}
+
+func searchAll(limit int, offset int, typ string, timeRange *wavefront.TimeRange, filter []*wavefront.SearchCondition, m interface{}) json.RawMessage {
+	searchParams := &wavefront.SearchParams{
+		Conditions: filter,
+		Limit:      limit,
+		Offset:     offset,
+		TimeRange:  timeRange,
+	}
+
+	searchClient := m.(*wavefrontClient).client.NewSearch(typ, searchParams)
+	var searchResponse *wavefront.SearchResponse
+	var err error
+	searchResponse, err = searchClient.Execute()
+
+	if err != nil {
+		fmt.Errorf("Failed to search for dashboards")
+	}
+
+	return searchResponse.Response.Items
 }

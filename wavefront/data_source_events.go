@@ -1,6 +1,7 @@
 package wavefront
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -31,6 +32,16 @@ func dataSourceEventsSchema() map[string]*schema.Schema {
 		earliestStartTimeEpochMillis: {
 			Type:     schema.TypeInt,
 			Required: true,
+		},
+		limitKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  100,
+		},
+		offsetKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
 		},
 	}
 }
@@ -96,13 +107,6 @@ func dataSourceEventEntitySchema() map[string]*schema.Schema {
 func dataSourceEventsRead(d *schema.ResourceData, m interface{}) error {
 
 	var allEvents []*wavefront.Event
-	eventClient := m.(*wavefrontClient).client.Events()
-
-	// Data Source ID is set to current time to always refresh
-	d.SetId(time.Now().UTC().String())
-
-	cont := true
-	offset := 0
 
 	earliestStartTimeEpochMillis, ok1 := d.GetOk("earliest_start_time_epoch_millis")
 	if !ok1 {
@@ -125,25 +129,15 @@ func dataSourceEventsRead(d *schema.ResourceData, m interface{}) error {
 		EndTime:   latestStartTimeEpochMillisInt64,
 	}
 
-	for cont {
-		filter := []*wavefront.SearchCondition{
-			{Key: "limit", Value: string(rune(pageSize)), MatchingMethod: exactMatching},
-			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
-		}
+	limit := d.Get(limitKey).(int)
+	offset := d.Get(offsetKey).(int)
 
-		events, err := eventClient.Find(filter, &timeRange)
-		if err != nil {
-			return err
-		}
-
-		allEvents = append(allEvents, events...)
-
-		if len(allEvents) < pageSize {
-			cont = false
-		} else {
-			offset += pageSize
-		}
+	if err := json.Unmarshal(searchAll(limit, offset, "event", &timeRange, nil, m), &allEvents); err != nil {
+		return fmt.Errorf("Response is invalid JSON")
 	}
+
+	// Data Source ID is set to current time to always refresh
+	d.SetId(time.Now().UTC().String())
 
 	if err := d.Set("events", flattenEvents(allEvents)); err != nil {
 		return err

@@ -1,6 +1,8 @@
 package wavefront
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -24,6 +26,16 @@ func dataSourceAlertsSchema() map[string]*schema.Schema {
 				Schema: dataSourceAlertSchema(),
 			},
 		},
+		limitKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  100,
+		},
+		offsetKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
+		},
 	}
 
 }
@@ -44,33 +56,15 @@ func sourceLabelSchema() map[string]*schema.Schema {
 func dataSourceAlertsRead(d *schema.ResourceData, m interface{}) error {
 
 	var allAlerts []*wavefront.Alert
-	alertClient := m.(*wavefrontClient).client.Alerts()
+	limit := d.Get(limitKey).(int)
+	offset := d.Get(offsetKey).(int)
+
+	if err := json.Unmarshal(searchAll(limit, offset, "alert", nil, nil, m), &allAlerts); err != nil {
+		return fmt.Errorf("Response is invalid JSON")
+	}
 
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
-
-	cont := true
-	offset := 0
-
-	for cont {
-		filter := []*wavefront.SearchCondition{
-			{Key: "limit", Value: string(rune(pageSize)), MatchingMethod: exactMatching},
-			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
-		}
-
-		alerts, err := alertClient.Find(filter)
-		if err != nil {
-			return err
-		}
-
-		allAlerts = append(allAlerts, alerts...)
-
-		if len(allAlerts) < pageSize {
-			cont = false
-		} else {
-			offset += pageSize
-		}
-	}
 
 	if err := d.Set("alerts", flattenAlerts(allAlerts)); err != nil {
 		return err
@@ -111,6 +105,7 @@ func flattenAlert(alert *wavefront.Alert) map[string]interface{} {
 	tfMap["include_obsolete_metrics"] = alert.IncludeObsoleteMetrics
 	tfMap["failing_host_label_pairs"] = flattenHostLabelPairs(alert.FailingHostLabelPairs)
 	tfMap["in_maintenance_host_label_pairs"] = flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)
+	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes
 
 	return tfMap
 }

@@ -1,7 +1,8 @@
 package wavefront
 
 import (
-	"log"
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -22,36 +23,31 @@ func dataSourceRolesSchema() map[string]*schema.Schema {
 			Computed: true,
 			Elem:     &schema.Resource{Schema: rolesSchema()},
 		},
+		limitKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  100,
+		},
+		offsetKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
+		},
 	}
 }
 
 func dataSourceRolesRead(d *schema.ResourceData, m interface{}) error {
 	var allRoles []*wavefront.Role
-	userClient := m.(*wavefrontClient).client.Roles()
 
-	cont := true
-	offset := 0
-	for cont {
-		filter := []*wavefront.SearchCondition{
-			{Key: "limit", Value: string(rune(pageSize)), MatchingMethod: exactMatching},
-			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
-		}
+	limit := d.Get(limitKey).(int)
+	offset := d.Get(offsetKey).(int)
 
-		roles, err := userClient.Find(filter)
-		if err != nil {
-			return err
-		}
-		allRoles = append(allRoles, roles...)
-
-		if len(roles) < pageSize {
-			cont = false
-		} else {
-			offset += pageSize
-		}
+	if err := json.Unmarshal(searchAll(limit, offset, "role", nil, nil, m), &allRoles); err != nil {
+		return fmt.Errorf("Response is invalid JSON")
 	}
+
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
-	log.Printf("found_roles: %v", allRoles)
 	if err := d.Set(rolesKey, flattenRoles(allRoles)); err != nil {
 		return err
 	}

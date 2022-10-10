@@ -8,11 +8,18 @@ description: |-
 # Data Source: wavefront_derived_metrics
 Use this data source to get information about all Wavefront derived metrics.
 
+## Argument Reference
+* `limit` - (Optional) Limit is the maximum number of results to be returned. Defaults to 100.
+* `offset` - (Optional) Offset is the offset from the first result to be returned. Defaults to 0.
+
+
 ## Example Usage
 
 ```hcl
 # Get the information about all derived metrics.
 data "wavefront_derived_metrics" "example" {
+  limit = 10
+  offset = 0
 }
 ```
 
@@ -43,6 +50,5 @@ data "wavefront_derived_metrics" "example" {
     * `deleted` - A Boolean flag indicating whether the derived metric is deleted or not.
     * `created_epoch_millis` - The timestamp in epoch milliseconds indicating when the derived metric is created.
     * `updated_epoch_millis` - The timestamp in epoch milliseconds indicating when the derived metric is updated.
-
 
 	

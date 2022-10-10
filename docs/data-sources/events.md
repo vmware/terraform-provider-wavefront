@@ -9,6 +9,14 @@ description: |-
 
 Use this data source to get information about all Wavefront events.
 
+
+## Argument Reference
+* `latest_start_time_epoch_millis` - (Required) Latest start time in epoch milliseconds.
+* `earliest_start_time_epoch_millis` - Earliest start time in epoch milliseconds.
+* `limit` - (Optional) Limit is the maximum number of results to be returned. Defaults to 100.
+* `offset` - (Optional) Offset is the offset from the first result to be returned. Defaults to 0.
+
+
 ## Example Usage
 
 ```hcl
@@ -32,4 +40,3 @@ data "wavefront_events" "example" {
   * `tags` - A set of tags assigned to the event.
 * `latest_start_time_epoch_millis` - Latest start time in epoch milliseconds.
 * `earliest_start_time_epoch_millis` - Earliest start time in epoch milliseconds.
-

@@ -1,6 +1,8 @@
 package wavefront
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -17,12 +19,22 @@ func dataSourceDashboards() *schema.Resource {
 func dataSourceDashboardsSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		// Computed Values
-		"dashboards": {
+		dashboardsKey: {
 			Type:     schema.TypeSet,
 			Computed: true,
 			Elem: &schema.Resource{
 				Schema: dataSourceDashboardSchema(),
 			},
+		},
+		limitKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  100,
+		},
+		offsetKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
 		},
 	}
 
@@ -30,33 +42,16 @@ func dataSourceDashboardsSchema() map[string]*schema.Schema {
 
 func dataSourceDashboardsRead(d *schema.ResourceData, m interface{}) error {
 	var allDashboards []*wavefront.Dashboard
-	dashboardClient := m.(*wavefrontClient).client.Dashboards()
+
+	limit := d.Get(limitKey).(int)
+	offset := d.Get(offsetKey).(int)
+
+	if err := json.Unmarshal(searchAll(limit, offset, "dashboard", nil, nil, m), &allDashboards); err != nil {
+		return fmt.Errorf("Response is invalid JSON")
+	}
 
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
-
-	cont := true
-	offset := 0
-
-	for cont {
-		filter := []*wavefront.SearchCondition{
-			{Key: "limit", Value: string(rune(pageSize)), MatchingMethod: exactMatching},
-			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
-		}
-
-		dashboards, err := dashboardClient.Find(filter)
-		if err != nil {
-			return err
-		}
-
-		allDashboards = append(allDashboards, dashboards...)
-
-		if len(allDashboards) < pageSize {
-			cont = false
-		} else {
-			offset += pageSize
-		}
-	}
 
 	if err := d.Set("dashboards", flattenDashboards(allDashboards)); err != nil {
 		return err

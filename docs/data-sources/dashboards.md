@@ -9,11 +9,17 @@ description: |-
 
 Use this data source to get information about all Wavefront dashboards.
 
+## Argument Reference
+* `limit` - (Optional) Limit is the maximum number of results to be returned. Defaults to 100.
+* `offset` - (Optional) Offset is the offset from the first result to be returned. Defaults to 0.
+
 ## Example Usage
 
 ```hcl
 # Get the information about all dashboards.
 data "wavefront_dashboards" "example" {
+  limit = 10
+  offset = 0
 }
 ```
 

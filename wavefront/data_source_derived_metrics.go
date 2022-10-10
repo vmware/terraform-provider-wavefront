@@ -1,6 +1,8 @@
 package wavefront
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -23,6 +25,16 @@ func dataSourceDerivedMetricsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: derivedMetricSchema(),
 			},
+		},
+		limitKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  100,
+		},
+		offsetKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
 		},
 	}
 }
@@ -151,32 +163,16 @@ func derivedMetricSchema() map[string]*schema.Schema {
 
 func dataSourceDerivedMetricsRead(d *schema.ResourceData, m interface{}) error {
 	var allDerivedMetrics []*wavefront.DerivedMetric
-	deriveMetricClient := m.(*wavefrontClient).client.DerivedMetrics()
+
+	limit := d.Get(limitKey).(int)
+	offset := d.Get(offsetKey).(int)
+
+	if err := json.Unmarshal(searchAll(limit, offset, "derivedmetric", nil, nil, m), &allDerivedMetrics); err != nil {
+		return fmt.Errorf("Response is invalid JSON")
+	}
 
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
-
-	cont := true
-	offset := 0
-
-	for cont {
-		filter := []*wavefront.SearchCondition{
-			{Key: "limit", Value: string(rune(pageSize)), MatchingMethod: exactMatching},
-			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
-		}
-		deriveMetrics, err := deriveMetricClient.Find(filter)
-		if err != nil {
-			return err
-		}
-
-		allDerivedMetrics = append(allDerivedMetrics, deriveMetrics...)
-
-		if len(allDerivedMetrics) < pageSize {
-			cont = false
-		} else {
-			offset += pageSize
-		}
-	}
 
 	if err := d.Set(derivedMetricsKey, flattenDerivedMetrics(allDerivedMetrics)); err != nil {
 		return err
