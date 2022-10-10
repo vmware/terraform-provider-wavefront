@@ -110,10 +110,10 @@ func resourceEventUpdate(d *schema.ResourceData, meta interface{}) error {
 		newEvent.Name = d.Get(nameKey).(string)
 	}
 	if d.HasChange(startTimeKey) {
-		newEvent.StartTime = d.Get(startTimeKey).(int64)
+		newEvent.StartTime = int64(d.Get(startTimeKey).(int))
 	}
 	if d.HasChange(endTimeKey) {
-		newEvent.StartTime = d.Get(endTimeKey).(int64)
+		newEvent.StartTime = int64(d.Get(endTimeKey).(int))
 	}
 
 	if d.HasChange(tagsKey) {
