@@ -13,11 +13,9 @@ const (
 	customerKey                  = "customer"
 	descriptionKey               = "description"
 	emailKey                     = "email"
-	exactMatching                = "EXACT"
 	idKey                        = "id"
 	lastSuccessfulLoginKey       = "last_successful_login"
 	nameKey                      = "name"
-	pageSize                     = 100
 	permissionsKey               = "permissions"
 	prefixesKey                  = "prefixes"
 	policyRulesKey               = "policy_rules"
