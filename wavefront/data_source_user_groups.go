@@ -1,6 +1,8 @@
 package wavefront
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -23,6 +25,16 @@ func dataSourceUserGroupsSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: userGroupsSchema,
 			},
+		},
+		limitKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  100,
+		},
+		offsetKey: {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Default:  0,
 		},
 	}
 }
@@ -59,28 +71,12 @@ func dataSourceUserGroupsRead(d *schema.ResourceData, m interface{}) error {
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 	var allGroups []*wavefront.UserGroup
-	groupsClient := m.(*wavefrontClient).client.UserGroups()
 
-	cont := true
-	offset := 0
+	limit := d.Get(limitKey).(int)
+	offset := d.Get(offsetKey).(int)
 
-	for cont {
-		filter := []*wavefront.SearchCondition{
-			{Key: "limit", Value: string(rune(pageSize)), MatchingMethod: exactMatching},
-			{Key: "offset", Value: string(rune(offset)), MatchingMethod: exactMatching},
-		}
-
-		groups, err := groupsClient.Find(filter)
-		if err != nil {
-			return err
-		}
-		allGroups = append(allGroups, groups...)
-
-		if len(groups) < pageSize {
-			cont = false
-		} else {
-			offset += pageSize
-		}
+	if err := json.Unmarshal(searchAll(limit, offset, "usergroup", nil, nil, m), &allGroups); err != nil {
+		return fmt.Errorf("Response is invalid JSON")
 	}
 
 	if err := d.Set(userGroupsListKey, flattenUserGroups(allGroups)); err != nil {
