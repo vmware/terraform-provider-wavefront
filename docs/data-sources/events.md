@@ -11,8 +11,8 @@ Use this data source to get information about all Wavefront events.
 
 
 ## Argument Reference
-* `latest_start_time_epoch_millis` - (Required) Latest start time in epoch milliseconds.
-* `earliest_start_time_epoch_millis` - Earliest start time in epoch milliseconds.
+* `latest_start_time_epoch_millis` - (Required) The latest start time in epoch milliseconds.
+* `earliest_start_time_epoch_millis` - (Required) The earliest start time in epoch milliseconds.
 * `limit` - (Optional) Limit is the maximum number of results to be returned. Defaults to 100.
 * `offset` - (Optional) Offset is the offset from the first result to be returned. Defaults to 0.
 
