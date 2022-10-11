@@ -1,8 +1,6 @@
 package wavefront
 
 import (
-	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -24,16 +22,6 @@ func dataSourceUsersSchema() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: userSchema(),
 			},
-		},
-		limitKey: {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  100,
-		},
-		offsetKey: {
-			Type:     schema.TypeInt,
-			Optional: true,
-			Default:  0,
 		},
 	}
 }
@@ -67,14 +55,13 @@ func userSchema() map[string]*schema.Schema {
 }
 
 func dataSourceUsersRead(d *schema.ResourceData, m interface{}) error {
-	var users []*wavefront.User
+	userClient := m.(*wavefrontClient).client.Users()
 
-	limit := d.Get(limitKey).(int)
-	offset := d.Get(offsetKey).(int)
-
-	if err := json.Unmarshal(searchAll(limit, offset, "event", nil, nil, m), &users); err != nil {
-		return fmt.Errorf("Response is invalid JSON")
+	users, err := userClient.Find(nil)
+	if err != nil {
+		return err
 	}
+	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 	if err := d.Set(usersKey, flattenUsers(users)); err != nil {
 		return err
