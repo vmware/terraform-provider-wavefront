@@ -76,7 +76,7 @@ func flattenMaintenanceWindow(maintenanceWindow *wavefront.MaintenanceWindow) ma
 	tfMap[sortAttrKey] = maintenanceWindow.SortAttr
 	tfMap[createdEpochMillisKey] = maintenanceWindow.CreatedEpochMillis
 	tfMap[updatedEpochMillisKey] = maintenanceWindow.UpdatedEpochMillis
-	tfMap[customerIdKey] = maintenanceWindow.CustomerId
+	tfMap[customerIDKey] = maintenanceWindow.CustomerId
 	tfMap[titleKey] = maintenanceWindow.Title
 	tfMap[startTimeInSecondsKey] = maintenanceWindow.StartTimeInSeconds
 	tfMap[endTimeInSecondsKey] = maintenanceWindow.EndTimeInSeconds

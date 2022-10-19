@@ -75,7 +75,6 @@ func Provider() *schema.Provider {
 			"wavefront_events":                 dataSourceEvents(),
 			"wavefront_dashboard":              dataSourceDashboard(),
 			"wavefront_dashboards":             dataSourceDashboards(),
-
 		},
 		ConfigureFunc: providerConfigure,
 	}

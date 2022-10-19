@@ -12,7 +12,7 @@ const (
 	runningStateKey                    = "running_state"
 	sortAttrKey                        = "sort_attr"
 	reasonKey                          = "reason"
-	customerIdKey                      = "customer_id"
+	customerIDKey                      = "customer_id"
 	relevantCustomerTagsKey            = "relevant_customer_tags"
 	titleKey                           = "title"
 	startTimeInSecondsKey              = "start_time_in_seconds"
@@ -54,7 +54,7 @@ func dataSourceMaintenanceWindowSchema() map[string]*schema.Schema {
 			Computed: true,
 		},
 
-		customerIdKey: {
+		customerIDKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
@@ -176,7 +176,7 @@ func setMaintenanceWindowAttributes(d *schema.ResourceData, maintenanceWindow *w
 	if err := d.Set(updatedEpochMillisKey, maintenanceWindow.UpdatedEpochMillis); err != nil {
 		return err
 	}
-	if err := d.Set(customerIdKey, maintenanceWindow.CustomerId); err != nil {
+	if err := d.Set(customerIDKey, maintenanceWindow.CustomerId); err != nil {
 		return err
 	}
 	if err := d.Set(titleKey, maintenanceWindow.Title); err != nil {
