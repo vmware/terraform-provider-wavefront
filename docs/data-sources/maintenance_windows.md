@@ -5,7 +5,7 @@ description: |-
     Get the information about all Wavefront maintenance windows.
 ---
 
-# Data Source: wavefront_external_links
+# Data Source: wavefront_maintenance_window_all
 
 Use this data source to get information about all Wavefront maintenance windows.
 
@@ -17,7 +17,7 @@ Use this data source to get information about all Wavefront maintenance windows.
 
 ```hcl
 # Get the information about all external links.
-data "wavefront_maintenance_windows" "example" {
+data "wavefront_maintenance_window_all" "example" {
   limit = 10
   offset = 0
 }
