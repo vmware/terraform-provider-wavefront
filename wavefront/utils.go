@@ -2,6 +2,7 @@ package wavefront
 
 import (
 	"encoding/json"
+
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )

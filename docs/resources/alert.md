@@ -59,6 +59,7 @@ If absent or <= 0, no re-triggering occurs.
 * `severity` - (Optional) - Severity of the alert, valid values are `INFO`, `SMOKE`, `WARN`, `SEVERE`.
 * `can_view` - (Optional) A list of users or groups that can view this resource.
 * `can_modify` - (Optional) A list of users or groups that can modify this resource.
+* `process_rate_minutes` - (Optional) The specified query is executed every `process_rate_minutes` minutes.
 
 
 ### Example
@@ -80,6 +81,7 @@ resource "wavefront_alert" "test_alert" {
   can_view = [
     "test@example.com",
   ]
+  process_rate_minutes = 4
 }
 
 resource "wavefront_alert_target" "test_target" {

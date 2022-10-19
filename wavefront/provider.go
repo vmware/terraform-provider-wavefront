@@ -54,6 +54,7 @@ func Provider() *schema.Provider {
 			"wavefront_role":                                 resourceRole(),
 			"wavefront_user":                                 resourceUser(),
 			"wavefront_user_group":                           resourceUserGroup(),
+			"wavefront_event":                                resourceEvent(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"wavefront_default_user_group":     dataSourceDefaultUserGroup(),
@@ -66,6 +67,15 @@ func Provider() *schema.Provider {
 			"wavefront_external_link":          dataSourceExternalLink(),
 			"wavefront_maintenance_window_all": dataSourceMaintenanceWindows(),
 			"wavefront_maintenance_window":     dataSourceMaintenanceWindow(),
+			"wavefront_alerts":                 dataSourceAlerts(),
+			"wavefront_alert":                  dataSourceAlert(),
+			"wavefront_derived_metrics":        dataSourceDerivedMetrics(),
+			"wavefront_derived_metric":         dataSourceDerivedMetric(),
+			"wavefront_event":                  dataSourceEvent(),
+			"wavefront_events":                 dataSourceEvents(),
+			"wavefront_dashboard":              dataSourceDashboard(),
+			"wavefront_dashboards":             dataSourceDashboards(),
+
 		},
 		ConfigureFunc: providerConfigure,
 	}
