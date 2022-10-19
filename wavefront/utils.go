@@ -1,32 +1,69 @@
 package wavefront
 
-import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+import (
+	"encoding/json"
+
+	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+)
 
 const (
-	accessTypeKey          = "access_type"
-	accountsKey            = "account_ids"
-	customerKey            = "customer"
-	descriptionKey         = "description"
-	emailKey               = "email"
-	exactMatching          = "EXACT"
-	idKey                  = "id"
-	lastSuccessfulLoginKey = "last_successful_login"
-	nameKey                = "name"
-	pageSize               = 100
-	permissionsKey         = "permissions"
-	prefixesKey            = "prefixes"
-	policyRulesKey         = "policy_rules"
-	policyTagKey           = "key"
-	policyTagValue         = "value"
-	roleIdsTagKey          = "role_ids"
-	rolesKey               = "roles"
-	tagsAndedKey           = "tags_anded"
-	tagsKey                = "tags"
-	updatedEpochMillisKey  = "updated_epoch_millis"
-	updaterIDKey           = "updater_id"
-	userGroupsKey          = "user_group_ids"
-	userGroupsListKey      = "user_groups"
-	usersKey               = "users"
+	accessTypeKey                = "access_type"
+	accountsKey                  = "account_ids"
+	customerKey                  = "customer"
+	descriptionKey               = "description"
+	emailKey                     = "email"
+	idKey                        = "id"
+	lastSuccessfulLoginKey       = "last_successful_login"
+	nameKey                      = "name"
+	permissionsKey               = "permissions"
+	prefixesKey                  = "prefixes"
+	policyRulesKey               = "policy_rules"
+	policyTagKey                 = "key"
+	policyTagValue               = "value"
+	roleIdsTagKey                = "role_ids"
+	rolesKey                     = "roles"
+	tagsAndedKey                 = "tags_anded"
+	tagsKey                      = "tags"
+	updatedEpochMillisKey        = "updated_epoch_millis"
+	userGroupsKey                = "user_group_ids"
+	userGroupsListKey            = "user_groups"
+	usersKey                     = "users"
+	queryKey                     = "query"
+	minutesKey                   = "minutes"
+	inTrashKey                   = "in_trash"
+	queryFailingKey              = "query_failing"
+	lastFailedTimeKey            = "last_failed_time"
+	lastErrorMessageKey          = "last_error_message"
+	additionalInformationKey     = "additional_information"
+	updateUserIDKey              = "update_user_id"
+	createUserIDKey              = "create_user_id"
+	statusKey                    = "status"
+	hostsUsedKey                 = "hosts_used"
+	lastProcessedMillisKey       = "last_processed_millis"
+	processRateMinutesKey        = "process_rate_minutes"
+	pointsScannedAtLastQueryKey  = "points_scanned_at_last_query"
+	includeObsoleteMetricsKey    = "include_obsolete_metrics"
+	lastQueryTimeKey             = "last_query_time"
+	metricsUsedKey               = "metrics_used"
+	queryQBEnabledKey            = "query_qb_enabled"
+	updatedEpochMillisKey1       = "updated_epoch_millis"
+	createdEpochMillisKey        = "created_epoch_millis"
+	deletedKey                   = "deleted"
+	derivedMetricsKey            = "derived_metrics"
+	urlKey                       = "url"
+	startTimeKey                 = "start_time"
+	endTimeKey                   = "endtime_key"
+	severityKey                  = "severity"
+	detailsKey                   = "details"
+	isEphemeralKey               = "is_ephemeral"
+	annotationsKey               = "annotations"
+	eventsKey                    = "events"
+	latestStartTimeEpochMillis   = "latest_start_time_epoch_millis"
+	earliestStartTimeEpochMillis = "earliest_start_time_epoch_millis"
+	limitKey                     = "limit"
+	offsetKey                    = "offset"
+	dashboardsKey                = "dashboards"
 )
 
 // compareStringSliceAnyOrder compares two string slices in any order. It returns
@@ -112,4 +149,24 @@ func parseStrArr(raw interface{}) []string {
 		}
 	}
 	return arr
+}
+
+func searchAll(limit int, offset int, typ string, timeRange *wavefront.TimeRange, filter []*wavefront.SearchCondition, m interface{}) json.RawMessage {
+	searchParams := &wavefront.SearchParams{
+		Conditions: filter,
+		Limit:      limit,
+		Offset:     offset,
+		TimeRange:  timeRange,
+	}
+
+	searchClient := m.(*wavefrontClient).client.NewSearch(typ, searchParams)
+	var searchResponse *wavefront.SearchResponse
+	var err error
+	searchResponse, err = searchClient.Execute()
+
+	if err != nil {
+		panic(err)
+	}
+
+	return searchResponse.Response.Items
 }
