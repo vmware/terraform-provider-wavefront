@@ -8,42 +8,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-/*
-	ID                              string   `json:"id"`
-	RunningState                    string   `json:"runningState"`
-	SortAttr                        int      `json:"sortAttr"`
-	Reason                          string   `json:"reason"`
-	CustomerId                      string   `json:"customerId"`
-	RelevantCustomerTags            []string `json:"relevantCustomerTags"`
-	Title                           string   `json:"title"`
-	StartTimeInSeconds              int64    `json:"startTimeInSeconds"`
-	EndTimeInSeconds                int64    `json:"endTimeInSeconds"`
-	RelevantHostTags                []string `json:"relevantHostTags"`
-	RelevantHostNames               []string `json:"relevantHostNames"`
-	CreatorId                       string   `json:"creatorId"`
-	UpdaterId                       string   `json:"updaterId"`
-	CreatedEpochMillis              int64    `json:"createdEpochMillis"`
-	UpdatedEpochMillis              int64    `json:"updatedEpochMillis"`
-	RelevantHostTagsAnded           bool     `json:"relevantHostTagsAnded"`
-	HostTagGroupHostNamesGroupAnded bool     `json:"hostTagGroupHostNamesGroupAnded"`
-	EventName                       string   `json:"eventName"`
-
-*/
-
 const (
-	runningStateKey                    = "runningState"
-	sortAttrKey                        = "sortAttr"
+	runningStateKey                    = "running_state"
+	sortAttrKey                        = "sort_attr"
 	reasonKey                          = "reason"
-	customerIdKey                      = "customerId"
-	relevantCustomerTagsKey            = "relevantCustomerTags"
+	customerIdKey                      = "customer_id"
+	relevantCustomerTagsKey            = "relevant_customer_tags"
 	titleKey                           = "title"
-	startTimeInSecondsKey              = "startTimeInSeconds"
-	endTimeInSecondsKey                = "endTimeInSeconds"
-	relevantHostTagsKey                = "relevantHostTags"
-	relevantHostNamesKey               = "relevantHostNames"
-	relevantHostTagsAndedKey           = "relevantHostTagsAnded"
-	hostTagGroupHostNamesGroupAndedKey = "hostTagGroupHostNamesGroupAnded"
-	eventNameKey                       = "eventName"
+	startTimeInSecondsKey              = "start_time_in_seconds"
+	endTimeInSecondsKey                = "end_time_in_seconds"
+	relevantHostTagsKey                = "relevant_host_tags"
+	relevantHostNamesKey               = "relevant_host_names"
+	relevantHostTagsAndedKey           = "relevant_host_tags_anded"
+	hostTagGroupHostNamesGroupAndedKey = "host_tag_group_host_names_group_anded"
+	eventNameKey                       = "event_name"
 	maintenanceWindowsKey              = "maintenance_windows"
 )
 

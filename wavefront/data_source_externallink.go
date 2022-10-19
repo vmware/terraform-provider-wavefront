@@ -15,7 +15,7 @@ const (
 	isLogIntegrationKey      = "is_log_integration"
 	metricFilterRegexKey     = "metric_filter_regex"
 	sourceFilterRegexKey     = "source_filter_regex"
-	pointTagFilterRegexesKey = "pointTagFilterRegexes"
+	pointTagFilterRegexesKey = "point_tag_filter_regexes"
 	externalLinksKey         = "external_links"
 )
 
