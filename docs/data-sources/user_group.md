@@ -2,7 +2,7 @@
 layout: "wavefront"
 page_title: "Wavefront: User Group"
 description: |-
-Get the information about a specific Wavefront user group.
+    Get the information about a specific Wavefront user group.
 ---
 
 # Data Source: wavefront_user_group
