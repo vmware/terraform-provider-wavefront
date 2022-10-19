@@ -9,8 +9,6 @@ import (
 )
 
 const (
-	creatorIDKey             = "creator_id"
-	updaterIDKey             = "updater_id"
 	templateKey              = "template"
 	isLogIntegrationKey      = "is_log_integration"
 	metricFilterRegexKey     = "metric_filter_regex"
