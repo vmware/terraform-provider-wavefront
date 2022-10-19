@@ -53,7 +53,7 @@ func dataSourceMaintenanceWindowsRead(d *schema.ResourceData, m interface{}) err
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 
-	if err := d.Set(externalLinksKey, flattenMaintenanceWindows(allMaintenanceWindows)); err != nil {
+	if err := d.Set(maintenanceWindowsKey, flattenMaintenanceWindows(allMaintenanceWindows)); err != nil {
 		return err
 	}
 	return nil

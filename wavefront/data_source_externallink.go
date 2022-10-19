@@ -59,7 +59,7 @@ func dataSourceExternalLinkSchema() map[string]*schema.Schema {
 		},
 
 		updatedEpochMillisKey: {
-			Type:     schema.TypeString,
+			Type:     schema.TypeInt,
 			Computed: true,
 		},
 

@@ -46,7 +46,7 @@ func dataSourceExternalLinksRead(d *schema.ResourceData, m interface{}) error {
 	limit := d.Get(limitKey).(int)
 	offset := d.Get(offsetKey).(int)
 
-	if err := json.Unmarshal(searchAll(limit, offset, "externallink", nil, nil, m), &allExternalLinks); err != nil {
+	if err := json.Unmarshal(searchAll(limit, offset, "extlink", nil, nil, m), &allExternalLinks); err != nil {
 		return fmt.Errorf("Response is invalid JSON")
 	}
 

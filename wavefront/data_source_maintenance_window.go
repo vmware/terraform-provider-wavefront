@@ -188,13 +188,13 @@ func setMaintenanceWindowAttributes(d *schema.ResourceData, maintenanceWindow *w
 	if err := d.Set(endTimeInSecondsKey, maintenanceWindow.EndTimeInSeconds); err != nil {
 		return err
 	}
-	if err := d.Set(creatorIDKey, maintenanceWindow.EndTimeInSeconds); err != nil {
+	if err := d.Set(creatorIDKey, maintenanceWindow.CreatorId); err != nil {
 		return err
 	}
-	if err := d.Set(updaterIDKey, maintenanceWindow.EndTimeInSeconds); err != nil {
+	if err := d.Set(updaterIDKey, maintenanceWindow.UpdaterId); err != nil {
 		return err
 	}
-	if err := d.Set(relevantHostTagsAndedKey, maintenanceWindow.EndTimeInSeconds); err != nil {
+	if err := d.Set(relevantHostTagsAndedKey, maintenanceWindow.RelevantHostTagsAnded); err != nil {
 		return err
 	}
 	if err := d.Set(hostTagGroupHostNamesGroupAndedKey, maintenanceWindow.HostTagGroupHostNamesGroupAnded); err != nil {
