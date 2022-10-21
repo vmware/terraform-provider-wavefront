@@ -67,6 +67,8 @@ func TestAccWavefrontAlert_Basic(t *testing.T) {
 						"wavefront_alert.test_alert", "severity", "WARN"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_alert", "tags.#", "5"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert.test_alert", "process_rate_minutes", "2"),
 				),
 			},
 		},
@@ -442,6 +444,7 @@ resource "wavefront_alert" "test_alert" {
   can_view = [
     wavefront_user.basic.id,
   ]
+  process_rate_minutes = 2
 }
 `
 }
@@ -559,15 +562,7 @@ resource "wavefront_alert" "test_alert3" {
 func testAccCheckWavefrontAlertThreshold() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
-  name = "Terraform Test Target"
-  description = "Test target"
-  method = "EMAIL"
-  recipient = "test@example.com"
-  email_subject = "This is a test"
-  is_html_content = true
-  template = "{}"
-  triggers = [
-    "ALERT_OPENED",
+	@@ -652,22 +571,18 @@ resource "wavefront_alert_target" "test_target" {
     "ALERT_RESOLVED"
   ]
 }
@@ -593,7 +588,6 @@ resource "wavefront_alert" "test_threshold_alert" {
 }
 `
 }
-
 func testAccCheckWavefrontAlertThresholdChangeCondition() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
