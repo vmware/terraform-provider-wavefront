@@ -15,7 +15,7 @@ Use this data source to get information about a Wavefront user group by its ID.
 ## Example Usage
 
 ```hcl
-# Get the information about the role.
+# Get the information about the user group.
 data "wavefront_user_group" "example" {
   id = "user-group-id"
 }
