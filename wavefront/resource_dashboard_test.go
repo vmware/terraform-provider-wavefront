@@ -2,8 +2,6 @@ package wavefront
 
 import (
 	"fmt"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -21,7 +19,6 @@ func TestBuildTerraformParameterDetail(t *testing.T) {
 			"Label": "test",
 		},
 	}
-
 	result := buildTerraformParameterDetail(parameterDetail, "test")
 	if result["label"] != "test" {
 		t.Errorf("expected test got %s", result["label"])
@@ -36,7 +33,6 @@ func TestBuildTerraformSection(t *testing.T) {
 		Name: "test",
 		Rows: []wavefront.Row{},
 	}
-
 	result := buildTerraformSection(section)
 	if result["name"] != "test" {
 		t.Errorf("expected test, got %s", result["name"])
@@ -44,7 +40,6 @@ func TestBuildTerraformSection(t *testing.T) {
 	if len(result["row"].([]map[string]interface{})) != 0 {
 		t.Errorf("expected empty array, got Array of lenth %d", len(result["rows"].([]map[string]interface{})))
 	}
-
 	sectionWithRows := wavefront.Section{
 		Rows: []wavefront.Row{
 			{
@@ -55,7 +50,6 @@ func TestBuildTerraformSection(t *testing.T) {
 			},
 		},
 	}
-
 	resultWithRows := buildTerraformSection(sectionWithRows)
 	if len(resultWithRows["row"].([]map[string]interface{})) != 2 {
 		t.Errorf("expected 2 rows, got %d", len(resultWithRows["row"].([]map[string]interface{})))
@@ -66,13 +60,10 @@ func TestBuildTerraformRow(t *testing.T) {
 	row := wavefront.Row{
 		Charts: []wavefront.Chart{},
 	}
-
 	result := buildTerraformRow(row)
-
 	if len(result["chart"].([]map[string]interface{})) != 0 {
 		t.Errorf("expected empty array, got Array of lenth %d", len(result["chart"].([]map[string]interface{})))
 	}
-
 	rowWithCharts := wavefront.Row{
 		Charts: []wavefront.Chart{
 			{
@@ -85,7 +76,6 @@ func TestBuildTerraformRow(t *testing.T) {
 			},
 		},
 	}
-
 	resultWithCharts := buildTerraformRow(rowWithCharts)
 	if len(resultWithCharts["chart"].([]map[string]interface{})) != 2 {
 		t.Errorf("expected array of length 2, got Array of lenth %d", len(result["chart"].([]map[string]interface{})))
@@ -99,7 +89,6 @@ func TestBuildTerraformChart(t *testing.T) {
 		Description: "A chart",
 		Units:       "unit",
 	}
-
 	result := buildTerraformChart(chart)
 	if result["name"] != "test_chart" {
 		t.Errorf("expected test_chart, got %s", result["name"])
@@ -113,7 +102,6 @@ func TestBuildTerraformChart(t *testing.T) {
 	if result["units"] != "unit" {
 		t.Errorf("expected test_chart, got %s", result["units"])
 	}
-
 	chartWithSources := wavefront.Chart{
 		Name: "I have sources",
 		Sources: []wavefront.Source{
@@ -127,7 +115,6 @@ func TestBuildTerraformChart(t *testing.T) {
 			},
 		},
 	}
-
 	resultWithCharts := buildTerraformChart(chartWithSources)
 	if resultWithCharts["name"] != "I have sources" {
 		t.Errorf("expected \"I have sources\", got %s", resultWithCharts["name"])
@@ -158,17 +145,13 @@ func TestBuildChartSettings(t *testing.T) {
 	settings := []interface{}{
 		settings0,
 	}
-
 	result := buildChartSettings(&settings)
-
 	if result == nil {
 		t.Fatalf("expected chart settings for %v", settings)
 	}
-
 	if result.Type != settings0["type"] {
 		t.Errorf("expected chart type %s, got %v", settings0["type"], result.Type)
 	}
-
 	if result.LineType != settings0["line_type"] {
 		t.Errorf("expected line type %s, got %v", settings0["line_type"], result.LineType)
 	}
@@ -178,16 +161,13 @@ func TestBuildSections(t *testing.T) {
 	section0 := make(map[string]interface{})
 	section0["name"] = "section 0"
 	section0["row"] = []interface{}{}
-
 	section1 := make(map[string]interface{})
 	section1["name"] = "section 1"
 	section1["row"] = []interface{}{}
-
 	sections := []interface{}{
 		section0,
 		section1,
 	}
-
 	result := buildSections(&sections)
 	if len(*result) != 2 {
 		t.Errorf("expected 2 sections for %d", len(*result))
@@ -197,15 +177,12 @@ func TestBuildSections(t *testing.T) {
 func TestBuildRows(t *testing.T) {
 	row0 := make(map[string]interface{})
 	row0["chart"] = []interface{}{}
-
 	row1 := make(map[string]interface{})
 	row1["chart"] = []interface{}{}
-
 	rows := []interface{}{
 		row0,
 		row1,
 	}
-
 	result := buildRows(&rows)
 	if len(*result) != 2 {
 		t.Errorf("expected 2 rows for %d", len(*result))
@@ -226,7 +203,6 @@ func TestBuildCharts(t *testing.T) {
 	}
 	chart0["chart_attribute"] = "null"
 	chart0["base"] = 0
-
 	chart1 := make(map[string]interface{})
 	chart1["name"] = "chart 1"
 	chart1["description"] = "desc"
@@ -240,12 +216,10 @@ func TestBuildCharts(t *testing.T) {
 	}
 	chart1["chart_attribute"] = `{ "dashboardLayout": { "x": 0, "y": 0, "w": 8, "h": 7} }`
 	chart1["base"] = 10
-
 	charts := []interface{}{
 		chart0,
 		chart1,
 	}
-
 	result := buildCharts(&charts)
 	if len(*result) != 2 {
 		t.Errorf("expected 2 charts for %d", len(*result))
@@ -261,16 +235,13 @@ func TestBuildSources(t *testing.T) {
 	source0 := make(map[string]interface{})
 	source0["name"] = "source 0"
 	source0["query"] = "source 0"
-
 	source1 := make(map[string]interface{})
 	source1["name"] = "source 1"
 	source1["query"] = "source 1"
-
 	sources := []interface{}{
 		source0,
 		source1,
 	}
-
 	result := buildSources(&sources)
 	if len(*result) != 2 {
 		t.Errorf("expected 2 sources for %d", len(*result))
@@ -292,11 +263,9 @@ func TestBuildParameterDetails(t *testing.T) {
 	param0["values_to_readable_strings"] = map[string]interface{}{
 		"test": "test",
 	}
-
 	params := []interface{}{
 		param0,
 	}
-
 	result := buildParameterDetails(&params)
 	for k, v := range *result {
 		if k != "source 0" {
@@ -306,18 +275,10 @@ func TestBuildParameterDetails(t *testing.T) {
 			t.Errorf("expected label 'source 0' got %s", k)
 		}
 	}
-
 }
 
 func TestAccWavefrontDashboard_Basic(t *testing.T) {
 	var record wavefront.Dashboard
-
-	config := testAccCheckWavefrontDashboardBasic()
-	if os.Getenv("TF_ACC") == "1" {
-		replace := "tftesting"
-		newCustomer := getCustomerName()
-		config = strings.Replace(config, replace, newCustomer, 1)
-	}
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -325,11 +286,10 @@ func TestAccWavefrontDashboard_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: config,
+				Config: testAccCheckWavefrontDashboardBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboard", &record),
 					testAccCheckWavefrontDashboardAttributes(&record),
-
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
 						"wavefront_dashboard.test_dashboard", "display_section_table_of_contents", "true"),
@@ -384,20 +344,13 @@ func TestAccWavefrontDashboard_Basic(t *testing.T) {
 func TestAccWavefrontDashboard_Updated(t *testing.T) {
 	var record wavefront.Dashboard
 
-	config := testAccCheckWavefrontDashboardBasic()
-	if os.Getenv("TF_ACC") == "1" {
-		replace := "tftesting"
-		newCustomer := getCustomerName()
-		config = strings.Replace(config, replace, newCustomer, 1)
-	}
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckWavefrontDashboardDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: config,
+				Config: testAccCheckWavefrontDashboardBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontDashboardExists("wavefront_dashboard.test_dashboard", &record),
 					testAccCheckWavefrontDashboardAttributes(&record),
@@ -428,7 +381,6 @@ func TestAccWavefrontDashboard_Updated(t *testing.T) {
 
 func TestAccWavefrontDashboard_Multiple(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -452,7 +404,6 @@ func TestAccWavefrontDashboard_Multiple(t *testing.T) {
 
 func TestAccWavefrontDashboard_ListParam(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -478,7 +429,6 @@ func TestAccWavefrontDashboard_ListParam(t *testing.T) {
 
 func TestAccWavefrontDashboard_DynamicSourceParam(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -506,7 +456,6 @@ func TestAccWavefrontDashboard_DynamicSourceParam(t *testing.T) {
 
 func TestAccWavefrontDashboard_DynamicSourceTagParam(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -534,7 +483,6 @@ func TestAccWavefrontDashboard_DynamicSourceTagParam(t *testing.T) {
 
 func TestAccWavefrontDashboard_DynamicMetricNameParam(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -562,7 +510,6 @@ func TestAccWavefrontDashboard_DynamicMetricNameParam(t *testing.T) {
 
 func TestAccWavefrontDashboard_DynamicTagKeyParam(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -592,7 +539,6 @@ func TestAccWavefrontDashboard_DynamicTagKeyParam(t *testing.T) {
 
 func TestAccWavefrontDashboard_DynamicMatchingSourceTagParam(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -620,7 +566,6 @@ func TestAccWavefrontDashboard_DynamicMatchingSourceTagParam(t *testing.T) {
 
 func TestAccWavefrontDashboard_Linear_ChartSettings(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -685,9 +630,9 @@ func TestAccWavefrontDashboard_Linear_ChartSettings(t *testing.T) {
 		},
 	})
 }
+
 func TestAccWavefrontDashboard_Table_ChartSettings(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -764,9 +709,9 @@ func TestAccWavefrontDashboard_Table_ChartSettings(t *testing.T) {
 		},
 	})
 }
+
 func TestAccWavefrontDashboard_Sparkline_ChartSettings(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -859,9 +804,9 @@ func TestAccWavefrontDashboard_Sparkline_ChartSettings(t *testing.T) {
 		},
 	})
 }
+
 func TestAccWavefrontDashboard_Markdown_ChartSettings(t *testing.T) {
 	var record wavefront.Dashboard
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -932,14 +877,11 @@ func TestAccWavefrontDashboard_Markdown_ChartSettings(t *testing.T) {
 }
 
 func testAccCheckWavefrontDashboardDestroy(s *terraform.State) error {
-
 	dashboards := testAccProvider.Meta().(*wavefrontClient).client.Dashboards()
-
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "wavefront_dashboard" {
 			continue
 		}
-
 		results, err := dashboards.Find(
 			[]*wavefront.SearchCondition{
 				{
@@ -955,28 +897,23 @@ func testAccCheckWavefrontDashboardDestroy(s *terraform.State) error {
 			return fmt.Errorf("dashboard still exists")
 		}
 	}
-
 	return nil
 }
 
 func testAccCheckWavefrontDashboardAttributes(dashboard *wavefront.Dashboard) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
 		if dashboard.Name != "Terraform Test Dashboard" {
 			return fmt.Errorf("bad value: %s", dashboard.Name)
 		}
-
 		return nil
 	}
 }
 
 func testAccCheckWavefrontDashboardAttributesUpdated(dashboard *wavefront.Dashboard) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
 		if dashboard.Name != "Terraform Test Dashboard Updated" {
 			return fmt.Errorf("bad value: %s", dashboard.Name)
 		}
-
 		return nil
 	}
 }
@@ -987,15 +924,12 @@ func testAccCheckWavefrontDashboardExists(n string, dashboard *wavefront.Dashboa
 		if !ok {
 			return fmt.Errorf("not found: %s", n)
 		}
-
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no Record ID is set")
 		}
-
 		dash := wavefront.Dashboard{
 			ID: rs.Primary.ID,
 		}
-
 		dashboards := testAccProvider.Meta().(*wavefrontClient).client.Dashboards()
 		err := dashboards.Get(&dash)
 		if err != nil {
@@ -1015,7 +949,6 @@ resource "wavefront_user" "basic" {
 		"alerts_management",
 	]
 }
-
 resource "wavefront_dashboard" "test_dashboard" {
   name = "Terraform Test Dashboard"
   description = "testing, testing"
@@ -1025,7 +958,6 @@ resource "wavefront_dashboard" "test_dashboard" {
   can_view = [
     wavefront_user.basic.id
   ]
-
   section{
     name = "section 1"
     row {
@@ -1586,6 +1518,7 @@ resource "wavefront_dashboard" "chart_settings_dash" {
 }
 `
 }
+
 func testAccCheckWavefrontDashboardTableChartSettings() string {
 	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
@@ -1657,6 +1590,7 @@ resource "wavefront_dashboard" "chart_settings_dash" {
 }
 `
 }
+
 func testAccCheckWavefrontDashboardSparklineChartSettings() string {
 	return `
 resource "wavefront_dashboard" "chart_settings_dash" {
@@ -1737,6 +1671,7 @@ resource "wavefront_dashboard" "chart_settings_dash" {
 }
 `
 }
+
 func testAccCheckWavefrontDashboardMarkdownChartSettings() string {
 	return `
 resource "wavefront_dashboard" "chart_settings_dash" {

@@ -96,9 +96,13 @@ func resourceUserRead(d *schema.ResourceData, meta interface{}) error {
 	user := results[0]
 
 	emailChunks := strings.Split(*user.ID, fmt.Sprintf("+%s", user.Customer))
-	email := fmt.Sprintf("%s%s", emailChunks[0], emailChunks[1])
+	if len(emailChunks) == 2 {
+		email := fmt.Sprintf("%s%s", emailChunks[0], emailChunks[1])
+		d.Set("email", email)
+	} else {
+		d.Set("email", user.ID)
+	}
 
-	d.Set("email", email)
 	d.Set("customer", user.Customer)
 
 	encodePermissions(d, user)
@@ -246,7 +250,6 @@ func resourceDecodeUserPermissions(d *schema.ResourceData, user interface{}) err
 		u.Permissions = permissions
 	default:
 		return fmt.Errorf("unknown type attempted to cast %T", v)
-
 	}
 
 	return nil
