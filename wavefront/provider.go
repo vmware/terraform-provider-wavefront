@@ -59,8 +59,10 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"wavefront_default_user_group":     dataSourceDefaultUserGroup(),
 			"wavefront_metrics_policy":         dataSourceMetricsPolicy(),
+			"wavefront_role":                   dataSourceRole(),
 			"wavefront_roles":                  dataSourceRoles(),
 			"wavefront_user":                   dataSourceUser(),
+			"wavefront_user_group":             dataSourceUserGroup(),
 			"wavefront_user_groups":            dataSourceUserGroups(),
 			"wavefront_users":                  dataSourceUsers(),
 			"wavefront_external_links":         dataSourceExternalLinks(),
