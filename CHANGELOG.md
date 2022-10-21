@@ -1,3 +1,11 @@
+## 3.3.0 (October 21, 2022)
+ENHANCEMENT:
+
+* Added support for Data Sources for Alert, Event, Dashboard, Derived Metric, Maintenance Window, External Links. 
+* Added support for Data Source for Role and UserGroup by id.
+* Added support for ProcessRateMinutes property in Alert Resource.
+* Fixed integration tests.
+
 ## 3.2.0 (September 2, 2022)
 ENHANCEMENT:
 
