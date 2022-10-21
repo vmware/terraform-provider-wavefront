@@ -3,6 +3,7 @@ package wavefront
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"testing"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
@@ -85,6 +86,7 @@ func testAccGetBasicPolicy() ([]wavefront.PolicyRule, error) {
 	if len(results) != 1 {
 		return nil, fmt.Errorf("unable to get default group, lookup return a match of %d groups", len(results))
 	}
+
 	defaultUser := results[0]
 	return []wavefront.PolicyRule{{
 		Accounts: []wavefront.PolicyUser{},
@@ -219,7 +221,7 @@ func testAccCheckWavefrontCustomMetricsPolicy(rulesProvider func() ([]wavefront.
 		if err != nil {
 			return fmt.Errorf("error finding Wavefront Metrics Policy %s", err)
 		}
-		if rs.Primary.ID != string(rune(policy.UpdatedEpochMillis)) {
+		if rs.Primary.ID != strconv.Itoa(policy.UpdatedEpochMillis) {
 			return fmt.Errorf("expected metric policy id of %s does not match %s", rs.Primary.ID, string(rune(policy.UpdatedEpochMillis)))
 		}
 		if len(desiredPolicies) != len(policy.PolicyRules) {

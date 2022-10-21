@@ -24,6 +24,7 @@ func TestAccWavefrontIngestionPolicy_Basic(t *testing.T) {
 resource wavefront_ingestion_policy tester {
     name = "Test Ingestion Policy"
     description = "Ingestion policy for Terraform test"
+	scope = "ACCOUNT"
 }`,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontIngestionPolicyExists("wavefront_ingestion_policy.tester", &record),
@@ -31,6 +32,7 @@ resource wavefront_ingestion_policy tester {
 						&wavefront.IngestionPolicy{
 							Name:        "Test Ingestion Policy",
 							Description: "Ingestion policy for Terraform test",
+							Scope:       "ACCOUNT",
 						},
 						&record,
 					),
@@ -39,6 +41,8 @@ resource wavefront_ingestion_policy tester {
 						"wavefront_ingestion_policy.tester", "name", "Test Ingestion Policy"),
 					resource.TestCheckResourceAttr(
 						"wavefront_ingestion_policy.tester", "description", "Ingestion policy for Terraform test"),
+					resource.TestCheckResourceAttr(
+						"wavefront_ingestion_policy.tester", "scope", "ACCOUNT"),
 				),
 			},
 		},
@@ -67,6 +71,7 @@ func testAccCheckWavefrontIngestionPolicyDestroy(s *terraform.State) error {
 
 		return fmt.Errorf("ingestion policy still exists, %s", rs.Primary.ID)
 	}
+
 	return nil
 }
 

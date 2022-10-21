@@ -2,14 +2,11 @@ package wavefront
 
 import (
 	"fmt"
-	"os"
-	"strings"
 	"testing"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/WavefrontHQ/go-wavefront-management-api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
@@ -17,42 +14,29 @@ func TestValidateAlertTarget(t *testing.T) {
 	email := "example@wavefront.com"
 	pdKey := "pd:not-a-real-pagerduty-key"
 	targetID := "target:efKj3H9aF"
-
 	w, e := validateAlertTarget(email, "target")
 	if len(w) != 0 || len(e) != 0 {
 		t.Fatal("expected no errors on email address validation")
 	}
-
 	w, e = validateAlertTarget(pdKey, "target")
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on pager-duty key target validation")
 	}
-
 	w, e = validateAlertTarget(targetID, "target")
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on alert target validation")
 	}
-
 	_, e = validateAlertTarget("totally,invalid,target", "target")
 	if len(e) == 0 {
 		t.Fatal("expected error on invalid alert targets")
 	}
-
 	w, e = validateAlertTarget(fmt.Sprintf("%s,%s,%s", email, pdKey, targetID), "target")
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on multiple alert target validation")
 	}
 }
-
 func TestAccWavefrontAlert_Basic(t *testing.T) {
 	var record wavefront.Alert
-
-	config := testAccCheckWavefrontAlertBasic()
-	if os.Getenv("TF_ACC") == "1" {
-		replace := "tftesting"
-		newCustomer := getCustomerName()
-		config = strings.Replace(config, replace, newCustomer, 1)
-	}
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -60,11 +44,10 @@ func TestAccWavefrontAlert_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: config,
+				Config: testAccCheckWavefrontAlertBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
-
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_alert", "name", "Terraform Test Alert"),
@@ -84,15 +67,15 @@ func TestAccWavefrontAlert_Basic(t *testing.T) {
 						"wavefront_alert.test_alert", "severity", "WARN"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_alert", "tags.#", "5"),
+					resource.TestCheckResourceAttr(
+						"wavefront_alert.test_alert", "process_rate_minutes", "2"),
 				),
 			},
 		},
 	})
 }
-
 func TestAccWavefrontAlert_RequiredAttributes(t *testing.T) {
 	var record wavefront.Alert
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -103,7 +86,6 @@ func TestAccWavefrontAlert_RequiredAttributes(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert_required", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
-
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_alert_required", "name", "Terraform Test Alert Required Attributes Only"),
@@ -124,16 +106,8 @@ func TestAccWavefrontAlert_RequiredAttributes(t *testing.T) {
 		},
 	})
 }
-
 func TestAccWavefrontAlert_Updated(t *testing.T) {
 	var record wavefront.Alert
-
-	config := testAccCheckWavefrontAlertBasic()
-	if os.Getenv("TF_ACC") == "1" {
-		replace := "tftesting"
-		newCustomer := getCustomerName()
-		config = strings.Replace(config, replace, newCustomer, 1)
-	}
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -141,7 +115,7 @@ func TestAccWavefrontAlert_Updated(t *testing.T) {
 		CheckDestroy: testAccCheckWavefrontAlertDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: config,
+				Config: testAccCheckWavefrontAlertBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
@@ -161,10 +135,8 @@ func TestAccWavefrontAlert_Updated(t *testing.T) {
 		},
 	})
 }
-
 func TestAccWavefrontAlert_RemoveOptionalAttribute(t *testing.T) {
 	var record wavefront.Alert
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -191,10 +163,8 @@ func TestAccWavefrontAlert_RemoveOptionalAttribute(t *testing.T) {
 		},
 	})
 }
-
 func TestAccWavefrontAlert_Multiple(t *testing.T) {
 	var record wavefront.Alert
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -216,10 +186,8 @@ func TestAccWavefrontAlert_Multiple(t *testing.T) {
 		},
 	})
 }
-
 func TestAccWavefrontAlert_Threshold(t *testing.T) {
 	var record wavefront.Alert
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -230,7 +198,6 @@ func TestAccWavefrontAlert_Threshold(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_threshold_alert", &record),
 					testAccCheckWavefrontThresholdAlertAttributes(&record),
-
 					//Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_threshold_alert", "conditions.%", "3"),
@@ -241,10 +208,8 @@ func TestAccWavefrontAlert_Threshold(t *testing.T) {
 		},
 	})
 }
-
 func TestAccWavefrontAlert_ThresholdWithCondition(t *testing.T) {
 	var record wavefront.Alert
-
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -257,7 +222,6 @@ func TestAccWavefrontAlert_ThresholdWithCondition(t *testing.T) {
 					testAccCheckWavefrontAlertExists(
 						"wavefront_alert.test_threshold_alert_change_condition", &record),
 					testAccCheckWavefrontThresholdAlertAttributes(&record),
-
 					// Check against state that the attributes are as we expect
 					// TODO: figure out why verification on `condition` using `resource.TestCheckResourceAttr` does not
 					//  work.
@@ -270,9 +234,7 @@ func TestAccWavefrontAlert_ThresholdWithCondition(t *testing.T) {
 		},
 	})
 }
-
 func TestResourceAlert_validateAlertConditions(t *testing.T) {
-
 	cases := []struct {
 		name         string
 		conf         *schema.ResourceData
@@ -354,69 +316,53 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 				d.Set("alert_type", "THRESHOLD")
 				d.Set("conditions", map[string]interface{}{"severe": "ts()"})
 				d.Set("threshold_targets", map[string]interface{}{"banana": "ts()"})
-
 				return d
 			}(),
 			"invalid severity: banana",
 		},
 	}
-
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			err := validateAlertConditions(&wavefront.Alert{}, c.conf)
-
 			m := ""
 			if err == nil {
 				m = ""
 			} else {
 				m = err.Error()
 			}
-
 			if m != c.errorMessage {
 				t.Errorf("expected error '%s', got '%s'", c.errorMessage, err.Error())
 			}
 		})
 	}
 }
-
 func testAccCheckWavefrontAlertDestroy(s *terraform.State) error {
-
 	alerts := testAccProvider.Meta().(*wavefrontClient).client.Alerts()
-
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "wavefront_alert" {
 			continue
 		}
-
 		tmpAlert := wavefront.Alert{ID: &rs.Primary.ID}
-
 		err := alerts.Get(&tmpAlert)
 		if err == nil {
 			return fmt.Errorf("alert still exists")
 		}
 	}
-
 	return nil
 }
-
 func testAccCheckWavefrontAlertAttributes(alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
 		if alert.Target != "test@example.com" && alert.Target != "test@example.com,foo@example.com" {
 			return fmt.Errorf("bad value: %s", alert.Target)
 		}
-
 		return nil
 	}
 }
-
 func testAccCheckWavefrontThresholdAlertAttributes(alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
 		if alert.Condition != "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )" {
 			return fmt.Errorf("bad value: %s", alert.Condition)
 		}
-
 		if val, ok := alert.Conditions["severe"]; ok {
 			if val != "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80" {
 				return fmt.Errorf("bad value: %s", alert.Conditions["severe"])
@@ -424,70 +370,52 @@ func testAccCheckWavefrontThresholdAlertAttributes(alert *wavefront.Alert) resou
 		} else {
 			return fmt.Errorf("multi-threshold alert's conditions are not set")
 		}
-
 		return nil
 	}
 }
-
 func testAccCheckWavefrontAlertAttributesUpdated(alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
 		if alert.Target != "terraform@example.com" {
 			return fmt.Errorf("bad value: %s", alert.Target)
 		}
-
 		return nil
 	}
 }
-
 func testAccCheckWavefrontAlertAttributesRemoved(alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
 		if alert.ResolveAfterMinutes != 5 {
 			return fmt.Errorf("unexpected value for ResolveAfterMinutes %v, expected 5", alert.ResolveAfterMinutes)
 		}
-
 		return nil
 	}
 }
-
 func testAccCheckWavefrontAlertAttributesRemovedUpdated(alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
 		if alert.ResolveAfterMinutes != 0 {
 			return fmt.Errorf("unexpected value for ResolveAfterMinutes %v, expected 0", alert.ResolveAfterMinutes)
 		}
-
 		return nil
 	}
 }
-
 func testAccCheckWavefrontAlertExists(n string, alert *wavefront.Alert) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
-
 		if !ok {
 			return fmt.Errorf("not found: %s", n)
 		}
-
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no Record ID is set")
 		}
-
 		alerts := testAccProvider.Meta().(*wavefrontClient).client.Alerts()
 		tmpAlert := wavefront.Alert{ID: &rs.Primary.ID}
-
 		err := alerts.Get(&tmpAlert)
 		if err != nil {
 			return fmt.Errorf("error finding Wavefront Alert %s", err)
 		}
-
 		*alert = tmpAlert
-
 		return nil
 	}
 }
-
 func testAccCheckWavefrontAlertBasic() string {
 	return `
 resource "wavefront_user" "basic" {
@@ -497,7 +425,6 @@ resource "wavefront_user" "basic" {
 		"alerts_management",
 	]
 }
-
 resource "wavefront_alert" "test_alert" {
   name = "Terraform Test Alert"
   target = "test@example.com"
@@ -517,10 +444,10 @@ resource "wavefront_alert" "test_alert" {
   can_view = [
     wavefront_user.basic.id,
   ]
+  process_rate_minutes = 2
 }
 `
 }
-
 func testAccCheckWavefrontAlertRemoveAttributes() string {
 	return `
 resource "wavefront_alert" "test_alert_required" {
@@ -538,7 +465,6 @@ resource "wavefront_alert" "test_alert_required" {
 }
 `
 }
-
 func testAccCheckWavefrontAlertUpdatedRemoveAttributes() string {
 	return `
 resource "wavefront_alert" "test_alert_required" {
@@ -555,7 +481,6 @@ resource "wavefront_alert" "test_alert_required" {
 }
 `
 }
-
 func testAccCheckWavefrontAlertRequiredAttributes() string {
 	return `
 resource "wavefront_alert" "test_alert_required" {
@@ -572,7 +497,6 @@ resource "wavefront_alert" "test_alert_required" {
 }
 `
 }
-
 func testAccCheckWavefrontAlertNewValue() string {
 	return `
 resource "wavefront_alert" "test_alert" {
@@ -591,7 +515,6 @@ resource "wavefront_alert" "test_alert" {
 }
 `
 }
-
 func testAccCheckWavefrontAlertMultiple() string {
 	return `
 resource "wavefront_alert" "test_alert1" {
@@ -636,24 +559,13 @@ resource "wavefront_alert" "test_alert3" {
 }
 `
 }
-
 func testAccCheckWavefrontAlertThreshold() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
-  name = "Terraform Test Target"
-  description = "Test target"
-  method = "EMAIL"
-  recipient = "test@example.com"
-  email_subject = "This is a test"
-  is_html_content = true
-  template = "{}"
-  triggers = [
-    "ALERT_OPENED",
+	@@ -652,22 +571,18 @@ resource "wavefront_alert_target" "test_target" {
     "ALERT_RESOLVED"
   ]
 }
-
-
 resource "wavefront_alert" "test_threshold_alert" {
   name = "Terraform Test Alert"
   alert_type = "THRESHOLD"
@@ -661,13 +573,11 @@ resource "wavefront_alert" "test_threshold_alert" {
   display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
   minutes = 5
   resolve_after_minutes = 5
-
   conditions = {
     "severe" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
     "warn" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 60"
     "info" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 50"
   }
-
   threshold_targets = {
 	"severe" = "target:${wavefront_alert_target.test_target.id}"
   }
@@ -678,7 +588,6 @@ resource "wavefront_alert" "test_threshold_alert" {
 }
 `
 }
-
 func testAccCheckWavefrontAlertThresholdChangeCondition() string {
 	return `
 resource "wavefront_alert_target" "test_target" {
@@ -694,8 +603,6 @@ resource "wavefront_alert_target" "test_target" {
     "ALERT_RESOLVED"
   ]
 }
-
-
 resource "wavefront_alert" "test_threshold_alert_change_condition" {
   name = "Terraform Test Alert"
   alert_type = "THRESHOLD"
@@ -706,17 +613,14 @@ resource "wavefront_alert" "test_threshold_alert_change_condition" {
   display_expression = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"
   minutes = 5
   resolve_after_minutes = 5
-
   conditions = {
     "severe" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"
     "warn" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 60"
     "info" = "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 50"
   }
-
   threshold_targets = {
 	"severe" = "target:${wavefront_alert_target.test_target.id}"
   }
-
   tags = [
     "terraform"
   ]
