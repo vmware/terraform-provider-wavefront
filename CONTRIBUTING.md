@@ -1,14 +1,14 @@
 # Contributing
 
-We welcome contributors to this Terraform Provider and we'll do our best to review and merge all requests. Generally adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes will be welcomed, functional changes may probably require some discussion first.
+Thanks for stopping by and considering contributing to the Wavefront Terraform Provider!!! We do our best to prioritze, review, and merge all requests. Generally, adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes are welcomed. However, functional changes may require some discussion first.
 
-We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront
+We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront.
 
-Steps
+### Steps
 
-1. Open an Issue - to track the change
-2. Fork the repository
-3. Make your changes
+1. Open an Issue - Be descriptive as possible!
+2. Fork the VMware Terraform Repository
+3. Make your changes to your forked repository
 4. Submit a [Pull Request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
 
 ## Resources
@@ -19,16 +19,27 @@ Steps
 
 ## Setup
 
-Ensure you have Go [installed and correctly setup](https://golang.org/doc/install).
+First ensure you have Go [installed and setup correctly](https://golang.org/doc/install).
 
-Fetch your fork of the - [repository](github.com/WavefrontHQ/terraform-provider-wavefront)
+Then locally fetch your forked repo - [repository](github.com/WavefrontHQ/terraform-provider-wavefront)
 `go get github.com/<your_account>/terraform-provider-wavefront`
 
-Build the current version to ensure you're correctly setup `make build`. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64, if you're using a different operating system or architecture then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).
+*Note*: If you experience the following error message:
+```
+module declares its path as: github.com/vmware/terraform-provider-wavefront
+but was required as: github.com/McCoyAle/terraform-provider-wavefront
+```
+This could be due to the [go.mod](https://github.com/vmware/terraform-provider-wavefront/blob/master/go.mod) file import reading the repository as VMware. You may need to update this to the name of your local repository. But do not submit this change upstream. 
+
+Next, you'll need to use the local `build.sh` script to build the current version binary. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64. 
+
+*Note*: If you're using a different operating system or architecture then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).
+
+It is also important to know you can also utilize `go build` to build the binaries as well. However, using the `build.sh` script will append the appropriate version identified in the [version](https://github.com/vmware/terraform-provider-wavefront/blob/master/version) directory. 
 
 Now that you have a binary you should attempt to run it and expect to see a message similar to the one below.
 
-``` shell
+```
 ./terraform-provider-wavefront_v0.1.2_darwin_amd64
 This binary is a plugin. These are not meant to be executed directly.
 Please execute the program that consumes these plugins, which will
