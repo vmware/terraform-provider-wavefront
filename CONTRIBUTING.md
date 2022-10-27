@@ -30,7 +30,7 @@ We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-w
 but was required as: github.com/McCoyAle/terraform-provider-wavefront
 ```
 
-...you will need to update the ["go.mod"](hhttps://github.com/McCoyAle/terraform-provider-wavefront/blob/master/go.mod) import section to your forked version.
+...you will need to update the [go.mod](https://github.com/McCoyAle/terraform-provider-wavefront/blob/master/go.mod) import section to your forked version.
 
 3. Build the current version to ensure you're correctly setup `./build.sh`.
 
