@@ -1,10 +1,10 @@
 # Contributing
 
-We welcome contributors to this Terraform Provider and we'll do our best to review and merge all requests. Generally adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes will be welcomed, functional changes may probably require some discussion first.
+Thanks for stopping by and considering contributing to the Wavefront Terraform Provider! We do our best to review and merge all requests according to priority. Generally adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes are welcome, while functional changes may probably require some discussion first.
 
-We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront
+We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront.
 
-Steps
+### Steps
 
 1. Open an Issue - to track the change
 2. Fork the repository
@@ -19,12 +19,22 @@ Steps
 
 ## Setup
 
-Ensure you have Go [installed and correctly setup](https://golang.org/doc/install).
+1. Ensure you have Go [installed and correctly setup](https://golang.org/doc/install).
 
-Fetch your fork of the - [repository](github.com/WavefrontHQ/terraform-provider-wavefront)
+2. Fetch your fork of the - [repository](github.com/WavefrontHQ/terraform-provider-wavefront)
 `go get github.com/<your_account>/terraform-provider-wavefront`
 
-Build the current version to ensure you're correctly setup `make build`. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64, if you're using a different operating system or architecture then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).
+*Note*: If you experience the error below against your forked repository:
+
+```module declares its path as: github.com/vmware/terraform-provider-wavefront
+but was required as: github.com/McCoyAle/terraform-provider-wavefront
+```
+
+...you will need to update the [go.mod](https://github.com/McCoyAle/terraform-provider-wavefront/blob/master/go.mod) import section to your forked version.
+
+3. Build the current version to ensure you're correctly setup `./build.sh`.
+
+*Note*: This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64, if you're using a different operating system or architecture then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).
 
 Now that you have a binary you should attempt to run it and expect to see a message similar to the one below.
 
@@ -34,6 +44,8 @@ This binary is a plugin. These are not meant to be executed directly.
 Please execute the program that consumes these plugins, which will
 load any plugins automatically
 ```
+
+Note: It is possible to build the file using ```go build github.com/McCoyAle/terraform-provider-wavefront``` which will populate a binary named *terraform-provider-wavefront*. However, the local build.sh files appends the version to the binary from the [version](https://github.com/McCoyAle/terraform-provider-wavefront/blob/master/version) directory of the project.
 
 ## Versioning
 
