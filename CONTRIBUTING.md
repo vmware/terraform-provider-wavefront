@@ -21,7 +21,7 @@ We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-w
 
 First ensure you have Go [installed and setup correctly](https://golang.org/doc/install).
 
-Then locally fetch your forked repo - [repository](github.com/WavefrontHQ/terraform-provider-wavefront)
+Then locally fetch your forked repo - [repository](https://github.com/vmware/terraform-provider-wavefront)
 `go get github.com/<your_account>/terraform-provider-wavefront`
 
 *Note*: If you experience the following error message:
