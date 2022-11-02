@@ -115,8 +115,8 @@ EOF
 }
 ```
 
-## Reading from external file
-Following is the example dashboard with sections and parameters from external file.
+## Reading from an External File
+Below is the example dashboard with sections and parameters from an external file.
 
 ```hcl
 resource "wavefront_dashboard_json" "test_dashboard_json" {
@@ -131,12 +131,12 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
 }
 ```
 
-Following are the sample files.
+The sample files are listed below.
 
 * dashboard_file.txt
 ```hcl
 {
-  "name": "Terraform Test Dashboard Json",
+  "name": "Terraform Test Dashboard JSON",
   "description": "a",
   "eventFilterType": "BYCHART",
   "eventQuery": "",
@@ -249,7 +249,7 @@ Following are the sample files.
 
 
 
-* Note - If there are dynamic variables present in Wavefront parameters, then parameters needs to be present in separate file.
+**Note:** If there are dynamic variables in the Wavefront parameters, then these parameters must be present in a separate file.
 
 ## Argument Reference
 
