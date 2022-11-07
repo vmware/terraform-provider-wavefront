@@ -147,7 +147,7 @@ The sample files are listed below.
   "displayQueryParameters": false,
   "sections": [
         ${section1},
-        ${section2},
+        ${section2}
       ],
   "parameterDetails": ${parameters},
   "tags" :{
