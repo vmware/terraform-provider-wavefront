@@ -74,7 +74,6 @@ func resourceDashboardJSONCreate(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("failed to parse dashboard, %s", err)
 	}
 
-	setDefaultSummarization(dashboard)
 	err = dashboards.Create(dashboard)
 	if err != nil {
 		return fmt.Errorf("failed to create dashboard, %s", err)
@@ -82,18 +81,6 @@ func resourceDashboardJSONCreate(d *schema.ResourceData, meta interface{}) error
 	d.SetId(dashboard.ID)
 	log.Printf("[INFO] Wavefront Dashboard %s Created", d.Id())
 	return resourceDashboardJSONRead(d, meta)
-}
-
-func setDefaultSummarization(dashboard *wavefront.Dashboard) {
-	for i := 0; i < len(dashboard.Sections); i++ {
-		for j := 0; j < len(dashboard.Sections[i].Rows); j++ {
-			for k := 0; k < len(dashboard.Sections[i].Rows[j].Charts); k++ {
-				if dashboard.Sections[i].Rows[j].Charts[k].Summarization == "" {
-					dashboard.Sections[i].Rows[j].Charts[k].Summarization = "MEAN"
-				}
-			}
-		}
-	}
 }
 
 func resourceDashboardJSONUpdate(d *schema.ResourceData, meta interface{}) error {
