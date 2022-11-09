@@ -61,12 +61,6 @@ func TestAccCloudIntegration_NewRelic(t *testing.T) {
 	testCloudIntegrationCommon(t, resourceName, record, testAccCheckWavefrontCloudIntegrationNewRelicBasic())
 }
 
-func TestAccCloudIntegration_Tesla(t *testing.T) {
-	var record wavefront.CloudIntegration
-	resourceName := "wavefront_cloud_integration_tesla.tesla"
-	testCloudIntegrationCommon(t, resourceName, record, testAccCheckWavefrontCloudIntegrationTeslaBasic())
-}
-
 func testCloudIntegrationCommon(t *testing.T, resourceName string, record wavefront.CloudIntegration, config string) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },

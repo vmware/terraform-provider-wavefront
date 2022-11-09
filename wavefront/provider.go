@@ -42,7 +42,6 @@ func Provider() *schema.Provider {
 			"wavefront_cloud_integration_gcp":                resourceCloudIntegrationGcp(),
 			"wavefront_cloud_integration_gcp_billing":        resourceCloudIntegrationGcpBilling(),
 			"wavefront_cloud_integration_newrelic":           resourceCloudIntegrationNewRelic(),
-			"wavefront_cloud_integration_tesla":              resourceCloudIntegrationTesla(),
 			"wavefront_dashboard":                            resourceDashboard(),
 			"wavefront_dashboard_json":                       resourceDashboardJSON(),
 			"wavefront_derived_metric":                       resourceDerivedMetric(),
@@ -110,5 +109,4 @@ const (
 	wfGcp              string = "GCP"
 	wfGcpBilling       string = "GCPBILLING"
 	wfNewRelic         string = "NEWRELIC"
-	wfTesla            string = "TESLA"
 )
