@@ -115,6 +115,8 @@ EOF
 }
 ```
 
+**Note:** If there are dynamic variables in the Wavefront dashboard json, then these variables must be present in a separate file as mentioned in below section.
+
 ## Reading from an External File
 Below is the example dashboard with sections and parameters from an external file.
 
@@ -249,7 +251,6 @@ The sample files are listed below.
 
 
 
-**Note:** If there are dynamic variables in the Wavefront parameters, then these parameters must be present in a separate file.
 
 ## Argument Reference
 
