@@ -1,3 +1,9 @@
+## 3.4.0 (November 9, 2022)
+ENHANCEMENT:
+
+* Removed Tesla Cloud Integration
+* Added documentation for calling dashboard sections from external file.
+
 ## 3.3.0 (October 21, 2022)
 ENHANCEMENT:
 
