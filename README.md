@@ -46,16 +46,16 @@ Now that you have a binary you should attempt to run it and expect to see a mess
 
 ```
 ./terraform-provider-wavefront_v0.1.2_darwin_amd64
-This binary is a plugin. These are not meant to be executed directly.
+This binary is a plugin. The plugins are not meant to be executed directly.
 Please execute the program that consumes these plugins, which will
-load any plugins automatically
+load any plugins automatically.
 ```
 
-If you experience any issues, please do not hesitate to submit an issue!!!
+If you experience any issues, please do not hesitate to submit an issue and we will prioritize accordingly!!!
 
 ### Running the Plugin
 
-Use a main.tf to create some test config, such as
+Use the main.tf file to create a test config, such as the following below:
 
 ```
  provider "wavefront" {
@@ -78,6 +78,8 @@ Use a main.tf to create some test config, such as
 ```
 
 Export your wavefront token `export WAVEFRONT_TOKEN=<token>` You could also configure the `token` in the provider section of main.tf, but best not to.
+
+*Note*: If you are not familiar with the process for creating a token please review the following [page](https://docs.wavefront.com/wavefront_api.html)
 
 Run `terraform init` to load your provider.
 
