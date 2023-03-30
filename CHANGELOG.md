@@ -1,3 +1,8 @@
+## 3.5.0 (March 30, 2023)
+ENHANCEMENT:
+
+* Upgrade net, text and sys dependencies for security fix.
+
 ## 3.4.0 (November 9, 2022)
 ENHANCEMENT:
 
