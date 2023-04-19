@@ -127,7 +127,7 @@ func resourceDashboardJSONDelete(d *schema.ResourceData, meta interface{}) error
 	return nil
 }
 
-func ValidateDashboardJSON(val interface{}, key string) ([]string, []error) {
+func ValidateDashboardJSON(val interface{}, _ string) ([]string, []error) {
 	dashboardJSONString := val.(string)
 	var dashboard wavefront.Dashboard
 	err := dashboard.UnmarshalJSON([]byte(dashboardJSONString))

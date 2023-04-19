@@ -104,7 +104,7 @@ func resourceAlert() *schema.Resource {
 	}
 }
 
-func validateAlertTarget(val interface{}, key string) (warnings []string, errors []error) {
+func validateAlertTarget(val interface{}, _ string) (warnings []string, errors []error) {
 	target := val.(string)
 	if target == "" {
 		return nil, nil

@@ -196,7 +196,7 @@ func policyRulesSchema() map[string]*schema.Schema {
 	}
 }
 
-func validateAccessTypeVal(v interface{}, p cty.Path) diag.Diagnostics {
+func validateAccessTypeVal(v interface{}, _ cty.Path) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	accessType := fmt.Sprintf("%v", v)
