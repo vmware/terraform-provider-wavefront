@@ -143,9 +143,5 @@ func setExternalLinkAttributes(d *schema.ResourceData, extLink wavefront.Externa
 	if err := d.Set(sourceFilterRegexKey, extLink.SourceFilterRegex); err != nil {
 		return err
 	}
-	if err := d.Set(pointTagFilterRegexesKey, extLink.PointTagFilterRegexes); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(pointTagFilterRegexesKey, extLink.PointTagFilterRegexes)
 }

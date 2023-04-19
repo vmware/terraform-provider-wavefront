@@ -74,9 +74,5 @@ func setUserGroupAttributes(d *schema.ResourceData, userGroup wavefront.UserGrou
 	if err := d.Set(rolesKey, flattenUserGroupRoles(userGroup.Roles)); err != nil {
 		return err
 	}
-	if err := d.Set(usersKey, userGroup.Users); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(usersKey, userGroup.Users)
 }

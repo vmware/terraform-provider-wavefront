@@ -40,10 +40,7 @@ func resourceMetricsPolicyRead(d *schema.ResourceData, meta interface{}) error {
 	if err := d.Set(updaterIDKey, metricsPolicy.UpdaterId); err != nil {
 		return err
 	}
-	if err := d.Set(updatedEpochMillisKey, metricsPolicy.UpdatedEpochMillis); err != nil {
-		return err
-	}
-	return nil
+	return d.Set(updatedEpochMillisKey, metricsPolicy.UpdatedEpochMillis)
 }
 
 func flattenPolicyRules(policy []wavefront.PolicyRule) []map[string]interface{} {
