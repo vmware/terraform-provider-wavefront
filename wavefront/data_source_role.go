@@ -66,9 +66,5 @@ func setRoleAttributes(d *schema.ResourceData, role wavefront.Role) error {
 	if err := d.Set(descriptionKey, role.Description); err != nil {
 		return err
 	}
-	if err := d.Set(permissionsKey, role.Permissions); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(permissionsKey, role.Permissions)
 }

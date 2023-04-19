@@ -73,10 +73,7 @@ func setUserAttributes(d *schema.ResourceData, user wavefront.User) error {
 	if err := d.Set(customerKey, user.Customer); err != nil {
 		return err
 	}
-	if err := d.Set(lastSuccessfulLoginKey, int(user.LastSuccessfulLogin)); err != nil {
-		return err
-	}
-	return nil
+	return d.Set(lastSuccessfulLoginKey, int(user.LastSuccessfulLogin))
 }
 
 // flattenUserGroups extracts user_group Ids from list of user_group objects

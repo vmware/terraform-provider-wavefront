@@ -53,10 +53,7 @@ func dataSourceDashboardsRead(d *schema.ResourceData, m interface{}) error {
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 
-	if err := d.Set("dashboards", flattenDashboards(allDashboards)); err != nil {
-		return err
-	}
-	return nil
+	return d.Set("dashboards", flattenDashboards(allDashboards))
 }
 
 func flattenDashboards(dashboards []*wavefront.Dashboard) interface{} {

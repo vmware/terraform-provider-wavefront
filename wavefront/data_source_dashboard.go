@@ -895,11 +895,7 @@ func setDashboardAttributes(d *schema.ResourceData, dashboard wavefront.Dashboar
 	if err := d.Set(parametersKey, convertStructToMap(dashboard.Parameters)); err != nil {
 		return err
 	}
-	if err := d.Set(parameterDetailsKey, flattenParameterDetails(dashboard.ParameterDetails)); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(parameterDetailsKey, flattenParameterDetails(dashboard.ParameterDetails))
 }
 
 func convertStructToMap(parameters struct{}) map[string]interface{} {

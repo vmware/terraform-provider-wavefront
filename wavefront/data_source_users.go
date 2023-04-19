@@ -63,10 +63,7 @@ func dataSourceUsersRead(d *schema.ResourceData, m interface{}) error {
 	}
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
-	if err := d.Set(usersKey, flattenUsers(users)); err != nil {
-		return err
-	}
-	return nil
+	return d.Set(usersKey, flattenUsers(users))
 }
 
 func flattenUsers(users []*wavefront.User) []map[string]interface{} {

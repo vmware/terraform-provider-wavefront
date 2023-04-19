@@ -66,10 +66,7 @@ func dataSourceAlertsRead(d *schema.ResourceData, m interface{}) error {
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 
-	if err := d.Set("alerts", flattenAlerts(allAlerts)); err != nil {
-		return err
-	}
-	return nil
+	return d.Set("alerts", flattenAlerts(allAlerts))
 }
 
 func flattenAlerts(alerts []*wavefront.Alert) []map[string]interface{} {

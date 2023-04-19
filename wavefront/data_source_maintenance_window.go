@@ -206,9 +206,5 @@ func setMaintenanceWindowAttributes(d *schema.ResourceData, maintenanceWindow *w
 	if err := d.Set(relevantHostNamesKey, maintenanceWindow.RelevantHostNames); err != nil {
 		return err
 	}
-	if err := d.Set(relevantHostTagsKey, maintenanceWindow.RelevantHostTags); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(relevantHostTagsKey, maintenanceWindow.RelevantHostTags)
 }

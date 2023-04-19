@@ -120,8 +120,5 @@ func setEventAttributes(d *schema.ResourceData, event wavefront.Event) error {
 	if err := d.Set(annotationsKey, event.Annotations); err != nil {
 		return err
 	}
-	if err := d.Set(tagsKey, event.Tags); err != nil {
-		return err
-	}
-	return nil
+	return d.Set(tagsKey, event.Tags)
 }

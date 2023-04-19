@@ -106,10 +106,7 @@ func testAccCheckWavefrontCloudIntegrationVerifyExtID(resourcePrefix, n string) 
 			return fmt.Errorf("no Record ID is set")
 		}
 
-		if err := resource.TestCheckResourceAttr(resourcePrefix, "external_id", rs.Primary.ID)(s); err != nil {
-			return err
-		}
-		return nil
+		return resource.TestCheckResourceAttr(resourcePrefix, "external_id", rs.Primary.ID)(s)
 	}
 }
 
