@@ -9,11 +9,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func suppressCase(k, old, new string, d *schema.ResourceData) bool {
+func suppressCase(_, old, new string, _ *schema.ResourceData) bool {
 	return strings.EqualFold(old, new)
 }
 
-func suppressSpaces(k, old, new string, d *schema.ResourceData) bool {
+func suppressSpaces(_, old, new string, _ *schema.ResourceData) bool {
 	return strings.TrimSpace(old) == strings.TrimSpace(new)
 }
 
