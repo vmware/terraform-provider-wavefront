@@ -194,7 +194,9 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 	// Use the Wavefront ID as the Terraform ID
 	d.SetId(*tmpAlert.ID)
 	d.Set("name", tmpAlert.Name)
-	d.Set("target", tmpAlert.Target)
+	if tmpAlert.Target != "" && tmpAlert.AlertType == wavefront.AlertTypeClassic {
+		d.Set("target", tmpAlert.Target)
+	}
 	d.Set("condition", trimSpaces(tmpAlert.Condition))
 	d.Set("additional_information", trimSpaces(tmpAlert.AdditionalInfo))
 	d.Set("display_expression", trimSpaces(tmpAlert.DisplayExpression))
