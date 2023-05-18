@@ -98,6 +98,7 @@ func resourceAlert() *schema.Resource {
 			"process_rate_minutes": {
 				Type:     schema.TypeInt,
 				Optional: true,
+				Default:  5,
 			},
 		},
 	}
