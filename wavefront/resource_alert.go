@@ -197,13 +197,15 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 	if tmpAlert.Target != "" && tmpAlert.AlertType == wavefront.AlertTypeClassic {
 		d.Set("target", tmpAlert.Target)
 	}
+	if tmpAlert.Severity != "" && tmpAlert.AlertType == wavefront.AlertTypeClassic {
+		d.Set("severity", tmpAlert.Severity)
+	}
 	d.Set("condition", trimSpaces(tmpAlert.Condition))
 	d.Set("additional_information", trimSpaces(tmpAlert.AdditionalInfo))
 	d.Set("display_expression", trimSpaces(tmpAlert.DisplayExpression))
 	d.Set("minutes", tmpAlert.Minutes)
 	d.Set("resolve_after_minutes", tmpAlert.ResolveAfterMinutes)
 	d.Set("notification_resend_frequency_minutes", tmpAlert.NotificationResendFrequencyMinutes)
-	d.Set("severity", tmpAlert.Severity)
 	d.Set("tags", tmpAlert.Tags)
 	d.Set("alert_type", tmpAlert.AlertType)
 	d.Set("conditions", tmpAlert.Conditions)
