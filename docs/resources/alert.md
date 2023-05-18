@@ -37,7 +37,7 @@ The following arguments are supported:
 or `THRESHOLD`.
 * `minutes` - (Required) The number of consecutive minutes that a series matching the condition query must 
 evaluate to "true" (non-zero value) before the alert fires.
-* `target` - (Optional) A comma-separated list of the email address or integration endpoint 
+* `target` - (Optional, `CLASSIC` alerts only) A comma-separated list of the email address or integration endpoint 
 (such as PagerDuty or webhook) to notify when the alert status changes. Multiple target types can be in the list.
 Alert target format: ({email}|pd:{pd_key}|target:{alert-target-id}).
 * `condition` - (Optional) A Wavefront query that is evaluated at regular intervals (default is 1 minute).
@@ -56,7 +56,7 @@ query must evaluate to "false" (zero value) before the alert resolves.  When uns
 the same value as `minutes`.
 * `notification_resend_frequency_minutes` - (Optional) How often to re-trigger a continually failing alert. 
 If absent or <= 0, no re-triggering occurs.  
-* `severity` - (Optional) - Severity of the alert, valid values are `INFO`, `SMOKE`, `WARN`, `SEVERE`.
+* `severity` - (Optional, `CLASSIC` alerts only) - Severity of the alert, valid values are `INFO`, `SMOKE`, `WARN`, `SEVERE`.
 * `can_view` - (Optional) A list of users or groups that can view this resource.
 * `can_modify` - (Optional) A list of users or groups that can modify this resource.
 * `process_rate_minutes` - (Optional) The specified query is executed every `process_rate_minutes` minutes.
