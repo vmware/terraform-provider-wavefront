@@ -59,7 +59,7 @@ If absent or <= 0, no re-triggering occurs.
 * `severity` - (Optional, `CLASSIC` alerts only) - Severity of the alert, valid values are `INFO`, `SMOKE`, `WARN`, `SEVERE`.
 * `can_view` - (Optional) A list of users or groups that can view this resource.
 * `can_modify` - (Optional) A list of users or groups that can modify this resource.
-* `process_rate_minutes` - (Optional) The specified query is executed every `process_rate_minutes` minutes.
+* `process_rate_minutes` - (Optional) The specified query is executed every `process_rate_minutes` minutes. Default value is 5 minutes.
 
 
 ### Example
