@@ -45,7 +45,7 @@ The alert fires and notifications are triggered when a data series matching this
 to a non-zero value for a set number of consecutive minutes. 
 * `conditions` - (Optional, `THRESHOLD` alerts only) a string->string map of `severity` to `condition` 
 for which this alert will trigger.
-* `threshold_targets` - (Optional, `THRESHOLD` alerts only) Targets for severity
+* `threshold_targets` - (Optional, `THRESHOLD` alerts only) A string to string map of Targets for severity.
 * `additional_information` - (Optional) User-supplied additional explanatory information for this alert.
 Useful for linking runbooks, migrations, etc.
 * `display_expression` - (Optional) A second query whose results are displayed in the alert user
