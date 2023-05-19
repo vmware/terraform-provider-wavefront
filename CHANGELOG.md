@@ -1,3 +1,8 @@
+## 3.6.0 (May 19, 2023)
+BUG FIXES:
+
+* Fixed bugs related to resource_alert and updated the documentation.
+
 ## 3.5.0 (March 30, 2023)
 ENHANCEMENT:
 
