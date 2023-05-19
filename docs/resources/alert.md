@@ -57,8 +57,8 @@ the same value as `minutes`.
 * `notification_resend_frequency_minutes` - (Optional) How often to re-trigger a continually failing alert. 
 If absent or <= 0, no re-triggering occurs.  
 * `severity` - (Optional, `CLASSIC` alerts only) - Severity of the alert, valid values are `INFO`, `SMOKE`, `WARN`, `SEVERE`.
-* `can_view` - (Optional) A list of users or groups that can view this resource.
-* `can_modify` - (Optional) A list of users or groups that can modify this resource.
+* `can_view` - (Optional) A list of valid users or groups that can view this resource on a tenant. Default is Empty list.
+* `can_modify` - (Optional) A list of valid users or groups that can modify this resource on a tenant.
 * `process_rate_minutes` - (Optional) The specified query is executed every `process_rate_minutes` minutes. Default value is 5 minutes.
 
 
