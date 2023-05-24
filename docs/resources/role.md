@@ -23,11 +23,13 @@ The following arguments are supported:
 
 * `name` - (Required) The name of the role.
 * `description` - (Optional) A short description of the role.
-* `permissions` - (Optional) A list of permissions to assign to this role. Valid options are 
-`agent_management`, `alerts_management`, `dashboard_management`, `embedded_charts`, `events_management`, `external_links_management`,
-`host_tag_management`, `metrics_management`, and `user_management`.
-* `assignees` - (Optional) A list of user groups or accounts to assign to this role. 
-
+* `permissions` - (Optional) A list of permissions to assign to this role. Valid options are:
+`agent_management`, `alerts_management`, `application_management`, `batch_query_priority`,
+`dashboard_management`, `derived_metrics_management`, `embedded_charts`, `events_management`,
+`external_links_management`, `host_tag_management`, `ingestion`, `metrics_management`,
+`monitored_application_service_management`, `saml_sso_management`, `token_management`,
+`user_management`.
+* `assignees` - (Optional) A list of user groups or accounts to assign to this role.
 
 ### Example
 
