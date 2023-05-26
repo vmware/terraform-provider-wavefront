@@ -94,7 +94,6 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	return &wavefrontClient{
 		client: *wFClient,
 	}, nil
-
 }
 
 var wfMutexKV = NewMutexKV()

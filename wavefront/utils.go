@@ -121,8 +121,7 @@ func getStringSlice(d *schema.ResourceData, key string) []string {
 }
 
 // setStringMap stores a map[string]string under a particular key.
-func setStringMap(
-	d *schema.ResourceData, key string, strMap map[string]string) error {
+func setStringMap(d *schema.ResourceData, key string, strMap map[string]string) error {
 	result := make(map[string]interface{}, len(strMap))
 	for k, v := range strMap {
 		result[k] = v
