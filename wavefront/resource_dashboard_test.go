@@ -878,6 +878,26 @@ func TestAccWavefrontDashboard_Markdown_ChartSettings(t *testing.T) {
 
 func testAccCheckWavefrontDashboardDestroy(s *terraform.State) error {
 	dashboards := testAccProvider.Meta().(*wavefrontClient).client.Dashboards()
+	users := testAccProvider.Meta().(*wavefrontClient).client.Users()
+	for _, rs := range s.RootModule().Resources {
+		if rs.Type != "wavefront_user" {
+			continue
+		}
+		results, err := users.Find(
+			[]*wavefront.SearchCondition{
+				{
+					Key:            "id",
+					Value:          rs.Primary.ID,
+					MatchingMethod: "EXACT",
+				},
+			})
+		if err != nil {
+			return fmt.Errorf("error finding Wavefront User. %s", err)
+		}
+		if len(results) > 0 {
+			return fmt.Errorf("user still exists")
+		}
+	}
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "wavefront_dashboard" {
 			continue
