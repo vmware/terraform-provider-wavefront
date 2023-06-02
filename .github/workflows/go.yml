@@ -1,0 +1,36 @@
+name: Go
+
+on:
+  push:
+    tags:
+    - v*
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ "1.18.x", "1.19.x", "1.20.x" ]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go }}
+
+    - name: Run gofmt
+      run: diff -u <(echo -n) <(gofmt -d .)
+
+    - name: Test
+      run: go test -timeout=120s -v -race -short
+
+    - name: Run go vet
+      run: go vet ./
