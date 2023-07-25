@@ -28,8 +28,6 @@ const (
 // Schema
 func resourceIngestionPolicy() *schema.Resource {
 
-	ingestionPolicyTagSchema := ingestionPolicyTagSchema()
-
 	return &schema.Resource{
 		Create: resourceIngestionPolicyCreate,
 		Read:   resourceIngestionPolicyRead,
@@ -75,7 +73,7 @@ func resourceIngestionPolicy() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Resource{
-					Schema: ingestionPolicyTagSchema,
+					Schema: ingestionPolicyTagSchema(),
 				},
 			},
 		},
@@ -96,49 +94,37 @@ func ingestionPolicyTagSchema() map[string]*schema.Schema {
 }
 
 func flattenIngestionPolicyAccountIDs(accounts []wavefront.IngestionPolicyAccount) []string {
-	var tfMaps []string
-	if accounts != nil && len(accounts) > 0 {
-		for _, v := range accounts {
-			tfMaps = append(tfMaps, v.ID)
-		}
+	tfMaps := make([]string, 0, len(accounts))
+	for _, v := range accounts {
+		tfMaps = append(tfMaps, v.ID)
 	}
 	return tfMaps
 }
 
 func flattenIngestionPolicyGroupIDs(groups []wavefront.IngestionPolicyGroup) []string {
-	var tfMaps []string
-	if groups != nil && len(groups) > 0 {
-		for _, v := range groups {
-			tfMaps = append(tfMaps, v.ID)
-		}
+	tfMaps := make([]string, 0, len(groups))
+	for _, v := range groups {
+		tfMaps = append(tfMaps, v.ID)
 	}
 	return tfMaps
 }
 
 func convertIngestionPolicyTagsToMap(raw []wavefront.IngestionPolicyTag) []map[string]string {
-	var tags = make([]map[string]string, 0)
-	if raw != nil {
-		for _, r := range raw {
-			tag := make(map[string]string)
-			tag[ipTagKey] = r.Key
-			tag[ipTagValue] = r.Value
-			tags = append(tags, tag)
-		}
+	var tags = make([]map[string]string, 0, len(raw))
+	for _, r := range raw {
+		tag := map[string]string{ipTagKey: r.Key, ipTagValue: r.Value}
+		tags = append(tags, tag)
 	}
 	return tags
 }
 
 // Helpers
 func parseIngestionPolicyTags(raw interface{}) []map[string]string {
-	var tags = make([]map[string]string, 0)
-	if raw != nil {
-		for _, r := range raw.([]interface{}) {
-			v := r.(map[string]interface{})
-			tag := make(map[string]string)
-			tag[ipTagKey] = v[ipTagKey].(string)
-			tag[ipTagValue] = v[ipTagValue].(string)
-			tags = append(tags, tag)
-		}
+	var tags = make([]map[string]string, 0, len(raw.([]interface{})))
+	for _, r := range raw.([]interface{}) {
+		v := r.(map[string]interface{})
+		tag := map[string]string{ipTagKey: v[ipTagKey].(string), ipTagValue: v[ipTagValue].(string)}
+		tags = append(tags, tag)
 	}
 	return tags
 }
@@ -193,9 +179,9 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 		return err
 	}
 
-	scope := ingestionPolicy.Scope
+	switch ingestionPolicy.Scope {
 
-	if scope == "ACCOUNT" {
+	case "ACCOUNT" :
 		accounts := flattenIngestionPolicyAccountIDs(ingestionPolicy.Accounts)
 		if len(accounts) < 1 {
 			return errors.New("ingestion policy account scope must have at least one associated account")
@@ -204,9 +190,8 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 				return err
 			}
 		}
-	}
 
-	if scope == "GROUP" {
+	case "GROUP" :
 		groups := flattenIngestionPolicyGroupIDs(ingestionPolicy.Groups)
 		if len(groups) < 1 {
 			return errors.New("ingestion policy group scope must have at least one associated group")
@@ -215,25 +200,25 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 				return err
 			}
 		}
-	}
 
-	if scope == "SOURCES" {
+	case "SOURCES" :
 		if err = d.Set(ipSourcesKey, ingestionPolicy.Sources); err != nil {
 			return err
 		}
-	}
 
-	if scope == "NAMESPACES" {
+
+	case "NAMESPACES" :
 		if err = d.Set(ipNamespacesKey, ingestionPolicy.Namespaces); err != nil {
 			return err
 		}
-	}
 
-	if scope == "TAGS" {
+
+	case "TAGS" :
 		tags := convertIngestionPolicyTagsToMap(ingestionPolicy.Tags)
 		if err = d.Set(ipTagsKey, tags); err != nil {
 			return err
 		}
+
 	}
 
 	return nil
@@ -249,6 +234,10 @@ func resourceIngestionPolicyUpdate(d *schema.ResourceData, meta interface{}) err
 		return nil
 	}
 
+	if err != nil {
+		return fmt.Errorf(""+"error finding ingestion policy, %s. %s", d.Id(), err)
+	}
+
 	policy.Name = d.Get(ipNameKey).(string)
 	policy.Description = d.Get(ipDescriptionKey).(string)
 	policy.Scope = d.Get(ipScopeKey).(string)
@@ -257,10 +246,6 @@ func resourceIngestionPolicyUpdate(d *schema.ResourceData, meta interface{}) err
 	policy.Sources = d.Get(ipSourcesKey).([]string)
 	policy.Namespaces = d.Get(ipNamespacesKey).([]string)
 	policy.Tags = d.Get(ipTagsKey).([]wavefront.IngestionPolicyTag)
-
-	if err != nil {
-		return fmt.Errorf(""+"error finding ingestion policy, %s. %s", d.Id(), err)
-	}
 
 	err = client.Update(policy)
 
