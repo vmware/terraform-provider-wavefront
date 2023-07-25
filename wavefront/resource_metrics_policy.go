@@ -268,7 +268,7 @@ func parsePolicyRules(raw interface{}) ([]wavefront.PolicyRuleRequest, error) {
 
 func parsePolicyTagsArr(raw interface{}) []wavefront.PolicyTag {
 	var arr []wavefront.PolicyTag
-	if raw != nil && len(raw.([]interface{})) > 0 {
+	if raw != nil {
 		for _, v := range raw.([]interface{}) {
 			kv := v.(map[string]interface{})
 			key := kv[policyTagKey].(string)
