@@ -181,7 +181,7 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 
 	switch ingestionPolicy.Scope {
 
-	case "ACCOUNT" :
+	case "ACCOUNT":
 		accounts := flattenIngestionPolicyAccountIDs(ingestionPolicy.Accounts)
 		if len(accounts) < 1 {
 			return errors.New("ingestion policy account scope must have at least one associated account")
@@ -191,7 +191,7 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 			}
 		}
 
-	case "GROUP" :
+	case "GROUP":
 		groups := flattenIngestionPolicyGroupIDs(ingestionPolicy.Groups)
 		if len(groups) < 1 {
 			return errors.New("ingestion policy group scope must have at least one associated group")
@@ -201,19 +201,17 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 			}
 		}
 
-	case "SOURCES" :
+	case "SOURCES":
 		if err = d.Set(ipSourcesKey, ingestionPolicy.Sources); err != nil {
 			return err
 		}
 
-
-	case "NAMESPACES" :
+	case "NAMESPACES":
 		if err = d.Set(ipNamespacesKey, ingestionPolicy.Namespaces); err != nil {
 			return err
 		}
 
-
-	case "TAGS" :
+	case "TAGS":
 		tags := convertIngestionPolicyTagsToMap(ingestionPolicy.Tags)
 		if err = d.Set(ipTagsKey, tags); err != nil {
 			return err
