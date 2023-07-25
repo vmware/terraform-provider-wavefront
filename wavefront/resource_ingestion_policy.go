@@ -164,7 +164,7 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 	}
 
 	if err != nil {
-		return fmt.Errorf("error finding ingestion policy, %s. %s", d.Id(), err)
+		return fmt.Errorf("an error happened fetching the ingestion policy, %s. %s", d.Id(), err)
 	}
 
 	if err = d.Set(ipNameKey, ingestionPolicy.Name); err != nil {
@@ -235,7 +235,7 @@ func resourceIngestionPolicyUpdate(d *schema.ResourceData, meta interface{}) err
 	}
 
 	if err != nil {
-		return fmt.Errorf(""+"error finding ingestion policy, %s. %s", d.Id(), err)
+		return fmt.Errorf("an error happened fetching the ingestion policy, %s. %s", d.Id(), err)
 	}
 
 	policy.Name = d.Get(ipNameKey).(string)
