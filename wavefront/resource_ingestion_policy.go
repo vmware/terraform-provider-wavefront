@@ -185,20 +185,18 @@ func resourceIngestionPolicyRead(d *schema.ResourceData, meta interface{}) error
 		accounts := flattenIngestionPolicyAccountIDs(ingestionPolicy.Accounts)
 		if len(accounts) < 1 {
 			return errors.New("ingestion policy account scope must have at least one associated account")
-		} else {
-			if err = d.Set(ipAccountsKey, accounts); err != nil {
-				return err
-			}
+		}
+		if err = d.Set(ipAccountsKey, accounts); err != nil {
+			return err
 		}
 
 	case "GROUP":
 		groups := flattenIngestionPolicyGroupIDs(ingestionPolicy.Groups)
 		if len(groups) < 1 {
 			return errors.New("ingestion policy group scope must have at least one associated group")
-		} else {
-			if err = d.Set(ipGroupsKey, groups); err != nil {
-				return err
-			}
+		}
+		if err = d.Set(ipGroupsKey, groups); err != nil {
+			return err
 		}
 
 	case "SOURCES":
