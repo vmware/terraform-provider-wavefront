@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -104,7 +104,7 @@ func resourceAlert() *schema.Resource {
 	}
 }
 
-func validateAlertTarget(val interface{}, key string) (warnings []string, errors []error) {
+func validateAlertTarget(val interface{}, _ string) (warnings []string, errors []error) {
 	target := val.(string)
 	if target == "" {
 		return nil, nil

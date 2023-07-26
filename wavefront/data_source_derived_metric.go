@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -225,9 +225,5 @@ func setDerivedMetricAttributes(d *schema.ResourceData, derivedMetric wavefront.
 	if err := d.Set(createdEpochMillisKey, derivedMetric.CreatedEpochMillis); err != nil {
 		return err
 	}
-	if err := d.Set(updatedEpochMillisKey1, derivedMetric.UpdatedEpochMillis); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(updatedEpochMillisKey1, derivedMetric.UpdatedEpochMillis)
 }

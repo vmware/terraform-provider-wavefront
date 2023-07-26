@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -50,12 +50,12 @@ func getAssignees(d *schema.ResourceData) ([]string, []string) {
 }
 
 func getChangedLists(d *schema.ResourceData, key string) ([]string, []string) {
-	old, new := d.GetChange(key)
+	oldC, newC := d.GetChange(key)
 	var oldP, newP []string
-	for _, o := range old.(*schema.Set).List() {
+	for _, o := range oldC.(*schema.Set).List() {
 		oldP = append(oldP, fmt.Sprint(o))
 	}
-	for _, n := range new.(*schema.Set).List() {
+	for _, n := range newC.(*schema.Set).List() {
 		newP = append(newP, fmt.Sprint(n))
 	}
 

@@ -22,6 +22,6 @@ func TestAccEventIDRequired(t *testing.T) {
 }
 
 const testAccEventIDRequiredFailConfig = `
-data "wavefront_events" "test_event" {
+data "wavefront_event" "test_event" {
 }
 `

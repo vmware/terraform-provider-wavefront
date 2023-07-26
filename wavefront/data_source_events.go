@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -139,11 +139,7 @@ func dataSourceEventsRead(d *schema.ResourceData, m interface{}) error {
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 
-	if err := d.Set("events", flattenEvents(allEvents)); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set("events", flattenEvents(allEvents))
 }
 
 func flattenEvents(events []*wavefront.Event) interface{} {

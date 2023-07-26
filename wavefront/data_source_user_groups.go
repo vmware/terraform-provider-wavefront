@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -79,10 +79,7 @@ func dataSourceUserGroupsRead(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("Response is invalid JSON")
 	}
 
-	if err := d.Set(userGroupsListKey, flattenUserGroups(allGroups)); err != nil {
-		return err
-	}
-	return nil
+	return d.Set(userGroupsListKey, flattenUserGroups(allGroups))
 }
 
 func flattenUserGroups(users []*wavefront.UserGroup) []map[string]interface{} {

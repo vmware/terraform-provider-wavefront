@@ -3,7 +3,7 @@ package wavefront
 import (
 	"fmt"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -94,7 +94,6 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	return &wavefrontClient{
 		client: *wFClient,
 	}, nil
-
 }
 
 var wfMutexKV = NewMutexKV()

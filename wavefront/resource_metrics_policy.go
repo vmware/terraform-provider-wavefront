@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -40,10 +40,7 @@ func resourceMetricsPolicyRead(d *schema.ResourceData, meta interface{}) error {
 	if err := d.Set(updaterIDKey, metricsPolicy.UpdaterId); err != nil {
 		return err
 	}
-	if err := d.Set(updatedEpochMillisKey, metricsPolicy.UpdatedEpochMillis); err != nil {
-		return err
-	}
-	return nil
+	return d.Set(updatedEpochMillisKey, metricsPolicy.UpdatedEpochMillis)
 }
 
 func flattenPolicyRules(policy []wavefront.PolicyRule) []map[string]interface{} {
@@ -199,7 +196,7 @@ func policyRulesSchema() map[string]*schema.Schema {
 	}
 }
 
-func validateAccessTypeVal(v interface{}, p cty.Path) diag.Diagnostics {
+func validateAccessTypeVal(v interface{}, _ cty.Path) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	accessType := fmt.Sprintf("%v", v)
@@ -271,7 +268,7 @@ func parsePolicyRules(raw interface{}) ([]wavefront.PolicyRuleRequest, error) {
 
 func parsePolicyTagsArr(raw interface{}) []wavefront.PolicyTag {
 	var arr []wavefront.PolicyTag
-	if raw != nil && len(raw.([]interface{})) > 0 {
+	if raw != nil {
 		for _, v := range raw.([]interface{}) {
 			kv := v.(map[string]interface{})
 			key := kv[policyTagKey].(string)
