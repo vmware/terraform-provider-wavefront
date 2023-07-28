@@ -229,6 +229,12 @@ The `parameter_details` mapping supports the following:
 * `dynamic_field_type` - (Optional) For `DYNAMIC` parameter types, the type of the field. Valid options are `SOURCE`,
   `SOURCE_TAG`, `METRIC_NAME`, `TAG_KEY`, and `MATCHING_SOURCE_TAG`.
 
+### Chart Attributes
+
+The `chart_attribute` mapping is a raw JSON object that supports the full API.
+The easiest way to identify the configuration you want, is to edit your dashboard in the UI,
+view it as JSON and copy the chartAttributes section.
+
 ### Example
 
 ```hcl
@@ -288,6 +294,18 @@ resource "wavefront_dashboard" "chart_settings_dash" {
           y1_unit_autoscaling                   = true
           y1_units                              = "units"
         }
+        chart_attribute = <<-EOT
+          {
+            "dashboardLinks": {
+              "*": {
+                "variables": {
+                  "xxx": "xxx"
+                },
+                "destination": "/dashboards/xxxx"
+              }
+            }
+          }
+        EOT
       }
     }
   }

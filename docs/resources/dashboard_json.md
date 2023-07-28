@@ -80,6 +80,16 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
                     "fixedLegendFilterField": "CURRENT",
                     "plainMarkdownContent": "markdown content"
                   },
+                  "chartAttributes": {
+                    "dashboardLinks": {
+                      "*": {
+                        "variables": {
+                          "xxx": "xxx"
+                        },
+                        "destination": "/dashboards/xxxx"
+                      }
+                    }
+                  },
                   "summarization": "MEAN"
                 }
               ],
