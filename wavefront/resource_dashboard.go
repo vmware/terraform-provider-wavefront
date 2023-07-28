@@ -1048,7 +1048,7 @@ func resourceDashboardCreate(d *schema.ResourceData, meta interface{}) error {
 	if d.HasChanges("can_view", "can_modify") {
 		err = dashboards.SetACL(dashboard.ID, canView, canModify)
 		if err != nil {
-			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
+			return fmt.Errorf("error setting ACL on Dashboard %s. %s", d.Get("name"), err)
 		}
 	}
 
