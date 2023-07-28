@@ -1,3 +1,8 @@
+## 4.1.0 (Jul 28, 2023)
+FEATURES:
+
+* Support `no_default_events` chart setting.
+
 ## 4.0.0 (Jul 27, 2023)
 BUG FIX:
 
