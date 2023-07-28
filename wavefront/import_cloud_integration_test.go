@@ -3,7 +3,7 @@ package wavefront
 import (
 	"testing"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
@@ -59,12 +59,6 @@ func TestAccCloudIntegration_NewRelic(t *testing.T) {
 	var record wavefront.CloudIntegration
 	resourceName := "wavefront_cloud_integration_newrelic.newrelic"
 	testCloudIntegrationCommon(t, resourceName, record, testAccCheckWavefrontCloudIntegrationNewRelicBasic())
-}
-
-func TestAccCloudIntegration_Tesla(t *testing.T) {
-	var record wavefront.CloudIntegration
-	resourceName := "wavefront_cloud_integration_tesla.tesla"
-	testCloudIntegrationCommon(t, resourceName, record, testAccCheckWavefrontCloudIntegrationTeslaBasic())
 }
 
 func testCloudIntegrationCommon(t *testing.T, resourceName string, record wavefront.CloudIntegration, config string) {

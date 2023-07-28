@@ -25,10 +25,10 @@ resource "wavefront_derived_metric" "derived" {
 
 The following arguments are supported:
 
-* `name` - (Required) The name of the Derived Metric in Wavefront
-* `query` - (Required) A Wavefront query that is evaluated at regular intervals (default `1m`)
-* `minutes` - (Required) How frequently the query generating the derived metric is run
-* `additional_information` - (Optional) User-supplied additional explanatory information for the derived metric
+* `name` - (Required) The name of the Derived Metric in Wavefront.
+* `query` - (Required) A Wavefront query that is evaluated at regular intervals (default is 1 minute).
+* `minutes` - (Required) How frequently the query generating the derived metric is run.
+* `additional_information` - (Optional) User-supplied additional explanatory information for the derived metric.
 * `tags` - (Optional) A set of tags to assign to this resource.
 
 ### Example
@@ -48,7 +48,7 @@ resource "wavefront_derived_metric" "derived" {
 
 ## Import
 
-Derived Metrics can be imported using the `id`, e.g.
+Derived Metrics can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_derived_metric.derived_metric 1577102900578

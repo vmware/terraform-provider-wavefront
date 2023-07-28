@@ -5,7 +5,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
@@ -34,7 +34,6 @@ func TestAccWavefrontUser_BasicUser(t *testing.T) {
 		},
 	})
 }
-
 func TestAccWavefrontUser_BasicUserChangeGroups(t *testing.T) {
 	var record wavefront.User
 
@@ -112,14 +111,11 @@ func TestAccWavefrontUser_BasicUserChangeEmail(t *testing.T) {
 }
 
 func testAccCheckWavefrontUserDestroy(s *terraform.State) error {
-
 	users := testAccProvider.Meta().(*wavefrontClient).client.Users()
-
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "wavefront_user" {
 			continue
 		}
-
 		results, err := users.Find(
 			[]*wavefront.SearchCondition{
 				{
@@ -135,24 +131,18 @@ func testAccCheckWavefrontUserDestroy(s *terraform.State) error {
 			return fmt.Errorf("user still exists")
 		}
 	}
-
 	return nil
 }
-
 func testAccCheckWavefrontUserExists(n string, user *wavefront.User) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
-
 		if !ok {
 			return fmt.Errorf("not found: %s", n)
 		}
-
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("no Record ID is set")
 		}
-
 		users := testAccProvider.Meta().(*wavefrontClient).client.Users()
-
 		results, err := users.Find(
 			[]*wavefront.SearchCondition{
 				{
@@ -171,13 +161,10 @@ func testAccCheckWavefrontUserExists(n string, user *wavefront.User) resource.Te
 		if *results[0].ID != rs.Primary.ID {
 			return fmt.Errorf("user not found")
 		}
-
 		*user = *results[0]
-
 		return nil
 	}
 }
-
 func testAccCheckWavefrontUserAttributes(user *wavefront.User, permissions []string, groups []string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		for _, v := range permissions {

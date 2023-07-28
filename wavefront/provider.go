@@ -3,7 +3,7 @@ package wavefront
 import (
 	"fmt"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -42,20 +42,40 @@ func Provider() *schema.Provider {
 			"wavefront_cloud_integration_gcp":                resourceCloudIntegrationGcp(),
 			"wavefront_cloud_integration_gcp_billing":        resourceCloudIntegrationGcpBilling(),
 			"wavefront_cloud_integration_newrelic":           resourceCloudIntegrationNewRelic(),
-			"wavefront_cloud_integration_tesla":              resourceCloudIntegrationTesla(),
 			"wavefront_dashboard":                            resourceDashboard(),
 			"wavefront_dashboard_json":                       resourceDashboardJSON(),
 			"wavefront_derived_metric":                       resourceDerivedMetric(),
 			"wavefront_external_link":                        resourceExternalLink(),
 			"wavefront_ingestion_policy":                     resourceIngestionPolicy(),
 			"wavefront_maintenance_window":                   resourceMaintenanceWindow(),
+			"wavefront_metrics_policy":                       resourceMetricsPolicy(),
 			"wavefront_service_account":                      resourceServiceAccount(),
 			"wavefront_role":                                 resourceRole(),
 			"wavefront_user":                                 resourceUser(),
 			"wavefront_user_group":                           resourceUserGroup(),
+			"wavefront_event":                                resourceEvent(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"wavefront_default_user_group": dataSourceDefaultUserGroup(),
+			"wavefront_default_user_group":     dataSourceDefaultUserGroup(),
+			"wavefront_metrics_policy":         dataSourceMetricsPolicy(),
+			"wavefront_role":                   dataSourceRole(),
+			"wavefront_roles":                  dataSourceRoles(),
+			"wavefront_user":                   dataSourceUser(),
+			"wavefront_user_group":             dataSourceUserGroup(),
+			"wavefront_user_groups":            dataSourceUserGroups(),
+			"wavefront_users":                  dataSourceUsers(),
+			"wavefront_external_links":         dataSourceExternalLinks(),
+			"wavefront_external_link":          dataSourceExternalLink(),
+			"wavefront_maintenance_window_all": dataSourceMaintenanceWindows(),
+			"wavefront_maintenance_window":     dataSourceMaintenanceWindow(),
+			"wavefront_alerts":                 dataSourceAlerts(),
+			"wavefront_alert":                  dataSourceAlert(),
+			"wavefront_derived_metrics":        dataSourceDerivedMetrics(),
+			"wavefront_derived_metric":         dataSourceDerivedMetric(),
+			"wavefront_event":                  dataSourceEvent(),
+			"wavefront_events":                 dataSourceEvents(),
+			"wavefront_dashboard":              dataSourceDashboard(),
+			"wavefront_dashboards":             dataSourceDashboards(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -74,7 +94,6 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	return &wavefrontClient{
 		client: *wFClient,
 	}, nil
-
 }
 
 var wfMutexKV = NewMutexKV()
@@ -89,5 +108,4 @@ const (
 	wfGcp              string = "GCP"
 	wfGcpBilling       string = "GCPBILLING"
 	wfNewRelic         string = "NEWRELIC"
-	wfTesla            string = "TESLA"
 )

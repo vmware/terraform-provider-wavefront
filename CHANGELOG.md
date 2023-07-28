@@ -1,8 +1,60 @@
-## 3.1.0 (December 22, 2021)
-
+## 4.1.0 (Jul 28, 2023)
 FEATURES:
 
-* **New Resource:** `no_default_events`
+* Support `no_default_events` chart setting.
+
+## 4.0.0 (Jul 27, 2023)
+BUG FIX:
+
+* Ingestion Policy API had changed, breaking the go client. The client has been fixed and this implements those new changes in the provider.
+
+## 3.6.0 (May 19, 2023)
+BUG FIXES:
+
+* Fixed bugs related to resource_alert and updated the documentation.
+
+## 3.5.0 (March 30, 2023)
+ENHANCEMENT:
+
+* Upgrade net, text and sys dependencies for security fix.
+
+## 3.4.0 (November 9, 2022)
+ENHANCEMENT:
+
+* Removed Tesla Cloud Integration
+* Added documentation for calling dashboard sections from external file.
+
+## 3.3.0 (October 21, 2022)
+ENHANCEMENT:
+
+* Added support for Data Sources for Alert, Event, Dashboard, Derived Metric, Maintenance Window, External Links. 
+* Added support for Data Source for Role and UserGroup by id.
+* Added support for ProcessRateMinutes property in Alert Resource.
+* Fixed integration tests.
+
+## 3.2.0 (September 2, 2022)
+ENHANCEMENT:
+
+* Upgraded Terraform-plugin-sdk/v2 from 2.6.1 to 2.21.0 for security vulnerabilty fix.
+* Upgraded go version from 1.16 to 1.17 for security vulnerabilty fix.
+* Using email instead of id for wavefront_user.
+
+## 3.1.0 (May 23, 2022)
+ENHANCEMENT:
+
+* Support for Metrics Policy & Various Data Sources
+
+## 3.0.2 (March 23, 2021)
+
+DOCUMENTATION:
+
+* Fixed a variety of typos, punctuation, and grammatical errors.
+
+## 3.0.1 (March 10, 2021)
+BUG FIXES:
+
+* Fix incompatibility issue between threshold alerts and new alert experience.
+* Update command in CONTRIBUTING.md.
 
 ## 3.0.0 (June 10, 2021)
 

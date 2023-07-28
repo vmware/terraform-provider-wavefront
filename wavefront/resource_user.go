@@ -2,8 +2,9 @@ package wavefront
 
 import (
 	"fmt"
+	"strings"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -94,7 +95,14 @@ func resourceUserRead(d *schema.ResourceData, meta interface{}) error {
 
 	user := results[0]
 
-	d.Set("email", user.ID)
+	emailChunks := strings.Split(*user.ID, fmt.Sprintf("+%s", user.Customer))
+	if len(emailChunks) == 2 {
+		email := fmt.Sprintf("%s%s", emailChunks[0], emailChunks[1])
+		d.Set("email", email)
+	} else {
+		d.Set("email", user.ID)
+	}
+
 	d.Set("customer", user.Customer)
 
 	encodePermissions(d, user)
@@ -242,7 +250,6 @@ func resourceDecodeUserPermissions(d *schema.ResourceData, user interface{}) err
 		u.Permissions = permissions
 	default:
 		return fmt.Errorf("unknown type attempted to cast %T", v)
-
 	}
 
 	return nil

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -39,7 +39,7 @@ func resourceAlert() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				StateFunc:        trimSpaces,
-				DiffSuppressFunc: suppressSpaces,
+				DiffSuppressFunc: suppressAlertConditionOnType,
 			},
 			"conditions": {
 				Type:     schema.TypeMap,
@@ -59,6 +59,7 @@ func resourceAlert() *schema.Resource {
 			"display_expression": {
 				Type:             schema.TypeString,
 				Optional:         true,
+				StateFunc:        trimSpaces,
 				DiffSuppressFunc: suppressSpaces,
 			},
 			"minutes": {
@@ -94,11 +95,16 @@ func resourceAlert() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Computed: true,
 			},
+			"process_rate_minutes": {
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  5,
+			},
 		},
 	}
 }
 
-func validateAlertTarget(val interface{}, key string) (warnings []string, errors []error) {
+func validateAlertTarget(val interface{}, _ string) (warnings []string, errors []error) {
 	target := val.(string)
 	if target == "" {
 		return nil, nil
@@ -119,6 +125,20 @@ func validateAlertTarget(val interface{}, key string) (warnings []string, errors
 	return warnings, errors
 }
 
+func suppressAlertConditionOnType(k, old, new string, d *schema.ResourceData) bool {
+	alertType := strings.ToUpper(d.Get("alert_type").(string))
+
+	// after v2 alerts, `condition` has been force sync with `display_expression`
+	// in multi-threshold alert
+	// terraform does not support to infer attribute value from other attributes
+	// thus we suppress the diff check for `condition` in multi-threshold alert.
+	if alertType == wavefront.AlertTypeThreshold {
+		return true
+	}
+
+	return suppressSpaces(k, old, new, d)
+}
+
 func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 	alerts := meta.(*wavefrontClient).client.Alerts()
 
@@ -132,6 +152,7 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 		ResolveAfterMinutes:                d.Get("resolve_after_minutes").(int),
 		NotificationResendFrequencyMinutes: d.Get("notification_resend_frequency_minutes").(int),
 		Tags:                               tags,
+		CheckingFrequencyInMinutes:         d.Get("process_rate_minutes").(int),
 	}
 
 	err := validateAlertConditions(a, d)
@@ -174,20 +195,25 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 	// Use the Wavefront ID as the Terraform ID
 	d.SetId(*tmpAlert.ID)
 	d.Set("name", tmpAlert.Name)
-	d.Set("target", tmpAlert.Target)
+	if tmpAlert.Target != "" && tmpAlert.AlertType == wavefront.AlertTypeClassic {
+		d.Set("target", tmpAlert.Target)
+	}
+	if tmpAlert.Severity != "" && tmpAlert.AlertType == wavefront.AlertTypeClassic {
+		d.Set("severity", tmpAlert.Severity)
+	}
 	d.Set("condition", trimSpaces(tmpAlert.Condition))
 	d.Set("additional_information", trimSpaces(tmpAlert.AdditionalInfo))
 	d.Set("display_expression", trimSpaces(tmpAlert.DisplayExpression))
 	d.Set("minutes", tmpAlert.Minutes)
 	d.Set("resolve_after_minutes", tmpAlert.ResolveAfterMinutes)
 	d.Set("notification_resend_frequency_minutes", tmpAlert.NotificationResendFrequencyMinutes)
-	d.Set("severity", tmpAlert.Severity)
 	d.Set("tags", tmpAlert.Tags)
 	d.Set("alert_type", tmpAlert.AlertType)
 	d.Set("conditions", tmpAlert.Conditions)
 	d.Set("threshold_targets", tmpAlert.Targets)
 	d.Set("can_view", tmpAlert.ACL.CanView)
 	d.Set("can_modify", tmpAlert.ACL.CanModify)
+	d.Set("process_rate_minutes", tmpAlert.CheckingFrequencyInMinutes)
 
 	return nil
 }
@@ -215,6 +241,7 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	a.ResolveAfterMinutes = d.Get("resolve_after_minutes").(int)
 	a.NotificationResendFrequencyMinutes = d.Get("notification_resend_frequency_minutes").(int)
 	a.Tags = tags
+	a.CheckingFrequencyInMinutes = d.Get("process_rate_minutes").(int)
 
 	err = validateAlertConditions(&a, d)
 	if err != nil {
@@ -262,6 +289,11 @@ func validateAlertConditions(a *wavefront.Alert, d *schema.ResourceData) error {
 	alertType := strings.ToUpper(d.Get("alert_type").(string))
 	if alertType == wavefront.AlertTypeThreshold {
 		a.AlertType = wavefront.AlertTypeThreshold
+
+		// v2 alerts now force sync `condition` the same as `display_expression`
+		// for multi-threshold alerts
+		a.Condition = d.Get("display_expression").(string)
+
 		if conditions, ok := d.GetOk("conditions"); ok {
 			a.Conditions = trimSpacesMap(conditions.(map[string]interface{}))
 			err := validateThresholdLevels(a.Conditions)

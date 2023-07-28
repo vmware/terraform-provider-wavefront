@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
@@ -56,7 +56,7 @@ func TestAccWavefrontRole_AdvancedRole(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "name", "Test Role"),
 					resource.TestCheckResourceAttr(resourceName, "description", "Test Role Description"),
 					resource.TestCheckResourceAttr(resourceName, "permissions.#", "2"),
-					resource.TestCheckNoResourceAttr(resourceName, "assignees"),
+					resource.TestCheckResourceAttr(resourceName, "assignees.#", "0"),
 				),
 			},
 		},
@@ -98,7 +98,6 @@ resource "wavefront_user_group" "user_group" {
   name        = "User Group"
   description = "User Group Description"
 }
-
 
 resource "wavefront_role" "role" {
   name        = "Test Role"

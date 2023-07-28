@@ -3,7 +3,7 @@ package wavefront
 import (
 	"testing"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
@@ -21,8 +21,7 @@ func TestAccUser_Basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckWavefrontUserExists("wavefront_user.basic", &record),
 				),
-			},
-			{
+			}, {
 				ResourceName:      resourceName,
 				ImportState:       true,
 				ImportStateVerify: true,

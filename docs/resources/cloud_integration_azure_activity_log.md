@@ -2,13 +2,13 @@
 layout: "wavefront"
 page_title: "Wavefront: Cloud Integration Azure Activity Logs"
 description: |-
-  Provides a Wavefront Cloud Integration for Azure Activity Logs. This allows azure activity log cloud integrations to be created,
+  Provides a Wavefront Cloud Integration for Azure Activity Logs. This allows Azure activity log cloud integrations to be created,
   updated, and deleted.
 ---
 
 # Resource : wavefront_cloud_integration_azure_activity_log
 
-Provides a Wavefront Cloud Integration for Azure Activity Logs. This allows azure activity log cloud integrations to be created,
+Provides a Wavefront Cloud Integration for Azure Activity Logs. This allows Azure activity log cloud integrations to be created,
 updated, and deleted.
 
 ## Example usage
@@ -27,15 +27,15 @@ resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 
 The following arguments are supported:
 
-* `service` - (Required) A value denoting which cloud service this service integrates with
-* `name` - (Required) The human-readable name of this integration
-* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration
-* `force_save` - (Optional) Forces this resource to save, even if errors are present
-* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service
-* `client_secret` - (Required) Client secret for an Azure service account within your project
-* `client_id` - (Required) Client id for an azure service account within your project
-* `tenant` - (Required)  Tenant Id for an Azure service account within your project
-* `category_filter` - (Optional) A list of Azure services (such as Microsoft.Compute/virtualMachines) from which to pull metrics
+* `service` - (Required) A value denoting which cloud service this service integrates with.
+* `name` - (Required) The human-readable name of this integration.
+* `additional_tags` - (Optional) A list of point tag key-values to add to every point ingested using this integration.
+* `force_save` - (Optional) Forces this resource to save, even if errors are present.
+* `service_refresh_rate_in_minutes` - (Optional) How often, in minutes, to refresh the service.
+* `client_secret` - (Required) Client secret for an Azure service account within your project.
+* `client_id` - (Required) Client ID for an Azure service account within your project.
+* `tenant` - (Required)  Tenant ID for an Azure service account within your project.
+* `category_filter` - (Optional) A list of Azure services (such as Microsoft.Compute/virtualMachines) from which to pull metrics.
 
 ### Example
 
@@ -58,7 +58,7 @@ resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 
 ## Import
 
-Azure Activity Log Cloud Integrations can be imported using the `id`, e.g.
+Azure Activity Log Cloud Integrations can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_cloud_integration_azure_activity_log.azure_al a411c16b-3cf7-4f03-bf11-8ca05aab898d

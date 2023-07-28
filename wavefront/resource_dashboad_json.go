@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -39,6 +39,7 @@ func buildDashboardJSON(d *schema.ResourceData) (*wavefront.Dashboard, error) {
 
 	// set url name as the resource ID
 	dashboard.ID = dashboard.Url
+	setDefaultSummarization(&dashboard)
 	return &dashboard, nil
 }
 
@@ -126,7 +127,7 @@ func resourceDashboardJSONDelete(d *schema.ResourceData, meta interface{}) error
 	return nil
 }
 
-func ValidateDashboardJSON(val interface{}, key string) ([]string, []error) {
+func ValidateDashboardJSON(val interface{}, _ string) ([]string, []error) {
 	dashboardJSONString := val.(string)
 	var dashboard wavefront.Dashboard
 	err := dashboard.UnmarshalJSON([]byte(dashboardJSONString))
@@ -159,4 +160,16 @@ func NormalizeDashboardJSON(val interface{}) string {
 
 	ret, _ := dashboard.MarshalJSON()
 	return string(ret)
+}
+
+func setDefaultSummarization(dashboard *wavefront.Dashboard) {
+	for i := 0; i < len(dashboard.Sections); i++ {
+		for j := 0; j < len(dashboard.Sections[i].Rows); j++ {
+			for k := 0; k < len(dashboard.Sections[i].Rows[j].Charts); k++ {
+				if dashboard.Sections[i].Rows[j].Charts[k].Summarization == "" {
+					dashboard.Sections[i].Rows[j].Charts[k].Summarization = "MEAN"
+				}
+			}
+		}
+	}
 }

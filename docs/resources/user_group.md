@@ -22,8 +22,8 @@ resource "wavefront_user_group" "basic" {
 
 The following arguments are supported:
 
-* `name` - (Required) The name of the user group
-* `description` - (Required) A short description of the user group
+* `name` - (Required) The name of the user group.
+* `description` - (Required) A short description of the user group.
 
 ### Example
 
@@ -36,7 +36,7 @@ resource "wavefront_user_group" "basic" {
 
 ## Import
 
-User Groups can be imported using the `id`, e.g.
+User Groups can be imported by using the `id`, e.g.:
 
 ```
 $ terraform import wavefront_user_group.some_group a411c16b-3cf7-4f03-bf11-8ca05aab898d
