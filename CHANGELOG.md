@@ -1,3 +1,8 @@
+## 4.0.0 (Jul 27, 2023)
+BUG FIX:
+
+* Ingestion Policy API had changed, breaking the go client. The client has been fixed and this implements those new changes in the provider.
+
 ## 3.6.0 (May 19, 2023)
 BUG FIXES:
 
