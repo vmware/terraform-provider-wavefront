@@ -24,12 +24,10 @@ lint:
 	golangci-lint run ./...
 
 test: fmtcheck
-	go test -i $(TEST) || exit 1
-	echo $(TEST) | \
-		xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
+	go test $(TEST) -v $(TESTARGS) -timeout=120s -short -race
 
 testacc: fmtcheck
-	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
+	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m -run '^TestAcc'
 
 test-compile:
 	@if [ "$(TEST)" = "./..." ]; then \
@@ -38,6 +36,9 @@ test-compile:
 		exit 1; \
 	fi
 	go test -c $(TEST) $(TESTARGS)
+
+tidy:
+	go mod tidy
 
 vet:
 	@echo "go vet ."
@@ -66,4 +67,4 @@ ifeq (,$(wildcard $(GOPATH)/src/$(WEBSITE_REPO)))
 endif
 	@$(MAKE) -C $(GOPATH)/src/$(WEBSITE_REPO) website-provider-test PROVIDER_PATH=$(shell pwd) PROVIDER_NAME=$(PKG_NAME)
 
-.PHONY: build test testacc vet fmt fmtcheck lint tools test-compile website website-lint website-test
+.PHONY: build test testacc vet fmt fmtcheck lint tools test-compile tidy website website-lint website-test

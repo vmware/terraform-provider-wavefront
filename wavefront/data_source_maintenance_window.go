@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -206,9 +206,5 @@ func setMaintenanceWindowAttributes(d *schema.ResourceData, maintenanceWindow *w
 	if err := d.Set(relevantHostNamesKey, maintenanceWindow.RelevantHostNames); err != nil {
 		return err
 	}
-	if err := d.Set(relevantHostTagsKey, maintenanceWindow.RelevantHostTags); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(relevantHostTagsKey, maintenanceWindow.RelevantHostTags)
 }
