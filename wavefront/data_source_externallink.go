@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -143,9 +143,5 @@ func setExternalLinkAttributes(d *schema.ResourceData, extLink wavefront.Externa
 	if err := d.Set(sourceFilterRegexKey, extLink.SourceFilterRegex); err != nil {
 		return err
 	}
-	if err := d.Set(pointTagFilterRegexesKey, extLink.PointTagFilterRegexes); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(pointTagFilterRegexesKey, extLink.PointTagFilterRegexes)
 }

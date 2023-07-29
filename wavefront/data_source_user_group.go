@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -74,9 +74,5 @@ func setUserGroupAttributes(d *schema.ResourceData, userGroup wavefront.UserGrou
 	if err := d.Set(rolesKey, flattenUserGroupRoles(userGroup.Roles)); err != nil {
 		return err
 	}
-	if err := d.Set(usersKey, userGroup.Users); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(usersKey, userGroup.Users)
 }

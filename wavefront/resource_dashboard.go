@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -398,6 +398,11 @@ func resourceDashboard() *schema.Resource {
 					ValidateFunc:     validateChartAttributeJSON,
 				},
 				"chart_setting": chartSetting,
+				"no_default_events": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: "Show events related to the sources included in queries",
+				},
 			},
 		},
 	}
@@ -591,6 +596,7 @@ func buildTerraformChart(wavefrontChart wavefront.Chart) map[string]interface{} 
 	chart["summarization"] = wavefrontChart.Summarization
 	chart["chart_attribute"] = string(wavefrontChart.ChartAttributes)
 	chart["chart_setting"] = []interface{}{buildTerraformChartSettings(wavefrontChart.ChartSettings)}
+	chart["no_default_events"] = wavefrontChart.NoDefaultEvents
 	return chart
 }
 
@@ -720,6 +726,7 @@ func buildCharts(terraformCharts *[]interface{}) *[]wavefront.Chart {
 			Summarization:   t["summarization"].(string),
 			ChartAttributes: json.RawMessage(t["chart_attribute"].(string)),
 			ChartSettings:   *buildChartSettings(&terraformChartSettings),
+			NoDefaultEvents: t["no_default_events"].(bool),
 		}
 	}
 
@@ -1041,7 +1048,7 @@ func resourceDashboardCreate(d *schema.ResourceData, meta interface{}) error {
 	if d.HasChanges("can_view", "can_modify") {
 		err = dashboards.SetACL(dashboard.ID, canView, canModify)
 		if err != nil {
-			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
+			return fmt.Errorf("error setting ACL on Dashboard %s. %s", d.Get("name"), err)
 		}
 	}
 

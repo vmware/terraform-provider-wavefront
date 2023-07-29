@@ -1,3 +1,23 @@
+## 4.1.0 (Jul 28, 2023)
+FEATURES:
+
+* Support `no_default_events` chart setting.
+
+## 4.0.0 (Jul 27, 2023)
+BUG FIX:
+
+* Ingestion Policy API had changed, breaking the go client. The client has been fixed and this implements those new changes in the provider.
+
+## 3.6.0 (May 19, 2023)
+BUG FIXES:
+
+* Fixed bugs related to resource_alert and updated the documentation.
+
+## 3.5.0 (March 30, 2023)
+ENHANCEMENT:
+
+* Upgrade net, text and sys dependencies for security fix.
+
 ## 3.4.0 (November 9, 2022)
 ENHANCEMENT:
 

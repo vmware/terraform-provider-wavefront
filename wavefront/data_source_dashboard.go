@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -895,11 +895,7 @@ func setDashboardAttributes(d *schema.ResourceData, dashboard wavefront.Dashboar
 	if err := d.Set(parametersKey, convertStructToMap(dashboard.Parameters)); err != nil {
 		return err
 	}
-	if err := d.Set(parameterDetailsKey, flattenParameterDetails(dashboard.ParameterDetails)); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set(parameterDetailsKey, flattenParameterDetails(dashboard.ParameterDetails))
 }
 
 func convertStructToMap(parameters struct{}) map[string]interface{} {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
@@ -203,6 +203,8 @@ func TestBuildCharts(t *testing.T) {
 	}
 	chart0["chart_attribute"] = "null"
 	chart0["base"] = 0
+	chart0["no_default_events"] = true
+
 	chart1 := make(map[string]interface{})
 	chart1["name"] = "chart 1"
 	chart1["description"] = "desc"
@@ -216,6 +218,8 @@ func TestBuildCharts(t *testing.T) {
 	}
 	chart1["chart_attribute"] = `{ "dashboardLayout": { "x": 0, "y": 0, "w": 8, "h": 7} }`
 	chart1["base"] = 10
+	chart1["no_default_events"] = false
+
 	charts := []interface{}{
 		chart0,
 		chart1,
@@ -878,6 +882,26 @@ func TestAccWavefrontDashboard_Markdown_ChartSettings(t *testing.T) {
 
 func testAccCheckWavefrontDashboardDestroy(s *terraform.State) error {
 	dashboards := testAccProvider.Meta().(*wavefrontClient).client.Dashboards()
+	users := testAccProvider.Meta().(*wavefrontClient).client.Users()
+	for _, rs := range s.RootModule().Resources {
+		if rs.Type != "wavefront_user" {
+			continue
+		}
+		results, err := users.Find(
+			[]*wavefront.SearchCondition{
+				{
+					Key:            "id",
+					Value:          rs.Primary.ID,
+					MatchingMethod: "EXACT",
+				},
+			})
+		if err != nil {
+			return fmt.Errorf("error finding Wavefront User. %s", err)
+		}
+		if len(results) > 0 {
+			return fmt.Errorf("user still exists")
+		}
+	}
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "wavefront_dashboard" {
 			continue

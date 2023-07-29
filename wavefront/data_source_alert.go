@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/WavefrontHQ/go-wavefront-management-api"
+	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -231,11 +231,7 @@ func setAlertAttributes(d *schema.ResourceData, alert wavefront.Alert) error {
 	if err := d.Set("in_maintenance_host_label_pairs", flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)); err != nil {
 		return err
 	}
-	if err := d.Set("process_rate_minutes", alert.CheckingFrequencyInMinutes); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set("process_rate_minutes", alert.CheckingFrequencyInMinutes)
 }
 
 func flattenHostLabelPairs(pairs []wavefront.SourceLabelPair) interface{} {
