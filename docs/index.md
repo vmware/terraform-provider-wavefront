@@ -19,7 +19,7 @@ Use the navigation on the left to read about the available resources.
 ```hcl
 # Configure the Wavefront provider
 provider "wavefront" {
-  version = "~> 2.0"
+  version = "~> 3.0"
 }
 
 resource "wavefront_alert" "test_alert" {
