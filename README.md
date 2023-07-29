@@ -1,9 +1,9 @@
 
 # Wavefront Terraform Provider
 
-Thanks for stopping by and considering contributing to the Wavefront Terraform Provider!!! The Terraform Provider is used to manage resources in Wavefront and currently supports creating, maintaining and destroying Alerts, Alert Targets and Dashboards Wavefront resources.
+Thanks for stopping by and considering contributing to the Aria Operations for Applications Terraform Provider!!! The Terraform Provider is used to manage resources in Aria Operations for Applications and currently supports creating, maintaining and destroying Alerts, Alert Targets and Dashboards Aria Operations for Applications resources.
 
-We do our best to prioritize, review, and merge all requests. Generally, adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes are welcomed. However, functional changes may require some discussion first.
+We do our best to prioritize, review, and merge all requests. Generally, adding missing features (as per the [Aria Operations for Applications API](https://www.wavefront.com/api/) or bug fixes are welcomed. However, functional changes may require some discussion first.
 
 We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront.
 
@@ -85,14 +85,14 @@ Run `terraform init` to load your provider.
 
 Run `terraform plan` to show the plan.
 
-Run `terraform apply` to apply the test configuration and then check the results in Wavefront.
+Run `terraform apply` to apply the test configuration and then check the results in Aria Operations for Applications.
 
 Update main.tf to change a value, the run plan and apply again to check that updates work.
 
 Run `terraform destroy` to test deleting resources.
 
 ### Acceptance Tests
-Acceptance tests are run against the Wavefront API so you'll need an account to use. Run at your own risk.
+Acceptance tests are run against the Aria Operations for Applications API so you'll need an account to use. Run at your own risk.
 
 You need to supply the `WAVEFRONT_TOKEN` and `WAVEFRONT_ADDRESS` environment variables
 
