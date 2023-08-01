@@ -1,5 +1,5 @@
 
-# Wavefront Terraform Provider
+# Aria Operations for Applications Terraform Provider
 
 Thanks for stopping by and considering contributing to the Terraform Provider for interacting with Aria Operations for Applications!!! The Terraform Provider is used to manage resources in Aria Operations for Applications (AOA) and currently supports creating, maintaining and destroying Alerts, Alert Targets and Dashboards AOA resources.
 
