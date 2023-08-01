@@ -44,7 +44,7 @@ It is also important to know you can also utilize `go build` to build the binari
 
 Now that you have a binary you should attempt to run it and expect to see a message similar to the one below.
 
-```
+```shell
 ./terraform-provider-wavefront_v0.1.2_darwin_amd64
 This binary is a plugin. The plugins are not meant to be executed directly.
 Please execute the program that consumes these plugins, which will
@@ -57,7 +57,7 @@ If you experience any issues, please do not hesitate to submit an issue and we w
 
 Use the main.tf file to create a test config, such as the following below:
 
-```
+```terraform
  provider "wavefront" {
    address = "cluster.wavefront.com"
  }

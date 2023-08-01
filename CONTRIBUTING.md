@@ -1,8 +1,11 @@
 # Contributing
 
-We welcome contributors to this Terraform Provider and we'll do our best to review and merge all requests. Generally adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes will be welcomed, functional changes may probably require some discussion first.
+We welcome contributors to this Terraform Provider, and we'll do our best to review and merge all requests.
+Adding missing features as per the [Wavefront API](https://www.wavefront.com/api/) or bug fixes will be welcomed,
+functional changes will require discussion.
 
-We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront
+We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider.
+New features and bug fixes will likely require updates to go-wavefront client.
 
 Steps
 
@@ -24,9 +27,9 @@ Ensure you have Go [installed and correctly setup](https://golang.org/doc/instal
 Fetch your fork of the - [repository](github.com/WavefrontHQ/terraform-provider-wavefront)
 `go get github.com/<your_account>/terraform-provider-wavefront`
 
-Build the current version to ensure you're correctly setup `make build`. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64, if you're using a different operating system or architecture then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).
+Build the current version to ensure you're correctly setup `make build`. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64, if you're using a different operating system or architecture, then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).
 
-Now that you have a binary you should attempt to run it and expect to see a message similar to the one below.
+Now that you have a binary, you should attempt to run it and expect to see a message similar to the one below.
 
 ``` shell
 ./terraform-provider-wavefront_v0.1.2_darwin_amd64
@@ -45,17 +48,17 @@ We use [Go Vendor](https://github.com/kardianos/govendor) to manage dependencies
 
 ## Unit Testing
 
-Unit Tests should be written where required and can be run from `make test`. The core functionality of the provider (Read, Create, Update, Delete and Import of resources is best tested via integration tests) but any supporting function should be unit tested.
+Unit Tests should be written where required and can be run from `make test`. The core functionality of the provider (Read, Create, Update, Delete and Import of resources is best tested via integration tests), but any supporting function should be unit tested.
 
 `make test` does not run acceptance tests.
 
 ## Acceptance Testing
 
-Acceptance Tests are required for the Read, Create, Update, Delete and Import of resources. To run the acceptance tests you should have access to a Wavefront account.
+Acceptance Tests are required for the Read, Create, Update, Delete and Import of resources. To run the acceptance tests, you should have access to a Wavefront account.
 
 The `WAVEFRONT_ADDRESS` and `WAVEFRONT_TOKEN` environment variables are required in order for the tests to run.
 
-```
+```shell
 export WAVEFRONT_ADDRESS=<your-account>.wavefront.com
 export WAVEFRONT_TOKEN=<your-wavefront-token>
 
