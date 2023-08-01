@@ -610,6 +610,8 @@ github.com/WavefrontHQ/go-wavefront-management-api v1.16.0 h1:TnwD32ulsMVpzJWr4+
 github.com/WavefrontHQ/go-wavefront-management-api v1.16.0/go.mod h1:lvOQYngtif/hxow8fjOM7ox/nSyYGyBjNwDBXxcTjvk=
 github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.0.1 h1:3q3Yowb110YrDqs75mH0kr7HnCysINNtJ1msdGt1e+s=
 github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.0.1/go.mod h1:kEo78iw4P8e5zeC7cOJHEde7v5tNseDhlddQXcCa9Bc=
+github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.1.0 h1:0V662BBrSmeWb2OZyeKIOi10YUsOWODDawimWuO2Eho=
+github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.1.0/go.mod h1:kEo78iw4P8e5zeC7cOJHEde7v5tNseDhlddQXcCa9Bc=
 github.com/acomagu/bufpipe v1.0.3 h1:fxAGrHZTgQ9w5QqVItgzwj235/uYZYgbXitB+dLupOk=
 github.com/acomagu/bufpipe v1.0.3/go.mod h1:mxdxdup/WdsKVreO5GpW4+M/1CE2sMG4jeGJ2sYmHc4=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=

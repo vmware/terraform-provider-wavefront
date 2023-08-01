@@ -1,3 +1,8 @@
+## 4.2.0 (Aug 1, 2023)
+ENHANCEMENT:
+
+* Allow for omissions of the chart `summarization` field from the dashboard objects.
+
 ## 4.1.0 (Jul 28, 2023)
 FEATURES:
 
