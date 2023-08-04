@@ -74,10 +74,17 @@ func resourceDashboardJSONCreate(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("failed to parse dashboard, %s", err)
 	}
 
+	// Needs to come before writing because those functions read at the end.
+	err = dashboards.SetACL(d.Id(), dashboard.ACL.CanView, dashboard.ACL.CanModify)
+	if err != nil {
+		return fmt.Errorf("error setting ACL on Dashboard %s. %s", dashboard.Name, err)
+	}
+
 	err = dashboards.Create(dashboard)
 	if err != nil {
 		return fmt.Errorf("failed to create dashboard, %s", err)
 	}
+
 	d.SetId(dashboard.ID)
 	log.Printf("[INFO] Wavefront Dashboard %s Created", d.Id())
 	return resourceDashboardJSONRead(d, meta)
@@ -90,6 +97,12 @@ func resourceDashboardJSONUpdate(d *schema.ResourceData, meta interface{}) error
 
 	if err != nil {
 		return fmt.Errorf("failed to parse dashboard, %s", err)
+	}
+
+	// Needs to come before writing because those functions read at the end.
+	err = dashboards.SetACL(d.Id(), dashboard.ACL.CanView, dashboard.ACL.CanModify)
+	if err != nil {
+		return fmt.Errorf("error setting ACL on Dashboard %s. %s", dashboard.Name, err)
 	}
 
 	err = dashboards.Update(dashboard)

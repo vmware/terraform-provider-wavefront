@@ -1,3 +1,10 @@
+## 4.3.0 (Aug 3, 2023)
+BUG FIX/ENHANCEMENT:
+
+* `dashboard_json` now respects the `acl` field.
+  * This field is ignored by the dashboard API. A specific call to the ACL endpoint is needed to set the ACLs. I have filed a bug against the Swagger which implies the field is valid for dashboard PUTs and POSTs. 
+    * I considered making an ACL resource, but this is more consistent with how the `dashboard` resource handles it. And I suspect it aligns better with user expectations.
+
 ## 4.2.0 (Aug 1, 2023)
 ENHANCEMENT:
 
