@@ -82,8 +82,8 @@ The following arguments are supported:
 * `parameter_details` - (Optional) The current JSON representation of dashboard parameters. See [parameter details](#parameter-details).
 * `display_section_table_of_contents` - (Optional) Whether the "pills" quick-linked the sections of the dashboard are
   displayed by default when the dashboard is shown.
-* `can_modify` - (Optional) A list of users that have modify ACL access to the dashboard.
-* `can_view` - (Optional) A list of users that have view ACL access to the dashboard.
+* `can_modify` - (Optional) A list of users/groups/roles that can modify the dashboard.
+* `can_view` - (Optional) A list of users/groups/roles that can view the dashboard.
 * `event_filter_type` - (Optional) How charts belonging to this dashboard should display events. `BYCHART` is default if
   unspecified. Valid options are: `BYCHART`, `AUTOMATIC`, `ALL`, `NONE`, `BYDASHBOARD`, and `BYCHARTANDDASHBOARD`.
 
