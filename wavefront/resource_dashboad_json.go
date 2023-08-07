@@ -74,11 +74,8 @@ func resourceDashboardJSONCreate(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("failed to parse dashboard, %s", err)
 	}
 
-	// Needs to come before writing because those functions read at the end.
-	err = dashboards.SetACL(d.Id(), dashboard.ACL.CanView, dashboard.ACL.CanModify)
-	if err != nil {
-		return fmt.Errorf("error setting ACL on Dashboard %s. %s", dashboard.Name, err)
-	}
+	canView := dashboard.ACL.CanView
+	canModify := dashboard.ACL.CanModify
 
 	err = dashboards.Create(dashboard)
 	if err != nil {
@@ -87,6 +84,12 @@ func resourceDashboardJSONCreate(d *schema.ResourceData, meta interface{}) error
 
 	d.SetId(dashboard.ID)
 	log.Printf("[INFO] Wavefront Dashboard %s Created", d.Id())
+
+	err = dashboards.SetACL(dashboard.ID, canView, canModify)
+	if err != nil {
+		return fmt.Errorf("error setting ACL on Dashboard %s. %s", dashboard.Name, err)
+	}
+
 	return resourceDashboardJSONRead(d, meta)
 }
 
@@ -99,11 +102,8 @@ func resourceDashboardJSONUpdate(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("failed to parse dashboard, %s", err)
 	}
 
-	// Needs to come before writing because those functions read at the end.
-	err = dashboards.SetACL(d.Id(), dashboard.ACL.CanView, dashboard.ACL.CanModify)
-	if err != nil {
-		return fmt.Errorf("error setting ACL on Dashboard %s. %s", dashboard.Name, err)
-	}
+	canView := dashboard.ACL.CanView
+	canModify := dashboard.ACL.CanModify
 
 	err = dashboards.Update(dashboard)
 	if err != nil {
@@ -111,6 +111,12 @@ func resourceDashboardJSONUpdate(d *schema.ResourceData, meta interface{}) error
 	}
 
 	log.Printf("[INFO] Wavefront Dashboard %s Updated", d.Id())
+
+	err = dashboards.SetACL(dashboard.ID, canView, canModify)
+	if err != nil {
+		return fmt.Errorf("error setting ACL on Dashboard %s. %s", dashboard.Name, err)
+	}
+
 	return resourceDashboardJSONRead(d, meta)
 }
 

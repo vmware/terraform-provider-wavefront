@@ -1,3 +1,8 @@
+## 5.0.1 (Aug 7, 2023)
+BUG FIX:
+
+* Fix a bug where the ACLs failed to apply if the chart didn't exist yet.
+
 ## 5.0.0 (Aug 3, 2023)
 BUG FIX/ENHANCEMENT:
 
