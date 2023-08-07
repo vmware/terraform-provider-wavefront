@@ -15,6 +15,16 @@ Provides a Wavefront Dashboard JSON resource.  This allows dashboards to be crea
 resource "wavefront_dashboard_json" "test_dashboard_json" {
   dashboard_json = <<-EOF
     {
+      "acl": {
+        "canModify": [
+          "group-uuid",
+          "role-uuid"
+        ],
+        "canView": [
+          "group-uuid",
+          "role-uuid"
+        ]
+      },
       "name": "Terraform Test Dashboard Json",
       "description": "a",
       "eventFilterType": "BYCHART",
