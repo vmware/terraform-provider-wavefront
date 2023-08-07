@@ -9,7 +9,7 @@ New features and bug fixes will likely require updates to go-wavefront client.
 
 Steps
 
-1. Open an Issue - to track the change
+1. Open an Issue to track the change
 2. Fork the repository
 3. Make your changes
 4. Submit a [Pull Request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
