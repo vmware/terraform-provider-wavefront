@@ -10,6 +10,7 @@ description: |-
 Use this data source to get information about a Wavefront role by its ID.
 
 ## Argument Reference
+
 * `id` - (Required) The ID associated with the role data to be fetched.
 
 ## Example Usage

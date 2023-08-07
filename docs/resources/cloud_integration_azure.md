@@ -22,7 +22,6 @@ resource "wavefront_cloud_integration_azure_activity_log" "azure_activity_log" {
 }
 ```
 
-
 ## Argument Reference
 
 The following arguments are supported:

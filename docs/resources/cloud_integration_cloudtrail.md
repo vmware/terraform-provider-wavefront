@@ -43,6 +43,7 @@ The following arguments are supported:
 * `prefix` - (Optional) The common prefix, if any, appended to all CloudTrail log files.
 
 ### Example
+
 ```hcl
 resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }

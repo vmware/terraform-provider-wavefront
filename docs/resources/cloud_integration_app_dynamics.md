@@ -8,7 +8,7 @@ description: |-
 
 # Resource : wavefront_cloud_integration_app_dynamics
 
-Provides a Wavefront Cloud Integration for AppDynamics. This allows AppDynamics cloud integrations to be created, 
+Provides a Wavefront Cloud Integration for AppDynamics. This allows AppDynamics cloud integrations to be created,
 updated, and deleted.
 
 ## Example usage
@@ -34,10 +34,10 @@ The following arguments are supported:
 * `user_name` - (Required) Username is a combination of userName and the account name.
 * `controller_name` - (Required) Name of the SaaS controller.
 * `encrypted_password` - (Required) Password for AppDynamics user.
-* `app_filter_regex` - (Optional)  List of regular expressions that an application name must match (case-insensitively) 
-in order to be ingested.
-* `enable_rollup` - (Optional) Set this to `false` to get separate results for all values within the time range, 
-by default it is `true`.
+* `app_filter_regex` - (Optional)  List of regular expressions that an application name must match (case-insensitively)
+  in order to be ingested.
+* `enable_rollup` - (Optional) Set this to `false` to get separate results for all values within the time range,
+  by default it is `true`.
 * `enable_error_metrics` - (Optional) Boolean flag to control Error metric ingestion.
 * `enable_business_trx_metrics` - (Optional) Boolean flag to control Business Transaction metric ingestion.
 * `enable_backend_metrics` - (Optional) Boolean flag to control Backend metric ingestion.
@@ -45,7 +45,6 @@ by default it is `true`.
 * `enable_individual_node_metrics` - (Optional) Boolean flag to control Individual Node metric ingestion.
 * `enable_app_infra_metrics` - (Optional) Boolean flag to control Application Infrastructure metric ingestion.
 * `enable_service_endpoint_metrics` - (Optional) Boolean flag to control Service End point metric ingestion.
-
 
 ### Example
 

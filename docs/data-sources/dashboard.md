@@ -10,6 +10,7 @@ description: |-
 Use this data source to get information about a certain Wavefront dashboard by its ID.
 
 ## Argument Reference
+
 * `id` - (Required) The ID associated with the dashboard data to be fetched.
 
 ## Example Usage
@@ -39,7 +40,6 @@ The following attributes are supported:
 * `can_view` - A list of users that have view ACL access to the dashboard.
 * `event_filter_type` - How charts belonging to this dashboard should display events. `BYCHART` is default if
   unspecified. Valid options are: `BYCHART`, `AUTOMATIC`, `ALL`, `NONE`, `BYDASHBOARD`, and `BYCHARTANDDASHBOARD`.
-
 
 ### Dashboard Sections
 
@@ -81,7 +81,7 @@ The `source` mapping supports the following:
 
 The `chart_setting` mapping supports the following:
 
-* `type` - Chart Type. `line` refers to the Line Plot, `scatter` to the Point Plot, `stacked-area` to the Stacked Area plot, `table` to the Tabular View, `scatterplot-xy` to Scatter Plot, `markdown-widget` to the Markdown display, and `sparkline` to the Single Stat view. Valid options are `line`, `scatterplot`,
+* `type` - Chart Type. `line` refers to the Line Plot, `scatter` to the Point Plot, `stacked-area` to the Stacked Area plot, `table` to the Tabular View, `scatterplot-xy` to Scatter Plot, `markdown-widget` to the Markdown display, and `sparkline` to the Single Stat view. Valid options are`line`, `scatterplot`,
   `stacked-area`, `stacked-column`, `table`, `scatterplot-xy`, `markdown-widget`, `sparkline`, `globe`, `nodemap`, `top-k`, `status-list`, and `histogram`.
 * `max` - Max value of the Y-axis. Set to null or leave blank for auto.
 * `line_type` - Plot interpolation type.  `linear` is default. Valid options are `linear`, `step-before`, `step-after`, `basis`, `cardinal`, and `monotone`.

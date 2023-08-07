@@ -10,6 +10,7 @@ description: |-
 Use this data source to get information about all Wavefront maintenance windows.
 
 ## Argument Reference
+
 * `limit` - (Optional) Limit is the maximum number of results to be returned. Defaults to 100.
 * `offset` - (Optional) Offset is the offset from the first result to be returned. Defaults to 0.
 
@@ -26,7 +27,7 @@ data "wavefront_maintenance_window_all" "example" {
 ## Attribute Reference
 
 * `maintenance_windows` - List of all maintenance windows in Wavefront. For each maintenance window you will see a list of attributes.
-    * `id` -  The ID of the maintenance window.
+    * `id` - The ID of the maintenance window.
     * `event_name` - The event name of the maintenance window.
     * `reason` - The reason for the maintenance window.
     * `title` - The title of the maintenance window.

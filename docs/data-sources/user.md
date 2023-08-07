@@ -7,9 +7,10 @@ description: |-
 
 # Data Source: wavefront_user
 
-Use this data source to get information for a given user by email from Wavefront. 
+Use this data source to get information for a given user by email from Wavefront.
 
 ## Argument Reference
+
 * `email` - The email associated with the user data to be fetched.
 
 ## Example Usage

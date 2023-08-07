@@ -14,7 +14,7 @@ updated, and deleted.
 ## Example usage
 
 ```hcl
-resource "wavefront_cloud_integration_aws_external_id" "ext_id" { 
+resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }
 
 resource "wavefront_cloud_integration_ec2" "ec2" {
@@ -36,8 +36,8 @@ The following arguments are supported:
 * `role_arn` - (Required) The external ID corresponding to the Role ARN.
 * `external_id` - (Required) The Role ARN that the customer has created in AWS IAM to allow access to Wavefront.
 * `hostname_tags` - (Optional) A list of AWS instance tags to use as the `source` name
-in a series. Default is `["hostname", "host", "name"]`. If no tag in the list is found, the series source
-is set to the instance id.
+  in a series. Default is `["hostname", "host", "name"]`. If no tag in the list is found, the series source
+  is set to the instance id.
 
 ### Example
 
@@ -46,15 +46,19 @@ resource "wavefront_cloud_integration_aws_external_id" "ext_id" {
 }
 
 resource "wavefront_cloud_integration_ec2" "ec2" {
-  name       = "Test Integration"
-  force_save = true
+  name            = "Test Integration"
+  force_save      = true
   additional_tags = {
     "tag1" = "value1"
     "tag2" = "value2"
   }
-  role_arn    = "arn:aws::1234567:role/example-arn"
-  external_id = wavefront_cloud_integration_aws_external_id.ext_id.id
-  hostname_tags  = ["host", "source", "name"]
+  role_arn      = "arn:aws::1234567:role/example-arn"
+  external_id   = wavefront_cloud_integration_aws_external_id.ext_id.id
+  hostname_tags = [
+    "host",
+    "source",
+    "name"
+  ]
   service_refresh_rate_in_minutes = 10
 }
 ```

@@ -36,31 +36,31 @@ The following arguments are supported:
 * `name` - (Required) The name of the alert target as it is displayed in Wavefront.
 * `description` - (Required) Description describing this alert target.
 * `triggers` - (Required) A list of occurrences on which this webhook will be fired. Valid values are `ALERT_OPENED`,
-`ALERT_UPDATED`, `ALERT_RESOLVED`, `ALERT_MAINTENANCE`, `ALERT_SNOOZED`, `ALERT_NO_DATA`, `ALERT_NO_DATA_RESOLVED`, `ALERT_NO_DATA_MAINTENANCE`.
+  `ALERT_UPDATED`, `ALERT_RESOLVED`, `ALERT_MAINTENANCE`, `ALERT_SNOOZED`, `ALERT_NO_DATA`, `ALERT_NO_DATA_RESOLVED`, `ALERT_NO_DATA_MAINTENANCE`.
 * `template` - (Required) A mustache template that will form the body of the POST request, email, and summary of the PagerDuty.
-* `recipient` - (Required) The end point for the notification Target.  `EMAIL`: email address. `PAGERDUTY`: PagerDuty 
-routing key. `WEBHOOK`: URL endpoint. 
+* `recipient` - (Required) The end point for the notification Target.  `EMAIL`: email address. `PAGERDUTY`: PagerDuty
+  routing key. `WEBHOOK`: URL endpoint.
 * `method` - (Optional) The notification method used for notification target. One of `WEBHOOK`, `EMAIL`, `PAGERDUTY`.
 * `route` - (Optional) List of routing targets that this alert target will notify. See [Route](#route)
 * `email_subject` - (Optional) The subject title of an email notification target.
 * `is_html_content` - (Optional) Determine whether the email alert content is sent as HTML or text.
 * `content_type` - (Optional) The value of the `Content-Type` header of the webhook.
-* `custom_headers` - (Optional) A `string->string` map specifying the custom HTTP header key/value pairs that will be 
-sent in the requests with a method of `WEBHOOK`.
+* `custom_headers` - (Optional) A `string->string` map specifying the custom HTTP header key/value pairs that will be
+  sent in the requests with a method of `WEBHOOK`.
 
-## Attributes Reference 
+## Attributes Reference
 
-* `target_id` - The target ID prefixed with `target:` for interpolating into a Wavefront Alert. 
+* `target_id` - The target ID prefixed with `target:` for interpolating into a Wavefront Alert.
 
 ### Route
 
 The `route` mapping supports the following:
 
 * `method` - (Required)  The notification method used for notification target. One of `WEBHOOK`, `EMAIL`, `PAGERDUTY`.
-* `target` - (Required) The endpoint for the alert route. `EMAIL`: email address. `PAGERDUTY`: PagerDuty routing 
-key. `WEBHOOK`: URL endpoint. 
-* `filter` - (Required) String that filters the route. Space delimited.  Currently only allows a single key value pair.
-(e.g. `env prod`)
+* `target` - (Required) The endpoint for the alert route. `EMAIL`: email address. `PAGERDUTY`: PagerDuty routing
+  key. `WEBHOOK`: URL endpoint.
+* `filter` - (Required) String that filters the route. Space delimited. Currently only allows a single key value pair.
+  (e.g. `env prod`)
 
 ### Example
 

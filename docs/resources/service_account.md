@@ -25,9 +25,9 @@ The following arguments are supported:
 * `identifier` - (Required) The unique identifier of the service account to create. Must have the prefix `sa::`.
 * `active` - (Required) Whether or not the service account is active.
 * `description` - (Optional) The description of the service account.
-* `permissions` - (Optional) List of permission to grant to this service account.  Valid options are
-`agent_management`, `alerts_management`, `dashboard_management`, `embedded_charts`, `events_management`, `external_links_management`,
-`host_tag_management`, `metrics_management`, and `user_management`.
+* `permissions` - (Optional) List of permission to grant to this service account. Valid options are
+  `agent_management`, `alerts_management`, `dashboard_management`, `embedded_charts`, `events_management`, `external_links_management`,
+  `host_tag_management`, `metrics_management`, and `user_management`.
 * `user_groups` - (Optional) List of user groups for this service account.
 * `ingestion_policy` - (Optional) ID of ingestion policy.
 

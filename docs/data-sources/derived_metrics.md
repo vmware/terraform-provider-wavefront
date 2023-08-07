@@ -6,12 +6,13 @@ description: |-
 ---
 
 # Data Source: wavefront_derived_metrics
+
 Use this data source to get information about all Wavefront derived metrics.
 
 ## Argument Reference
+
 * `limit` - (Optional) Limit is the maximum number of results to be returned. Defaults to 100.
 * `offset` - (Optional) Offset is the offset from the first result to be returned. Defaults to 0.
-
 
 ## Example Usage
 
@@ -41,7 +42,7 @@ data "wavefront_derived_metrics" "example" {
     * `status` - The status of the derived metric.
     * `hosts_used` - A list of hosts used in the derived metric.
     * `last_processed_millis` - The last processed timestamp.
-    * `process_rate_minutes` -  The specified query is executed every `process_rate_minutes` minutes.
+    * `process_rate_minutes` - The specified query is executed every `process_rate_minutes` minutes.
     * `points_scanned_at_last_query` - The number of points scanned when the last query was executed.
     * `include_obsolete_metrics` - A Boolean flag indicating whether to include obsolete metrics or not.
     * `last_query_time` - The timestamp indicating the last time the query was executed.

@@ -10,6 +10,7 @@ description: |-
 Use this data source to get information about a Wavefront maintenance window by its ID.
 
 ## Argument Reference
+
 * `id` - (Required) The ID of the maintenance window.
 
 ## Example Usage
@@ -23,7 +24,7 @@ data "wavefront_maintenance_window" "example" {
 
 ## Attribute Reference
 
-* `id` -  The ID of the maintenance window.
+* `id` - The ID of the maintenance window.
 * `event_name` - The event name of the maintenance window.
 * `reason` - The reason for the maintenance window.
 * `title` - The title of the maintenance window.
@@ -43,7 +44,7 @@ data "wavefront_maintenance_window" "example" {
 * `relevant_host_tags_anded` - Whether to AND source or host tags listed in `relevant_host_tags`.
   If set to `true`, the source or host must contain all tags for the maintenance window to apply. If set to `false`,
   the tags are OR'ed, and the source or host must contain one of the tags. Default value is `false`.
-* `host_tag_group_host_names_group_anded` - If set to `true`, the source or host must be in `relevant_host_names` and must have tags matching the specification formed by `relevant_host_tags` and `relevant_host_tags_anded` in for this maintenance window to apply. 
+* `host_tag_group_host_names_group_anded` - If set to `true`, the source or host must be in `relevant_host_names` and must have tags matching the specification formed by `relevant_host_tags` and `relevant_host_tags_anded` in for this maintenance window to apply.
   If set to false, the source or host must either be in `relevant_host_names` or match `relevant_host_tags` and `relevant_host_tags_anded`. Default value is `false`.
 * `created_epoch_millis` - The timestamp in epoch milliseconds indicating when the maintenance window is created.
 * `updated_epoch_millis` - The timestamp in epoch milliseconds indicating when the maintenance window is updated.

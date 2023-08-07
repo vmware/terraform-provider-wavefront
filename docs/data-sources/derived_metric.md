@@ -10,6 +10,7 @@ description: |-
 Use this data source to get information about a certain Wavefront derived metric by its ID.
 
 ## Argument Reference
+
 * `id` - (Required) The ID associated with the derived metric data to be fetched.
 
 ## Example Usage
@@ -38,7 +39,7 @@ data "wavefront_derived_metric" "example" {
 * `status` - The status of the derived metric.
 * `hosts_used` - A list of hosts used in the derived metric.
 * `last_processed_millis` - The last processed timestamp.
-* `process_rate_minutes` -  The specified query is executed every `process_rate_minutes` minutes.
+* `process_rate_minutes` - The specified query is executed every `process_rate_minutes` minutes.
 * `points_scanned_at_last_query` - The number of points scanned when last query was executed.
 * `include_obsolete_metrics` -A Boolean flag indicating whether to include obsolete metrics or not.
 * `last_query_time` - The timestamp indicating the last time the query was executed.

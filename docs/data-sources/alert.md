@@ -2,7 +2,7 @@
 layout: "wavefront"
 page_title: "Wavefront: Alert"
 description: |-
-    Get the information about a specific Wavefront alert.
+  Get the information about a specific Wavefront alert.
 ---
 
 # Data Source: wavefront_alert
@@ -10,6 +10,7 @@ description: |-
 Use this data source to get information about a Wavefront alert by its ID.
 
 ## Argument Reference
+
 * `id` - (Required) The ID associated with the alert data to be fetched.
 
 ## Example Usage

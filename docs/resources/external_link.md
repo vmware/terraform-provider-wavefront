@@ -29,9 +29,9 @@ The following arguments are supported:
 * `metric_filter_regex` - (Optional) Controls whether a link is displayed in the context menu of a highlighted series. If present, the metric name of the highlighted series must match this regular expression in order for the link to be displayed.
 * `source_filter_regex` - (Optional) Controls whether a link is displayed in the context menu of a highlighted series. If present, the source name of the highlighted series must match this regular expression in order for the link to be displayed.
 * `point_tag_filter_regexes` - (Optional) Controls whether a link is displayed in the context menu of a highlighted
-series. This is a map from string to regular expression. The highlighted series must contain point tags whose
-keys are present in the keys of this map and whose values match the regular expressions associated with those
-keys in order for the link to be displayed.
+  series. This is a map from string to regular expression. The highlighted series must contain point tags whose
+  keys are present in the keys of this map and whose values match the regular expressions associated with those
+  keys in order for the link to be displayed.
 * `is_log_integration` - Whether this is a "Log Integration" subType of external link.
 
 ### Example

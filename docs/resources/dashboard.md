@@ -257,9 +257,15 @@ resource "wavefront_dashboard" "chart_settings_dash" {
         chart_setting {
           auto_column_tags                      = false
           column_tags                           = "deprecated"
-          custom_tags                           = ["tag1", "tag2"]
+          custom_tags                           = [
+            "tag1",
+            "tag2"
+          ]
           expected_data_spacing                 = 120
-          fixed_legend_display_stats            = ["stat1", "stat2"]
+          fixed_legend_display_stats            = [
+            "stat1",
+            "stat2"
+          ]
           fixed_legend_enabled                  = true
           fixed_legend_filter_field             = "CURRENT"
           fixed_legend_filter_limit             = 1
@@ -282,10 +288,21 @@ resource "wavefront_dashboard" "chart_settings_dash" {
           sparkline_line_color                  = "rgba(1,1,1,1)"
           sparkline_size                        = "BOTTOM"
           sparkline_value_color_map_apply_to    = "TEXT"
-          sparkline_value_color_map_colors      = ["rgba(1,1,1,1)", "rgba(2,2,2,2)", "rgba(3,3,3,3)"]
-          sparkline_value_color_map_values      = [1, 2]
-          sparkline_value_text_map_text         = ["a"]
-          sparkline_value_text_map_thresholds   = [1]
+          sparkline_value_color_map_colors      = [
+            "rgba(1,1,1,1)",
+            "rgba(2,2,2,2)",
+            "rgba(3,3,3,3)"
+          ]
+          sparkline_value_color_map_values      = [
+            1,
+            2
+          ]
+          sparkline_value_text_map_text         = [
+            "a"
+          ]
+          sparkline_value_text_map_thresholds   = [
+            1
+          ]
           type                                  = "line"
           y0_scale_si_by_1024                   = true
           y0_unit_autoscaling                   = true

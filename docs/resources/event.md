@@ -36,6 +36,7 @@ The following arguments are supported:
 * `end_time` - (Optional) The end time of the event in epoch milliseconds.
 
 ### Example
+
 ```hcl
 resource "wavefront_event" "event" {
   name = "terraform-test"

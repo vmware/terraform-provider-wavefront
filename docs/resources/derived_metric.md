@@ -10,7 +10,6 @@ description: |-
 
 Provides a Wavefront Derived Metric Resource. This allows derived metrics to be created,
 updated, and deleted.
-  
 
 ## Example usage
 
@@ -21,6 +20,7 @@ resource "wavefront_derived_metric" "derived" {
   query   = "aliasMetric(5, \"some.metric\")"
 }
 ```
+
 ## Argument Reference
 
 The following arguments are supported:

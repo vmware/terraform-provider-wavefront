@@ -10,6 +10,7 @@ description: |-
 Use this data source to get information about a certain Wavefront event.
 
 ## Argument Reference
+
 * `id` - (Required) The ID associated with the event data to be fetched.
 
 ## Example Usage

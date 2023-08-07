@@ -7,7 +7,7 @@ description: |-
 
 # Resource: wavefront_dashboard_json
 
-Provides a Wavefront Dashboard JSON resource.  This allows dashboards to be created, updated, and deleted.
+Provides a Wavefront Dashboard JSON resource. This allows dashboards to be created, updated, and deleted.
 
 ## Example usage
 
@@ -137,9 +137,12 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
 }
 ```
 
-**Note:** If there are dynamic variables in the Wavefront dashboard json, then these variables must be present in a separate file as mentioned in the section below.
+*
+*Note:
+** If there are dynamic variables in the Wavefront dashboard json, then these variables must be present in a separate file as mentioned in the section below.
 
 ## Reading from an External File
+
 Below is the example dashboard with sections and parameters from an external file.
 
 ```hcl
@@ -158,6 +161,7 @@ resource "wavefront_dashboard_json" "test_dashboard_json" {
 The sample files are listed below.
 
 * dashboard_file.txt
+
 ```hcl
 {
   "name": "Terraform Test Dashboard JSON",
@@ -181,6 +185,7 @@ The sample files are listed below.
 ```
 
 * section1.json
+
 ```json
 {
   "name": "section 1",
@@ -246,8 +251,8 @@ The sample files are listed below.
 }
 ```
 
-
 * parameters.json
+
 ```json
 {
   "param": {
@@ -270,16 +275,12 @@ The sample files are listed below.
 }
 ```
 
-
-
-
-
 ## Argument Reference
 
 The following arguments are supported:
 
-* `dashboard_json` - (Required) See the [Wavefront API Documentation](https://docs.wavefront.com/wavefront_api.html#api-documentation-wavefront-instance) 
-for instructions on how to get to your API documentation for more details. 
+* `dashboard_json` - (Required) See the [Wavefront API Documentation](https://docs.wavefront.com/wavefront_api.html#api-documentation-wavefront-instance)
+  for instructions on how to get to your API documentation for more details.
 
 ## Import
 

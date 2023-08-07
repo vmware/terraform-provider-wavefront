@@ -7,9 +7,10 @@ description: |-
 
 # Data Source: wavefront_user_groups
 
-Use this data source to get all User Groups in Wavefront. 
+Use this data source to get all User Groups in Wavefront.
 
 ## Argument Reference
+
 * `limit` - (Optional) Limit is the maximum number of results to be returned. Defaults to 100.
 * `offset` - (Optional) Offset is the offset from the first result to be returned. Defaults to 0.
 
@@ -26,8 +27,8 @@ data "wavefront_user_groups" "groups" {
 ## Attribute Reference
 
 * `user_groups` - List of user groups.
-  * `id` - The group ID.
-  * `name` - The group name.
-  * `description` - The group description.
-  * `roles` - List of roles associated with the group.
-  * `users` - List of users assigned to the group.
+    * `id` - The group ID.
+    * `name` - The group name.
+    * `description` - The group description.
+    * `roles` - List of roles associated with the group.
+    * `users` - List of users assigned to the group.
