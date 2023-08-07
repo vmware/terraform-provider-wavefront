@@ -8,22 +8,22 @@ run:
 linters:
   disable-all: true
   enable:
-    - errcheck
-    # - gofmt
-    - goimports
-    - unused
-    - gosimple
-    - govet
-    - ineffassign
-    - nakedret
-    - misspell
-    - revive
-    - staticcheck
-    - typecheck
-    - unused
-    - unconvert
-    - vet
-    - vetshadow
+  - errcheck
+  # - gofmt
+  - goimports
+  - unused
+  - gosimple
+  - govet
+  - ineffassign
+  - nakedret
+  - misspell
+  - revive
+  - staticcheck
+  - typecheck
+  - unused
+  - unconvert
+  - vet
+  - vetshadow
 
 linters-settings:
   errcheck:
