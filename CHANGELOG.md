@@ -1,9 +1,11 @@
 ## 5.0.1 (Aug 7, 2023)
+
 BUG FIX:
 
 * Fix a bug where the ACLs failed to apply if the chart didn't exist yet.
 
 ## 5.0.0 (Aug 3, 2023)
+
 BUG FIX/ENHANCEMENT:
 
 ⚠️ If you haven't properly set the ACLs for your `dashboard_json` resources, this version of the provider could lead to an inability to modify those dashboards. (It will apply a blank list if nothing is provided. Similar to how the `dashboard` resource handles it.) ⚠️
@@ -13,52 +15,61 @@ The `acl` field was previously ignored for the `dashboard_json` resource; becaus
 To be consistent with how the `dashboard` resource handles it, the provider now calls the ACL endpoint while saving each `dashboard_json` resource.
 
 ## 4.2.0 (Aug 1, 2023)
+
 ENHANCEMENT:
 
 * Allow for omissions of the chart `summarization` field from the dashboard objects.
 
 ## 4.1.0 (Jul 28, 2023)
+
 FEATURES:
 
 * Support `no_default_events` chart setting.
 
 ## 4.0.0 (Jul 27, 2023)
+
 BUG FIX:
 
 * Ingestion Policy API had changed, breaking the go client. The client has been fixed and this implements those new changes in the provider.
 
 ## 3.6.0 (May 19, 2023)
+
 BUG FIXES:
 
 * Fixed bugs related to resource_alert and updated the documentation.
 
 ## 3.5.0 (March 30, 2023)
+
 ENHANCEMENT:
 
 * Upgrade net, text and sys dependencies for security fix.
 
 ## 3.4.0 (November 9, 2022)
+
 ENHANCEMENT:
 
 * Removed Tesla Cloud Integration
 * Added documentation for calling dashboard sections from external file.
 
 ## 3.3.0 (October 21, 2022)
+
 ENHANCEMENT:
 
-* Added support for Data Sources for Alert, Event, Dashboard, Derived Metric, Maintenance Window, External Links. 
+* Added support for Data Sources for Alert, Event, Dashboard, Derived Metric, Maintenance Window, External Links.
 * Added support for Data Source for Role and UserGroup by id.
 * Added support for ProcessRateMinutes property in Alert Resource.
 * Fixed integration tests.
 
 ## 3.2.0 (September 2, 2022)
+
 ENHANCEMENT:
 
-* Upgraded Terraform-plugin-sdk/v2 from 2.6.1 to 2.21.0 for security vulnerabilty fix.
-* Upgraded go version from 1.16 to 1.17 for security vulnerabilty fix.
+* Upgraded Terraform-plugin-sdk/v2 from 2.6.1 to 2.21.0 for security vulnerability fix.
+* Upgraded go version from 1.16 to 1.17 for security vulnerability fix.
 * Using email instead of id for wavefront_user.
 
 ## 3.1.0 (May 23, 2022)
+
 ENHANCEMENT:
 
 * Support for Metrics Policy & Various Data Sources
@@ -70,6 +81,7 @@ DOCUMENTATION:
 * Fixed a variety of typos, punctuation, and grammatical errors.
 
 ## 3.0.1 (March 10, 2021)
+
 BUG FIXES:
 
 * Fix incompatibility issue between threshold alerts and new alert experience.
@@ -79,22 +91,22 @@ BUG FIXES:
 
 NOTES:
 
-* Upgrade to the new terraform SDK v2.6.1 from v1 as v1 is reaching end of life.
-With this change there is no more support for Terraform 0.11 and below.
+* Upgrade to the new terraform SDK v2.6.1 from v1 as v1 is reaching end-of-life.
+  With this change, there is no more support for Terraform 0.11 and below.
 * Minor documentation updates showing that multiple alert targets can be
-specified at once in the alert target field.
+  specified at once in the alert target field.
 
 ## 2.8.3 (March 1, 2021)
 
 BUG FIXES:
 
-* Fix typo on main page of the Wavefront terraform provider documentation.
+* Fix typo on the main page of the Wavefront terraform provider documentation.
 
 ## 2.8.2 (March 1, 2021)
 
 BUG FIXES:
 
-* Fix typo on main page of the Wavefront provider terraform documentation.
+* Fix typo on the main page of the Wavefront provider terraform documentation.
 
 ## 2.8.1 (February 1, 2021)
 
@@ -106,7 +118,7 @@ BUG FIXES:
 
 BUG FIXES:
 
-* Fix broken releases paage link in README.md
+* Fix releases page link in README.md
 * Fix broken make command in README.md
 
 ENHANCEMENTS:
@@ -115,7 +127,7 @@ ENHANCEMENTS:
 
 FEATURES:
 
-* **New Resource:** `wavefront_ingestion_policy`
+* New Resource: `wavefront_ingestion_policy`
 
 ## 2.7.3 (December 16, 2020)
 
@@ -147,17 +159,17 @@ ENHANCEMENTS:
 
 FEATURES:
 
-* **New Resource:** `wavefront_external_link`
+* New Resource: `wavefront_external_link`
 
 ## 2.6.0 (September 23, 2020)
 
 BUG FIXES:
 
-* When user changes external_id, destroy and re-create the AWS cloud integration resource rather than trying to change external_id in a PUT request.
+* When a user changes external_id, destroy and re-create the AWS cloud integration resource rather than trying to change external_id in a PUT request.
 
 FEATURES:
 
-* **New Resource:** `wavefront_maintenance_window`
+* New Resource: `wavefront_maintenance_window`
 
 ## 2.5.1 (September 16, 2020)
 
@@ -174,11 +186,11 @@ BUG FIXES:
 
 ENHANCEMENTS:
 
-* Documentation changed to meet latest standards
+* Documentation changed to meet the latest standards
 
 FEATURES:
 
-* **New Resource:** `wavefront_service_account`
+* New Resource: `wavefront_service_account`
 
 ## 2.4.0 (August 28, 2020)
 
@@ -190,7 +202,6 @@ ENHANCEMENTS:
 
 * package wavefront_plugin renamed to wavefront to ensure consistency between the package folder structure and the package name.
 * Rename terraform-providers to vmware due to repo move.
-
 
 ## 2.3.1 (July 02, 2020)
 
@@ -204,7 +215,6 @@ ENHANCEMENTS:
 * resource/wavefront_alert_target: new `target_id` computed value which prefixes `target:` onto the id for joining into wavefront alerts.
 * resource/wavefront_alert: added validation on `target` field
 
-
 ## 2.3.0 (June 02, 2020)
 
 BREAKING CHANGES:
@@ -215,7 +225,7 @@ BREAKING CHANGES:
 
 FEATURES:
 
-* **New Resource:** `wavefront_role`
+* New Resource: `wavefront_role`
 
 BUG FIXES:
 
@@ -232,22 +242,22 @@ ENHANCEMENTS:
 
 NOTES:
 
-* Updated to latest go-wavefront-management-api
+* Updated to the latest go-wavefront-management-api
 * Temporarily fixed some failing tests by skipping non-empty plans
-* Cleaned up text in README/CONTRIBUTING where stale repo pointers existed
+* Clean up README/CONTRIBUTING where stale repo pointers existed
 
 FEATURES:
 
-* **New Resource:** `wavefront_cloud_integration_cloudwatch`
-* **New Resource:** `wavefront_cloud_integration_cloudtrail`
-* **New Resource:** `wavefront_cloud_integration_ec2`
-* **New Resource:** `wavefront_cloud_integration_gcp`
-* **New Resource:** `wavefront_cloud_integration_gcp_billing`
-* **New Resource:** `wavefront_cloud_integration_azure`
-* **New Resource:** `wavefront_cloud_integration_azure_activity_log`
-* **New Resource:** `wavefront_cloud_integration_newrelic`
-* **New Resource:** `wavefront_cloud_integration_app_dynamics`
-* **New Resource:** `wavefront_cloud_integration_tesla`
+* New Resource: `wavefront_cloud_integration_cloudwatch`
+* New Resource: `wavefront_cloud_integration_cloudtrail`
+* New Resource: `wavefront_cloud_integration_ec2`
+* New Resource: `wavefront_cloud_integration_gcp`
+* New Resource: `wavefront_cloud_integration_gcp_billing`
+* New Resource: `wavefront_cloud_integration_azure`
+* New Resource: `wavefront_cloud_integration_azure_activity_log`
+* New Resource: `wavefront_cloud_integration_newrelic`
+* New Resource: `wavefront_cloud_integration_app_dynamics`
+* New Resource: `wavefront_cloud_integration_tesla`
 
 ENHANCEMENTS:
 
@@ -262,17 +272,15 @@ NOTES:
 
 * Consistent error messages casing across all errors
 
-
 FEATURES:
 
-* **New Resource:** `wavefront_default_user_group`
+* New Resource: `wavefront_default_user_group`
 
 ENHANCEMENTS:
 
 * resource/wavefront_alert: Support for `can_view` and `can_modify` ACL
 * resource/wavefront_dashboard: Support for `can_view` and `can_modify` ACL
 * resource/wavefront_dashboard_json: Support for `can_view` and `can_modify` ACL
-
 
 ## 2.1.2 (January 13, 2020)
 
@@ -283,7 +291,7 @@ NOTES:
 
 FEATURES:
 
-* **New Resource:** `wavefront_user_group`
+* New Resource: `wavefront_user_group`
 
 BUG FIXES:
 
@@ -293,9 +301,9 @@ BUG FIXES:
 
 FEATURES:
 
-* **New Resource:** `wavefront_derived_metrics`
-* **New Resource:** `wavefront_user`
-* **New Resource:** `wavefront_alert_target`
+* New Resource: `wavefront_derived_metrics`
+* New Resource: `wavefront_user`
+* New Resource: `wavefront_alert_target`
 
 BUG FIXES:
 
@@ -305,7 +313,7 @@ BUG FIXES:
 
 FEATURES:
 
-* **New Resource:** `wavefront_dashboard_json`
+* New Resource: `wavefront_dashboard_json`
 
 ENHANCEMENTS:
 
@@ -331,8 +339,8 @@ BREAKING CHANGES:
 
 * resource/dashboard: Added support for Dynamic and List parameter types*
 * string_key and string_value have been removed from parameter_detail
-* values_to_readable_strings replaces string_key and string_value as a map[string]string. Each key in the map is 
-effectively a separate string_key and the value is a separate string_value.
+* values_to_readable_strings replaces string_key and string_value as a map[string]string. Each key in the map is
+  effectively a separate string_key and the value is a separate string_value.
 * The value of default_value must equal one of the keys (not value) within the values_to_readable_string map.
 
 ENHANCEMENTS:
@@ -353,21 +361,21 @@ ENHANCEMENTS:
 
 ENHANCEMENTS:
 
-* resource/alert:  Allow optional Alert attributes (as defined by the API) to be omitted from Terraform. `display_expression` and `resolve_after_minutes` are now optional.
+* resource/alert: Allow optional Alert attributes (as defined by the API) to be omitted from Terraform. `display_expression` and `resolve_after_minutes` are now optional.
 
 ## 0.1.1 (October 12, 2017)
 
-NOTES: 
+NOTES:
 
-* Builds both linux and darwin versions of the plugin and uploads them all to github releases.
+* Builds both linux and darwin versions of the plugin and uploads them all to GitHub releases.
 
 ## 0.1.0 (September 15, 2017)
 
-NOTES: 
+NOTES:
 
-* First Release - Supports a limited Set of the Wavefront API*
+* First Release: Supports a limited Set of the Wavefront API*
 
 NEW FEATURES:
 
-* **New Resource:** `wavefront_alert`
-* **New Resource:** `wavefront_dashboard`
+* New Resource: `wavefront_alert`
+* New Resource: `wavefront_dashboard`

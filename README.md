@@ -1,4 +1,3 @@
-
 # Aria Operations for Applications Terraform Provider
 
 Thanks for stopping by and considering contributing to the Terraform Provider for interacting with Aria Operations for Applications!!! The Terraform Provider is used to manage resources in Aria Operations for Applications (AOA) and currently supports creating, maintaining and destroying Alerts, Alert Targets, and Dashboards for AOA resources.
@@ -16,22 +15,25 @@ Below, you will find some resources to help you get acquainted with Terraform an
 * This is a good [blog post](https://opencredo.com/blogs/running-a-terraform-provider-with-a-debugger/) to get some details on how to debug custom terraform provider.
 
 ## Requirements
+
 * Go version 1.13 or higher
 * Terraform 0.10.0 or higher (Custom providers were released at 0.10.0)
 * [govendor](https://github.com/kardianos/govendor) for dependency management
 
-
 ## Installing the Plugin
+
 First, ensure you have Go [installed and setup correctly](https://golang.org/doc/install).
 
 Then locally fetch your forked repo - [repository](https://github.com/vmware/terraform-provider-wavefront)
 `go get github.com/<your_account>/terraform-provider-wavefront`
 
 *Note*: If you experience the following error message:
+
 ```
 module declares its path as: github.com/vmware/terraform-provider-wavefront
 but was required as: github.com/McCoyAle/terraform-provider-wavefront
 ```
+
 This could be due to the [go.mod](https://github.com/vmware/terraform-provider-wavefront/blob/master/go.mod) file import reading the repository as VMware. You may need to update this to the name of your local repository. But do not submit this change upstream.
 
 Next, you'll need to use the local `build.sh` script to build the current version binary. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64. We release darwin and linux amd64 packages on the [releases page](https://github.com/vmware/terraform-provider-wavefront/releases). If you require a different architecture, you will need to build the plugin from source and then remove the `_os_arch` from the end of the file name and place it in `~/.terraform.d/plugins` which is where `terraform init` will look for plugins.
@@ -59,22 +61,22 @@ Use the main.tf file to create a test config, such as the following below:
 
 ```terraform
  provider "wavefront" {
-   address = "cluster.wavefront.com"
- }
+  address = "cluster.wavefront.com"
+}
 
- resource "wavefront_alert" "test_alert" {
-   name = "Terraform Test Alert"
-   target = "test@example.com,target:alert-target-id"
-   condition = "100-ts(\"cpu.usage_idle\", environment=flamingo-int and cpu=cpu-total and service=game-service) > 80"
-   display_expression = "100-ts(\"cpu.usage_idle\", environment=flamingo-int and cpu=cpu-total and service=game-service)"
-   minutes = 5
-   resolve_after_minutes = 5
-   severity = "WARN"
-   tags = [
-     "terraform",
-     "flamingo"
-   ]
- }
+resource "wavefront_alert" "test_alert" {
+  name                  = "Terraform Test Alert"
+  target                = "test@example.com,target:alert-target-id"
+  condition             = "100-ts(\"cpu.usage_idle\", environment=flamingo-int and cpu=cpu-total and service=game-service) > 80"
+  display_expression    = "100-ts(\"cpu.usage_idle\", environment=flamingo-int and cpu=cpu-total and service=game-service)"
+  minutes               = 5
+  resolve_after_minutes = 5
+  severity              = "WARN"
+  tags                  = [
+    "terraform",
+    "flamingo"
+  ]
+}
 ```
 
 Export your wavefront token `export WAVEFRONT_TOKEN=<token>` You could also configure the `token` in the provider section of main.tf, but best not to.
@@ -92,6 +94,7 @@ Update main.tf to change a value, then run plan and apply again to check that th
 Run `terraform destroy` to test deleting resources.
 
 ### Acceptance Tests
+
 Acceptance tests are run against the Wavefront API, so you'll need an account to use them. Run at your own risk.
 
 You need to supply the `WAVEFRONT_TOKEN` and `WAVEFRONT_ADDRESS` environment variables
