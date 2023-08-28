@@ -16,35 +16,64 @@ Below, you will find some resources to help you get acquainted with Terraform an
 
 ## Requirements
 
-* Go version 1.13 or higher
+* Go version 1.13 or higher [installed and setup correctly](https://golang.org/doc/install).
 * Terraform 0.10.0 or higher (Custom providers were released at 0.10.0)
 * [govendor](https://github.com/kardianos/govendor) for dependency management
 
-## Installing the Plugin
+## Developing the Provider
+1. To use your local copy of the provider, you first need to build it.
+    ```shell
+    make build
+    ```
+   This will install the provider to `/Users/<USERNAME>/go/bin`.
+2. Then add a `.terraformrc` file to your home directory tha references the locally built provider:
+    ```shell
+    provider_installation {
+      dev_overrides {
+        "vmware/wavefront" = "/Users/<USERNAME>/go/bin"
+      }
+    }
+    ```
+    You may need to run `terragform init -upgrade` to switch between local and remote versions of the plugin.
 
-First, ensure you have Go [installed and setup correctly](https://golang.org/doc/install).
+    * For more information on how the dev_overrides works, see [Development Overrides for Provider Developers](https://developer.hashicorp.com/terraform/cli/config/config-file#development-overrides-for-provider-developers).
 
-Then locally fetch your forked repo - [repository](https://github.com/vmware/terraform-provider-wavefront)
-`go get github.com/<your_account>/terraform-provider-wavefront`
+### Linting
 
-*Note*: If you experience the following error message:
+1. Install `golangci-lint`: https://golangci-lint.run/usage/install
+1. Run
+    ```shell
+    make lint
+    ```
 
-```
-module declares its path as: github.com/vmware/terraform-provider-wavefront
-but was required as: github.com/McCoyAle/terraform-provider-wavefront
-```
+### Running Tests
 
-This could be due to the [go.mod](https://github.com/vmware/terraform-provider-wavefront/blob/master/go.mod) file import reading the repository as VMware. You may need to update this to the name of your local repository. But do not submit this change upstream.
+1. Run
+    ```shell
+    make test
+    ```
 
-Next, you'll need to use the local `build.sh` script to build the current version binary. This will create two binaries in the form of terraform-provider-wavefront_version_os_arch in the root of the repository, one for Darwin amd64 and one for Linux amd64. We release darwin and linux amd64 packages on the [releases page](https://github.com/vmware/terraform-provider-wavefront/releases). If you require a different architecture, you will need to build the plugin from source and then remove the `_os_arch` from the end of the file name and place it in `~/.terraform.d/plugins` which is where `terraform init` will look for plugins.
+### Acceptance Tests
 
-Valid provider filenames are `terraform-provider-NAME_X.X.X` or `terraform-provider-NAME_vX.X.X`
+Acceptance tests are run against the Wavefront API, so you'll need an account to use them. Run at your own risk.
 
-*Note*: If you're using a different operating system or architecture, then you will need to update the build step of the makefile to also [build a binary for your OS and architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04).
+You need to supply the `WAVEFRONT_TOKEN` and `WAVEFRONT_ADDRESS` environment variables
 
-It is also important to know you can also utilize `go build` to build the binaries as well. However, using the `build.sh` script will append the appropriate version identified in the [version](https://github.com/vmware/terraform-provider-wavefront/blob/master/version) directory.
+To run the tests run
+`make testacc`
 
-Now that you have a binary, you should attempt to run it and expect to see a message similar to the one below.
+### Using a local Go cli
+
+1. To test your local copy of the go-wavefront-management-api client library, add this to the provider's `go.mod` file:
+    ```text
+    replace github.com/WavefrontHQ/go-wavefront-management-api/vX vX.Y.Z => /Users/<USERNAME>/workspace/go-wavefront-management-api
+    ```
+
+### Building the provider for different architectures
+
+You can use the local `build.sh` script to build specific versions of the binary. By default, this will create two binaries in the form of `terraform-provider-wavefront_<version_os_arch>` in the root of the repository, one for `Darwin amd64` and one for `Linux amd64`. We release darwin and linux amd64 packages on the [releases page](https://github.com/vmware/terraform-provider-wavefront/releases). If you require a different architecture, you can add it to the `build.sh` script to be built.
+
+Now that you have a binary, you test that it was built correctly by attempting to run it and confirming that you see a message similar to the one below.
 
 ```shell
 ./terraform-provider-wavefront_v0.1.2_darwin_amd64
@@ -55,9 +84,9 @@ load any plugins automatically.
 
 If you experience any issues, please do not hesitate to submit an issue, and we will prioritize accordingly!!!
 
-### Running the Plugin
+## Using the Plugin
 
-Use the main.tf file to create a test config, such as the following below:
+Use the `main.tf` file to create a test config, such as the following below:
 
 ```terraform
  provider "wavefront" {
@@ -92,15 +121,6 @@ Run `terraform apply` to apply the test configuration and then check the results
 Update main.tf to change a value, then run plan and apply again to check that the updates work.
 
 Run `terraform destroy` to test deleting resources.
-
-### Acceptance Tests
-
-Acceptance tests are run against the Wavefront API, so you'll need an account to use them. Run at your own risk.
-
-You need to supply the `WAVEFRONT_TOKEN` and `WAVEFRONT_ADDRESS` environment variables
-
-To run the tests run
-`make testacc`
 
 ## Contributing
 
