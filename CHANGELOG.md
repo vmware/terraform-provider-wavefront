@@ -1,3 +1,9 @@
+## 5.0.3 (Oct 6, 2023)
+
+* Upgrade go-wavefront-management-api to 2.1.1
+  * golang version and module upgrades
+* Tidy and upgrade modules
+
 ## 5.0.2 (Oct 6, 2023)
 
 * Push new version using updated gpg key.
