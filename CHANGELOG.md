@@ -1,3 +1,7 @@
+## 5.0.2 (Oct 6, 2023)
+
+* Push new version using updated gpg key.
+
 ## 5.0.1 (Aug 7, 2023)
 
 BUG FIX:
