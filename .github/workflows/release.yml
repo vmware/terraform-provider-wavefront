@@ -9,21 +9,20 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: Set up Go
+    - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.21
+        go-version-file: 'go.mod'
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3
       with: # Required: the version of golangci-lint is required and must be specified without a patch version:
         # we always use the latest patch version.
-        version: v1.52
+        version: v1.54
         # Optional: if set to `true` then the all caching functionality will be complete disabled,
         #           takes precedence over all other caching options.
         skip-cache: true
@@ -38,13 +37,16 @@ jobs:
 
     - name: Import GPG key
       id: import_gpg
-      uses: crazy-max/ghaction-import-gpg@v5
+      uses: crazy-max/ghaction-import-gpg@v6
       with:
         gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
         passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
+    - name: List keys
+      run: gpg -K
+
     - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@v4
+      uses: goreleaser/goreleaser-action@v5
       with:
         version: latest
         args: release --clean

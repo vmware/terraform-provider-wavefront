@@ -8,20 +8,23 @@ run:
 linters:
   disable-all: true
   enable:
+  - durationcheck
   - errcheck
-  # - gofmt
+  - exportloopref
+  - gofmt
   - goimports
-  - unused
   - gosimple
   - govet
   - ineffassign
-  - nakedret
+  - makezero
   - misspell
+  - nakedret
   - revive
   - staticcheck
+  - tenv
   - typecheck
-  - unused
   - unconvert
+  - unused
   - vet
   - vetshadow
 
