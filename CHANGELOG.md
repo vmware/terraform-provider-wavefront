@@ -1,3 +1,7 @@
+## 5.0.4 (Oct 6, 2023)
+
+Rebuild provider with new GPG key.
+
 ## 5.0.3 (Oct 6, 2023)
 
 * Upgrade go-wavefront-management-api to 2.1.1
