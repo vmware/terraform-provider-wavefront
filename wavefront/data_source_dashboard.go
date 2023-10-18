@@ -911,7 +911,7 @@ func convertStructToMap(parameters struct{}) map[string]interface{} {
 }
 
 func flattenParameterDetails(details map[string]wavefront.ParameterDetail) []map[string]interface{} {
-	paramsDetails := make([]map[string]interface{}, len(details))
+	paramsDetails := make([]map[string]interface{}, 0, len(details))
 
 	for _, v := range details {
 		paramsDetails = append(paramsDetails, flattenParameterDetail(v))
