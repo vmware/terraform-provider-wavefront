@@ -1,3 +1,10 @@
+## 5.0.5 (Oct 18, 2023)
+
+* Remove some broken Makefile commands.
+* Fix upgraded linter's new warning.
+* Upgrade all modules.
+* Update github actions.
+
 ## 5.0.4 (Oct 6, 2023)
 
 Rebuild provider with new GPG key.
