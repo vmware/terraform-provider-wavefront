@@ -7,8 +7,6 @@ description: |-
 
 # Wavefront Provider
 
-> Version 3.0.1 addresses a compatibility issue with the new alerting experience.
-
 The Wavefront provider is used to interact with the Wavefront monitoring service. The
 provider needs to be configured with the proper credentials before it can be used.
 
@@ -18,9 +16,16 @@ Use the navigation on the left to read about the available resources.
 
 ```hcl
 # Configure the Wavefront provider
-provider "wavefront" {
-  version = "~> 3.0"
+terraform {
+  required_providers {
+    wavefront = {
+      source  = "vmware/wavefront"
+      version = "~> 5.0.5"
+    }
+  }
 }
+
+provider "wavefront" {}
 
 resource "wavefront_alert" "test_alert" {
   name                   = "High CPU Alert"
