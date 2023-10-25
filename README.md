@@ -1,68 +1,80 @@
 # Aria Operations for Applications Terraform Provider
 
-Thanks for stopping by and considering contributing to the Terraform Provider for interacting with Aria Operations for Applications!!! The Terraform Provider is used to manage resources in Aria Operations for Applications (AOA) and currently supports creating, maintaining and destroying Alerts, Alert Targets, and Dashboards for AOA resources.
+Thanks for stopping by and considering contributing to the Terraform Provider for interacting with Aria Operations for Applications! This Provider is used to manage resources in Aria Operations for Applications (AOA). 
 
-We do our best to prioritize, review, and merge all requests. Generally, adding missing features (as per the [Wavefront API](https://www.wavefront.com/api/)) or bug fixes are welcomed. However, functional changes may require some discussion first.
-
-We make use of [go-wavefront-management-api](https://github.com/WavefrontHQ/go-wavefront-management-api) to abstract the API from the provider. New features (and possibly bug fixes) will likely require updates to go-wavefront.
-
-## Resources
-
-Below, you will find some resources to help you get acquainted with Terraform and the concept of Terraform providers.
-
-* This is a good [blog post](https://www.terraform.io/guides/writing-custom-terraform-providers.html?) by Hashicorp to get started.
-* Looking at how existing [Providers](https://github.com/terraform-providers) work can be useful.
-* This is a good [blog post](https://opencredo.com/blogs/running-a-terraform-provider-with-a-debugger/) to get some details on how to debug custom terraform provider.
+We welcome contributors to this provider! Please see our [CONTRIBUTING.md](./CONTRIBUTING.md) for more details on contributing.
 
 ## Requirements
 
 * Go version 1.13 or higher [installed and setup correctly](https://golang.org/doc/install).
-* Terraform 0.10.0 or higher (Custom providers were released at 0.10.0)
-* [govendor](https://github.com/kardianos/govendor) for dependency management
+* Terraform 0.10.0 or higher (Custom providers were released at 0.10.0).
+* Install [`golangci-lint`](https://golangci-lint.run/usage/install).
 
-## Developing the Provider
+## Provider Development and Installation
+
+In this section, you'll find information about how to develop, build and install your custom terraform provider locally.
+The examples will assume `MacOS`, but will provide instructions for how to build for other platforms.
+
+### Building the Provider
+
 1. To use your local copy of the provider, you first need to build it.
     ```shell
     make build
     ```
    This will install the provider to `/Users/<USERNAME>/go/bin`.
-2. Then add a `.terraformrc` file to your home directory tha references the locally built provider:
+1. Then add a `.terraformrc` file to your home directory that references the locally built provider:
     ```shell
     provider_installation {
       dev_overrides {
         "vmware/wavefront" = "/Users/<USERNAME>/go/bin"
       }
+    
+    direct {}
     }
     ```
-    You may need to run `terragform init -upgrade` to switch between local and remote versions of the plugin.
+    You may need to run `terraform init -upgrade` to switch between local and remote versions of the plugin.
 
     * For more information on how the dev_overrides works, see [Development Overrides for Provider Developers](https://developer.hashicorp.com/terraform/cli/config/config-file#development-overrides-for-provider-developers).
+1. Now, when running `terraform` commands - such as `plan` or `apply` - your local copy of the provider will be used. If everything has worked as expected, you should see output similar to the following when running `terraform` commands:
+```text
+╷
+│ Warning: Provider development overrides are in effect
+│
+│ The following provider development overrides are set in the CLI configuration:
+│  - vmware/wavefront in /Users/<USERNAME>/go/bin
+│
+│ The behavior may therefore not match any released version of the provider and applying changes may cause the state to become incompatible with published releases.
+╵
+```
 
-### Linting
+### Unit Tests
 
-1. Install `golangci-lint`: https://golangci-lint.run/usage/install
-1. Run
-    ```shell
-    make lint
-    ```
+Unit Tests should be written where required and can be run from `make test`. The core functionality of the provider (Read, Create, Update, Delete and Import of resources is best tested via integration tests), but any supporting function should be unit tested.
 
-### Running Tests
-
-1. Run
-    ```shell
-    make test
-    ```
+`make test` does not run acceptance tests.
 
 ### Acceptance Tests
 
-Acceptance tests are run against the Wavefront API, so you'll need an account to use them. Run at your own risk.
+Acceptance Tests are required for the Read, Create, Update, Delete and Import of resources. Acceptance tests are run against the Wavefront API, so you'll need an account to use them. Run at your own risk.
 
-You need to supply the `WAVEFRONT_TOKEN` and `WAVEFRONT_ADDRESS` environment variables
+The `WAVEFRONT_ADDRESS` and `WAVEFRONT_TOKEN` environment variables are required in order for the tests to run.
 
-To run the tests run
-`make testacc`
+```shell
+export WAVEFRONT_ADDRESS=<your-account>.wavefront.com
+export WAVEFRONT_TOKEN=<your-wavefront-token>
 
-### Using a local Go cli
+make testacc
+```
+
+### Linting and Formatting
+
+1. Run
+    ```shell
+    make lint
+    make fmt
+    ```
+
+### Using a local copy of the Wavefront Golang Client Library
 
 1. To test your local copy of the go-wavefront-management-api client library, add this to the provider's `go.mod` file:
     ```text
@@ -82,46 +94,8 @@ Please execute the program that consumes these plugins, which will
 load any plugins automatically.
 ```
 
-If you experience any issues, please do not hesitate to submit an issue, and we will prioritize accordingly!!!
+Once you have the plugin you should remove the `_os_arch` from the end of the file name.
 
 ## Using the Plugin
 
-Use the `main.tf` file to create a test config, such as the following below:
-
-```terraform
- provider "wavefront" {
-  address = "cluster.wavefront.com"
-}
-
-resource "wavefront_alert" "test_alert" {
-  name                  = "Terraform Test Alert"
-  target                = "test@example.com,target:alert-target-id"
-  condition             = "100-ts(\"cpu.usage_idle\", environment=flamingo-int and cpu=cpu-total and service=game-service) > 80"
-  display_expression    = "100-ts(\"cpu.usage_idle\", environment=flamingo-int and cpu=cpu-total and service=game-service)"
-  minutes               = 5
-  resolve_after_minutes = 5
-  severity              = "WARN"
-  tags                  = [
-    "terraform",
-    "flamingo"
-  ]
-}
-```
-
-Export your wavefront token `export WAVEFRONT_TOKEN=<token>` You could also configure the `token` in the provider section of main.tf, but best not to.
-
-*Note*: If you are not familiar with the process for creating a token please review the following [page](https://docs.wavefront.com/wavefront_api.html)
-
-Run `terraform init` to load your provider.
-
-Run `terraform plan` to show the plan.
-
-Run `terraform apply` to apply the test configuration and then check the results in Wavefront.
-
-Update main.tf to change a value, then run plan and apply again to check that the updates work.
-
-Run `terraform destroy` to test deleting resources.
-
-## Contributing
-
-Please review the [CONTRIBUTOR.md](CONTRIBUTOR.md) document for more information on contributing.
+To see instructions for using this provider to manage resources in Aria Operations for Applications, please see [the documentation in the terraform registry](https://registry.terraform.io/providers/vmware/wavefront/latest/docs).
