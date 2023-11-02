@@ -100,6 +100,11 @@ func resourceAlert() *schema.Resource {
 				Optional: true,
 				Default:  5,
 			},
+			"runbook_links": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
 		},
 	}
 }
@@ -143,6 +148,7 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	tags := decodeTags(d)
+	runbookLinks := decodeRunbookLinks(d)
 
 	a := &wavefront.Alert{
 		Name:                               d.Get("name").(string),
@@ -153,6 +159,7 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 		NotificationResendFrequencyMinutes: d.Get("notification_resend_frequency_minutes").(int),
 		Tags:                               tags,
 		CheckingFrequencyInMinutes:         d.Get("process_rate_minutes").(int),
+		RunbookLinks:                       runbookLinks,
 	}
 
 	err := validateAlertConditions(a, d)
@@ -214,6 +221,7 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("can_view", tmpAlert.ACL.CanView)
 	d.Set("can_modify", tmpAlert.ACL.CanModify)
 	d.Set("process_rate_minutes", tmpAlert.CheckingFrequencyInMinutes)
+	d.Set("runbook_links", tmpAlert.RunbookLinks)
 
 	return nil
 }
@@ -231,6 +239,7 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	tags := decodeTags(d)
+	runbookLinks := decodeRunbookLinks(d)
 	canView, canModify := decodeAccessControlList(d)
 
 	a := tmpAlert
@@ -241,6 +250,7 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	a.ResolveAfterMinutes = d.Get("resolve_after_minutes").(int)
 	a.NotificationResendFrequencyMinutes = d.Get("notification_resend_frequency_minutes").(int)
 	a.Tags = tags
+	a.RunbookLinks = runbookLinks
 	a.CheckingFrequencyInMinutes = d.Get("process_rate_minutes").(int)
 
 	err = validateAlertConditions(&a, d)
@@ -343,4 +353,12 @@ func validateThresholdLevels(m map[string]string) error {
 		}
 	}
 	return nil
+}
+
+// Decodes the runbook links from the state and returns a []string of links
+func decodeRunbookLinks(d *schema.ResourceData) (links []string) {
+	for _, link := range d.Get("runbook_links").([]interface{}) {
+		links = append(links, link.(string))
+	}
+	return links
 }

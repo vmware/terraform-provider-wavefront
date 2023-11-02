@@ -95,6 +95,7 @@ func flattenAlert(alert *wavefront.Alert) map[string]interface{} {
 	tfMap["severity_list"] = alert.SeverityList
 	tfMap["status"] = alert.Status
 	tfMap["tags"] = alert.Tags
+	tfMap["runbook_links"] = alert.RunbookLinks
 	tfMap["can_view"] = alert.ACL.CanView
 	tfMap["can_modify"] = alert.ACL.CanModify
 	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes

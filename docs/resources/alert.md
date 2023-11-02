@@ -60,6 +60,7 @@ The following arguments are supported:
 * `can_view` - (Optional) A list of valid users or groups that can view this resource on a tenant. Default is Empty list.
 * `can_modify` - (Optional) A list of valid users or groups that can modify this resource on a tenant.
 * `process_rate_minutes` - (Optional) The specified query is executed every `process_rate_minutes` minutes. Default value is 5 minutes.
+* `runbook_links` - A list of user-supplied runbook links for this alert.
 
 ### Example
 

@@ -139,6 +139,12 @@ func dataSourceAlertSchema() map[string]*schema.Schema {
 				Schema: sourceLabelSchema(),
 			},
 		},
+
+		"runbook_links": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+		},
 	}
 
 }
@@ -208,6 +214,9 @@ func setAlertAttributes(d *schema.ResourceData, alert wavefront.Alert) error {
 		return err
 	}
 	if err := d.Set("tags", alert.Tags); err != nil {
+		return err
+	}
+	if err := d.Set("runbook_links", alert.RunbookLinks); err != nil {
 		return err
 	}
 	if err := d.Set("can_view", alert.ACL.CanView); err != nil {
