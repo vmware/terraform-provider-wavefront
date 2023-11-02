@@ -4,8 +4,8 @@ github.com/Microsoft/go-winio v0.6.1 h1:9/kr64B9VUZrLm5YYwbGtUJnMgqWVOdUAXu6Migc
 github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5+sAH+4kjUM=
 github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95 h1:KLq8BE0KwCL+mmXnjLWEAOYO+2l2AE4YMmqG1ZpZHBs=
 github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95/go.mod h1:EjAoLdwvbIOoOQr3ihjnSoLZRtE8azugULFRteWMNc0=
-github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.1.1 h1:Y2XZN5MoPOKIX7YVfAVFOnWYDkAQAh/65Y97Tt4Ez8g=
-github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.1.1/go.mod h1:yOfesauybnZn9yYaovaLRe3RxlsLSRIswmHayvJO9O8=
+github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.2.1 h1:9RWLxiaJ2NsKOGzLBEEDYBEQfqdAcELcIfiz2ETchp4=
+github.com/WavefrontHQ/go-wavefront-management-api/v2 v2.2.1/go.mod h1:yOfesauybnZn9yYaovaLRe3RxlsLSRIswmHayvJO9O8=
 github.com/acomagu/bufpipe v1.0.4 h1:e3H4WUzM3npvo5uv95QuJM3cQspFNtFBzvJ2oNjKIDQ=
 github.com/acomagu/bufpipe v1.0.4/go.mod h1:mxdxdup/WdsKVreO5GpW4+M/1CE2sMG4jeGJ2sYmHc4=
 github.com/agext/levenshtein v1.2.3 h1:YB2fHEn0UJagG8T1rrWknE3ZQzWM06O8AMAatNn7lmo=
