@@ -22,6 +22,20 @@ We will review your pull request and provide feedback.
 ## Versioning
 
 We use [Semantic Versioning](http://semver.org/) on this project. The version is located inside the `version` file, in the root of the repository, in the format `vMajor.Minor.Patch`. Update this version as required.
+
+## Creating a new Release
+
+1. Update the CHANGELOG.md
+1. Update the `version` file to vX.Y.Z
+1. Commit changes
+1. Make a new tag (`git tag vX.Y.Z`)
+1. Push changes / tag vX.Y.Z (`git push --tags`)
+    1. A GitHub Action should generate the necessary binaries and a Release on GitHub.
+        1. Binaries need to be complete before a TF Registry Resync will work.
+1. Update the GitHub Release text to match past releases. (aka version as title and summary as body)
+1. Ask the HashiCorp team to Resync the provider by sending an email to support@hashicorp.com, or by using https://support.hashicorp.com/hc/en-us
+
+
 ## Helpful Resources for Provider Development
 
 * This is a good [blog post](https://www.terraform.io/guides/writing-custom-terraform-providers.html?) by Hashicorp to get started.
