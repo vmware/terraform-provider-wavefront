@@ -105,6 +105,13 @@ func resourceAlert() *schema.Resource {
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
+			"alert_triage_dashboards": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: alertTriageDashboardSchema(),
+				},
+			},
 		},
 	}
 }
@@ -149,6 +156,7 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 
 	tags := decodeTags(d)
 	runbookLinks := decodeRunbookLinks(d)
+	alertTriageDashboards := decodeAlertTriageDashboards(d)
 
 	a := &wavefront.Alert{
 		Name:                               d.Get("name").(string),
@@ -160,6 +168,7 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 		Tags:                               tags,
 		CheckingFrequencyInMinutes:         d.Get("process_rate_minutes").(int),
 		RunbookLinks:                       runbookLinks,
+		AlertTriageDashboards:              alertTriageDashboards,
 	}
 
 	err := validateAlertConditions(a, d)
@@ -222,6 +231,7 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("can_modify", tmpAlert.ACL.CanModify)
 	d.Set("process_rate_minutes", tmpAlert.CheckingFrequencyInMinutes)
 	d.Set("runbook_links", tmpAlert.RunbookLinks)
+	d.Set("alert_triage_dashboards", parseAlertTriageDashboards(tmpAlert.AlertTriageDashboards))
 
 	return nil
 }
@@ -240,6 +250,7 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	tags := decodeTags(d)
 	runbookLinks := decodeRunbookLinks(d)
+	alertTriageDashboards := decodeAlertTriageDashboards(d)
 	canView, canModify := decodeAccessControlList(d)
 
 	a := tmpAlert
@@ -251,6 +262,7 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	a.NotificationResendFrequencyMinutes = d.Get("notification_resend_frequency_minutes").(int)
 	a.Tags = tags
 	a.RunbookLinks = runbookLinks
+	a.AlertTriageDashboards = alertTriageDashboards
 	a.CheckingFrequencyInMinutes = d.Get("process_rate_minutes").(int)
 
 	err = validateAlertConditions(&a, d)
@@ -361,4 +373,35 @@ func decodeRunbookLinks(d *schema.ResourceData) (links []string) {
 		links = append(links, link.(string))
 	}
 	return links
+}
+
+func decodeAlertTriageDashboards(d *schema.ResourceData) []wavefront.AlertTriageDashboard {
+	alertTriageDashboards := []wavefront.AlertTriageDashboard{}
+
+	if dashboards, ok := d.Get("alert_triage_dashboards").([]interface{}); ok {
+		for _, dashboard := range dashboards {
+			dashboardData := dashboard.(map[string]interface{})
+			alertTriageDashboard := wavefront.AlertTriageDashboard{
+				DashboardId: dashboardData["dashboard_id"].(string),
+				Description: dashboardData["description"].(string),
+				Parameters:  make(map[string]map[string]string),
+			}
+
+			if parameters, ok := dashboardData["parameters"].([]interface{}); ok && len(parameters) > 0 {
+				// Assuming there should be only one parameters block
+				parametersData := parameters[0].(map[string]interface{})
+
+				if constants, ok := parametersData["constants"].(map[string]interface{}); ok {
+					alertTriageDashboard.Parameters["constants"] = make(map[string]string)
+					for key, value := range constants {
+						alertTriageDashboard.Parameters["constants"][key] = value.(string)
+					}
+				}
+			}
+
+			alertTriageDashboards = append(alertTriageDashboards, alertTriageDashboard)
+		}
+	}
+
+	return alertTriageDashboards
 }

@@ -145,6 +145,14 @@ func dataSourceAlertSchema() map[string]*schema.Schema {
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
+
+		"alert_triage_dashboards": {
+			Type:     schema.TypeList,
+			Computed: true,
+			Elem: &schema.Resource{
+				Schema: alertTriageDashboardSchema(),
+			},
+		},
 	}
 
 }
@@ -240,6 +248,9 @@ func setAlertAttributes(d *schema.ResourceData, alert wavefront.Alert) error {
 	if err := d.Set("in_maintenance_host_label_pairs", flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)); err != nil {
 		return err
 	}
+	if err := d.Set("alert_triage_dashboards", parseAlertTriageDashboards(alert.AlertTriageDashboards)); err != nil {
+		return err
+	}
 	return d.Set("process_rate_minutes", alert.CheckingFrequencyInMinutes)
 }
 
@@ -256,4 +267,26 @@ func flattenHostLabelPair(pair wavefront.SourceLabelPair) map[string]interface{}
 	tfMap["firing"] = pair.Firing
 	tfMap["host"] = pair.Host
 	return tfMap
+}
+
+func parseAlertTriageDashboards(alertTriageDashboards []wavefront.AlertTriageDashboard) []map[string]interface{} {
+	triageDashboards := make([]map[string]interface{}, len(alertTriageDashboards))
+
+	for i, alertTriageDashboard := range alertTriageDashboards {
+		dashboardData := map[string]interface{}{
+			"dashboard_id": alertTriageDashboard.DashboardId,
+			"description":  alertTriageDashboard.Description,
+		}
+
+		parameters := make([]map[string]interface{}, 1)
+
+		for key, value := range alertTriageDashboard.Parameters {
+			parameters[0] = map[string]interface{}{key: value}
+		}
+
+		dashboardData["parameters"] = parameters
+		triageDashboards[i] = dashboardData
+	}
+
+	return triageDashboards
 }

@@ -47,3 +47,4 @@ data "wavefront_alert" "example" {
 * `failing_host_label_pairs` - A list of failing host label pairs.
 * `in_maintenance_host_label_pairs` - A list of in maintenance host label pairs.
 * `runbook_links` - A list of user-supplied runbook links for this alert.
+* `alert_triage_dashboards` - A set of user-supplied dashboard and parameters to create dashboard links for triaging alerts.

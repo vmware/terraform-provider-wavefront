@@ -10,6 +10,84 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
+const (
+	testDashboardID1   = "id-1"
+	testDashboardID2   = "id-2"
+	testDashboardDesc1 = "desc-1"
+	testDashboardDesc2 = "desc-2"
+	testKey1           = "key-1"
+	testKey2           = "key-2"
+	testKey3           = "key-3"
+	testVal1           = "val-1"
+	testVal2           = "val-2"
+	testVal3           = "val-3"
+)
+
+func TestDecodeAlertTriageDashboards(t *testing.T) {
+	testData := map[string]interface{}{
+		"name": "Test Alert",
+		"alert_triage_dashboards": []interface{}{
+			map[string]interface{}{
+				"dashboard_id": testDashboardID1,
+				"description":  testDashboardDesc1,
+				"parameters": []interface{}{
+					map[string]interface{}{
+						"constants": map[string]interface{}{
+							testKey1: testVal1,
+							testKey2: testVal2,
+						},
+					},
+				},
+			},
+			map[string]interface{}{
+				"dashboard_id": testDashboardID2,
+				"description":  testDashboardDesc2,
+				"parameters": []interface{}{
+					map[string]interface{}{
+						"constants": map[string]interface{}{
+							testKey3: testVal3,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	resourceData := schema.TestResourceDataRaw(t, resourceAlert().Schema, testData)
+
+	alertTriageDashboards := decodeAlertTriageDashboards(resourceData)
+
+	// Check the length of the result slice
+	if len(alertTriageDashboards) != 2 {
+		t.Errorf("Expected 2 AlertTriageDashboard items, but got %d", len(alertTriageDashboards))
+	}
+
+	// Check the content of the first item
+	if alertTriageDashboards[0].DashboardId != testDashboardID1 {
+		t.Errorf("Expected DashboardId to be '%s', but got %s", testDashboardID1, alertTriageDashboards[0].DashboardId)
+	}
+	if alertTriageDashboards[0].Description != testDashboardDesc1 {
+		t.Errorf("Expected Description to be '%s', but got %s", testDashboardDesc1, alertTriageDashboards[0].Description)
+	}
+	if alertTriageDashboards[0].Parameters["constants"][testKey1] != testVal1 {
+		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey1, testVal1, alertTriageDashboards[0].Parameters["constants"][testKey1])
+	}
+	if alertTriageDashboards[0].Parameters["constants"][testKey2] != testVal2 {
+		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey2, testVal2, alertTriageDashboards[0].Parameters["constants"][testKey2])
+	}
+
+	// Check the content of the second item
+	if alertTriageDashboards[1].DashboardId != testDashboardID2 {
+		t.Errorf("Expected DashboardId to be '%s', but got %s", testDashboardID2, alertTriageDashboards[1].DashboardId)
+	}
+	if alertTriageDashboards[1].Description != testDashboardDesc2 {
+		t.Errorf("Expected Description to be '%s', but got %s", testDashboardDesc2, alertTriageDashboards[1].Description)
+	}
+	if alertTriageDashboards[1].Parameters["constants"][testKey3] != testVal3 {
+		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey3, testVal3, alertTriageDashboards[1].Parameters["constants"][testKey3])
+	}
+}
+
 func TestValidateAlertTarget(t *testing.T) {
 	email := "example@wavefront.com"
 	pdKey := "pd:not-a-real-pagerduty-key"

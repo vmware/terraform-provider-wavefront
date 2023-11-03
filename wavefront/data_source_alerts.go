@@ -53,6 +53,35 @@ func sourceLabelSchema() map[string]*schema.Schema {
 	}
 }
 
+func alertTriageDashboardSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"dashboard_id": {
+			Type:        schema.TypeString,
+			Required:    true,
+			Description: "Dashboard ID",
+		},
+		"description": {
+			Type:        schema.TypeString,
+			Required:    true,
+			Description: "Dashboard Description",
+		},
+		"parameters": {
+			MaxItems: 1, // There should be only one "parameters" block
+			Type:     schema.TypeList,
+			Optional: true,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"constants": {
+						Type:     schema.TypeMap,
+						Optional: true,
+						Elem:     schema.TypeString,
+					},
+				},
+			},
+		},
+	}
+}
+
 func dataSourceAlertsRead(d *schema.ResourceData, m interface{}) error {
 
 	var allAlerts []*wavefront.Alert
