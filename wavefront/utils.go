@@ -64,6 +64,13 @@ const (
 	limitKey                     = "limit"
 	offsetKey                    = "offset"
 	dashboardsKey                = "dashboards"
+	constantsKey                 = "constants"
+	parametersKey                = "parameters"
+	dashboardIDKey               = "dashboard_id"
+	alertTriageDashboardsKey     = "alert_triage_dashboards"
+	runbookLinksKey              = "runbook_links"
+	hostKey                      = "host"
+	firingKey                    = "firing"
 )
 
 // compareStringSliceAnyOrder compares two string slices in any order. It returns

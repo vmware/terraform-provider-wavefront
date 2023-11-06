@@ -118,7 +118,6 @@ const (
 	dynamicFieldTypeKey        = "dynamic_field_type"
 	sectionsKey                = "sections"
 	parameterDetailsKey        = "parameter_details"
-	parametersKey              = "parameters"
 	canViewKey                 = "can_view"
 	canModifyKey               = "can_modify"
 )

@@ -18,21 +18,23 @@ const (
 	testKey1           = "key-1"
 	testKey2           = "key-2"
 	testKey3           = "key-3"
+	testKey4           = "key-4"
 	testVal1           = "val-1"
 	testVal2           = "val-2"
 	testVal3           = "val-3"
+	testVal4           = "val-4"
 )
 
 func TestDecodeAlertTriageDashboards(t *testing.T) {
 	testData := map[string]interface{}{
 		"name": "Test Alert",
-		"alert_triage_dashboards": []interface{}{
+		alertTriageDashboardsKey: []interface{}{
 			map[string]interface{}{
-				"dashboard_id": testDashboardID1,
-				"description":  testDashboardDesc1,
-				"parameters": []interface{}{
+				dashboardIDKey: testDashboardID1,
+				descriptionKey: testDashboardDesc1,
+				parametersKey: []interface{}{
 					map[string]interface{}{
-						"constants": map[string]interface{}{
+						constantsKey: map[string]interface{}{
 							testKey1: testVal1,
 							testKey2: testVal2,
 						},
@@ -40,11 +42,11 @@ func TestDecodeAlertTriageDashboards(t *testing.T) {
 				},
 			},
 			map[string]interface{}{
-				"dashboard_id": testDashboardID2,
-				"description":  testDashboardDesc2,
-				"parameters": []interface{}{
+				dashboardIDKey: testDashboardID2,
+				descriptionKey: testDashboardDesc2,
+				parametersKey: []interface{}{
 					map[string]interface{}{
-						"constants": map[string]interface{}{
+						constantsKey: map[string]interface{}{
 							testKey3: testVal3,
 						},
 					},
@@ -69,11 +71,11 @@ func TestDecodeAlertTriageDashboards(t *testing.T) {
 	if alertTriageDashboards[0].Description != testDashboardDesc1 {
 		t.Errorf("Expected Description to be '%s', but got %s", testDashboardDesc1, alertTriageDashboards[0].Description)
 	}
-	if alertTriageDashboards[0].Parameters["constants"][testKey1] != testVal1 {
-		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey1, testVal1, alertTriageDashboards[0].Parameters["constants"][testKey1])
+	if alertTriageDashboards[0].Parameters[constantsKey][testKey1] != testVal1 {
+		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey1, testVal1, alertTriageDashboards[0].Parameters[constantsKey][testKey1])
 	}
-	if alertTriageDashboards[0].Parameters["constants"][testKey2] != testVal2 {
-		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey2, testVal2, alertTriageDashboards[0].Parameters["constants"][testKey2])
+	if alertTriageDashboards[0].Parameters[constantsKey][testKey2] != testVal2 {
+		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey2, testVal2, alertTriageDashboards[0].Parameters[constantsKey][testKey2])
 	}
 
 	// Check the content of the second item
@@ -83,8 +85,8 @@ func TestDecodeAlertTriageDashboards(t *testing.T) {
 	if alertTriageDashboards[1].Description != testDashboardDesc2 {
 		t.Errorf("Expected Description to be '%s', but got %s", testDashboardDesc2, alertTriageDashboards[1].Description)
 	}
-	if alertTriageDashboards[1].Parameters["constants"][testKey3] != testVal3 {
-		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey3, testVal3, alertTriageDashboards[1].Parameters["constants"][testKey3])
+	if alertTriageDashboards[1].Parameters[constantsKey][testKey3] != testVal3 {
+		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey3, testVal3, alertTriageDashboards[1].Parameters[constantsKey][testKey3])
 	}
 }
 

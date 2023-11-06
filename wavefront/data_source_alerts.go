@@ -40,48 +40,6 @@ func dataSourceAlertsSchema() map[string]*schema.Schema {
 
 }
 
-func sourceLabelSchema() map[string]*schema.Schema {
-	return map[string]*schema.Schema{
-		"host": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"firing": {
-			Type:     schema.TypeInt,
-			Computed: true,
-		},
-	}
-}
-
-func alertTriageDashboardSchema() map[string]*schema.Schema {
-	return map[string]*schema.Schema{
-		"dashboard_id": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "Dashboard ID",
-		},
-		"description": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "Dashboard Description",
-		},
-		"parameters": {
-			MaxItems: 1, // There should be only one "parameters" block
-			Type:     schema.TypeList,
-			Optional: true,
-			Elem: &schema.Resource{
-				Schema: map[string]*schema.Schema{
-					"constants": {
-						Type:     schema.TypeMap,
-						Optional: true,
-						Elem:     schema.TypeString,
-					},
-				},
-			},
-		},
-	}
-}
-
 func dataSourceAlertsRead(d *schema.ResourceData, m interface{}) error {
 
 	var allAlerts []*wavefront.Alert
@@ -124,7 +82,6 @@ func flattenAlert(alert *wavefront.Alert) map[string]interface{} {
 	tfMap["severity_list"] = alert.SeverityList
 	tfMap["status"] = alert.Status
 	tfMap["tags"] = alert.Tags
-	tfMap["runbook_links"] = alert.RunbookLinks
 	tfMap["can_view"] = alert.ACL.CanView
 	tfMap["can_modify"] = alert.ACL.CanModify
 	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes
@@ -133,6 +90,8 @@ func flattenAlert(alert *wavefront.Alert) map[string]interface{} {
 	tfMap["failing_host_label_pairs"] = flattenHostLabelPairs(alert.FailingHostLabelPairs)
 	tfMap["in_maintenance_host_label_pairs"] = flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)
 	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes
+	tfMap[runbookLinksKey] = alert.RunbookLinks
+	tfMap[alertTriageDashboardsKey] = alert.AlertTriageDashboards
 
 	return tfMap
 }

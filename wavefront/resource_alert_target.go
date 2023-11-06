@@ -22,7 +22,7 @@ func resourceTarget() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"description": {
+			descriptionKey: {
 				Type:     schema.TypeString,
 				Required: true,
 			},
@@ -111,7 +111,7 @@ func resourceTargetCreate(d *schema.ResourceData, meta interface{}) error {
 
 	t := &wavefront.Target{
 		Title:         d.Get("name").(string),
-		Description:   d.Get("description").(string),
+		Description:   d.Get(descriptionKey).(string),
 		Triggers:      triggers,
 		Template:      d.Get("template").(string),
 		Method:        d.Get("method").(string),
@@ -152,7 +152,7 @@ func resourceTargetRead(d *schema.ResourceData, meta interface{}) error {
 	// Use the Wavefront ID as the Terraform ID
 	d.SetId(*tmpTarget.ID)
 	d.Set("name", tmpTarget.Title)
-	d.Set("description", tmpTarget.Description)
+	d.Set(descriptionKey, tmpTarget.Description)
 	d.Set("triggers", tmpTarget.Triggers)
 	d.Set("template", tmpTarget.Template)
 	d.Set("method", tmpTarget.Method)
@@ -199,7 +199,7 @@ func resourceTargetUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	t := results[0]
 	t.Title = d.Get("name").(string)
-	t.Description = d.Get("description").(string)
+	t.Description = d.Get(descriptionKey).(string)
 	t.Triggers = triggers
 	t.Template = d.Get("template").(string)
 	t.Method = d.Get("method").(string)
