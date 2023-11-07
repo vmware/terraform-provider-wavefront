@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -25,69 +26,80 @@ const (
 	testVal4           = "val-4"
 )
 
+func TestDecodeRunbookLinks(t *testing.T) {
+	resource := dataSourceAlert()
+	var testAlertID = "test-id"
+	var expectedLink = []string{testLink1, testLink2}
+
+	// Create a sample schema.ReourceData
+	d := resource.TestResourceData()
+	alert := wavefront.Alert{
+		Name:         testAlertName,
+		ID:           &testAlertID,
+		RunbookLinks: expectedLink,
+	}
+
+	err := setAlertAttributes(d, alert)
+	assert.Nil(t, err)
+
+	actualLinks := decodeRunbookLinks(d)
+	assert.Equal(t, expectedLink, actualLinks)
+}
+
 func TestDecodeAlertTriageDashboards(t *testing.T) {
-	testData := map[string]interface{}{
-		"name": "Test Alert",
-		alertTriageDashboardsKey: []interface{}{
-			map[string]interface{}{
-				dashboardIDKey: testDashboardID1,
-				descriptionKey: testDashboardDesc1,
-				parametersKey: []interface{}{
-					map[string]interface{}{
-						constantsKey: map[string]interface{}{
-							testKey1: testVal1,
-							testKey2: testVal2,
-						},
-					},
-				},
-			},
-			map[string]interface{}{
-				dashboardIDKey: testDashboardID2,
-				descriptionKey: testDashboardDesc2,
-				parametersKey: []interface{}{
-					map[string]interface{}{
-						constantsKey: map[string]interface{}{
-							testKey3: testVal3,
-						},
-					},
-				},
-			},
+	resource := dataSourceAlert()
+	var testAlertID = "test-id"
+	var testParameters = map[string]map[string]string{constantsKey: {testKey1: testVal1, testKey2: testVal2}}
+	var expectedAlertTriageDashboards = []wavefront.AlertTriageDashboard{
+		{
+			DashboardId: testDashboardID1,
+			Description: testDashboardDesc1,
+			Parameters:  testParameters,
 		},
 	}
 
-	resourceData := schema.TestResourceDataRaw(t, resourceAlert().Schema, testData)
-
-	alertTriageDashboards := decodeAlertTriageDashboards(resourceData)
-
-	// Check the length of the result slice
-	if len(alertTriageDashboards) != 2 {
-		t.Errorf("Expected 2 AlertTriageDashboard items, but got %d", len(alertTriageDashboards))
+	// Create a sample schema.ReourceData
+	d := resource.TestResourceData()
+	alert := wavefront.Alert{
+		Name:                  testAlertName,
+		ID:                    &testAlertID,
+		AlertTriageDashboards: expectedAlertTriageDashboards,
 	}
 
-	// Check the content of the first item
-	if alertTriageDashboards[0].DashboardId != testDashboardID1 {
-		t.Errorf("Expected DashboardId to be '%s', but got %s", testDashboardID1, alertTriageDashboards[0].DashboardId)
-	}
-	if alertTriageDashboards[0].Description != testDashboardDesc1 {
-		t.Errorf("Expected Description to be '%s', but got %s", testDashboardDesc1, alertTriageDashboards[0].Description)
-	}
-	if alertTriageDashboards[0].Parameters[constantsKey][testKey1] != testVal1 {
-		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey1, testVal1, alertTriageDashboards[0].Parameters[constantsKey][testKey1])
-	}
-	if alertTriageDashboards[0].Parameters[constantsKey][testKey2] != testVal2 {
-		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey2, testVal2, alertTriageDashboards[0].Parameters[constantsKey][testKey2])
+	err := setAlertAttributes(d, alert)
+	assert.Nil(t, err)
+
+	actualAlertTriageDashboards := decodeAlertTriageDashboards(d)
+	assert.Equal(t, expectedAlertTriageDashboards, actualAlertTriageDashboards)
+}
+
+func TestSuppressAlertConditionOnType(t *testing.T) {
+	resource := dataSourceAlert()
+	var testAlertID = "test-id"
+
+	// Create an alert of type THRESHOLD
+	d := resource.TestResourceData()
+	alertThreshold := wavefront.Alert{
+		Name:      testAlertName,
+		ID:        &testAlertID,
+		AlertType: wavefront.AlertTypeThreshold,
 	}
 
-	// Check the content of the second item
-	if alertTriageDashboards[1].DashboardId != testDashboardID2 {
-		t.Errorf("Expected DashboardId to be '%s', but got %s", testDashboardID2, alertTriageDashboards[1].DashboardId)
+	err := setAlertAttributes(d, alertThreshold)
+	assert.Nil(t, err)
+	assert.True(t, suppressAlertConditionOnType("foo", "bar", "foobar", d))
+
+	// Create an alert of type CLASSIC
+	// d := resource.TestResourceData()
+	alertClassic := wavefront.Alert{
+		Name:      testAlertName,
+		ID:        &testAlertID,
+		AlertType: wavefront.AlertTypeClassic,
 	}
-	if alertTriageDashboards[1].Description != testDashboardDesc2 {
-		t.Errorf("Expected Description to be '%s', but got %s", testDashboardDesc2, alertTriageDashboards[1].Description)
-	}
-	if alertTriageDashboards[1].Parameters[constantsKey][testKey3] != testVal3 {
-		t.Errorf("Expected constants.%s to be '%s', but got %s", testKey3, testVal3, alertTriageDashboards[1].Parameters[constantsKey][testKey3])
-	}
+
+	err = setAlertAttributes(d, alertClassic)
+	assert.Nil(t, err)
+	assert.False(t, suppressAlertConditionOnType("foo", "bar", "foobar", d))
 }
 
 func TestValidateAlertTarget(t *testing.T) {
