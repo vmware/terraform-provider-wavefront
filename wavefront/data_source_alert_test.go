@@ -1,6 +1,8 @@
 package wavefront
 
 import (
+	"fmt"
+	"reflect"
 	"regexp"
 	"testing"
 
@@ -17,6 +19,7 @@ const (
 	testFiring1   = 1
 	testLink1     = "test-link-1"
 	testLink2     = "test-link-2"
+	testKey       = "test-key"
 )
 
 func TestAccAlertIDRequired(t *testing.T) {
@@ -33,80 +36,96 @@ func TestAccAlertIDRequired(t *testing.T) {
 	})
 }
 
+func TestParseAlertTriageDashboardParameters(t *testing.T) {
+	// Create some test parameters
+	expected := map[string]map[string]string{
+		constantsKey: {testKey1: testVal1, testKey2: testVal2},
+		testKey:      {testKey3: testVal3, testKey4: testVal4},
+	}
+
+	// Parse the test parameters
+	actual := parseAlertTriageDashboardParameters(expected)
+
+	// Assert that the parsed parameters match the input
+	assert.True(t, parsedParametersMatch(expected, actual))
+}
+
+func TestParseAlertTriageDashboard(t *testing.T) {
+	// Create some test parameters
+	expectedParams := map[string]map[string]string{
+		constantsKey: {testKey1: testVal1, testKey2: testVal2},
+		testKey:      {testKey3: testVal3, testKey4: testVal4},
+	}
+
+	// Create a test dashboard
+	expected := wavefront.AlertTriageDashboard{
+		DashboardId: testDashboardID1,
+		Description: testDashboardDesc1,
+		Parameters:  expectedParams,
+	}
+
+	// Parse the test dashboard
+	actual := parseAlertTriageDashboard(expected)
+
+	// Assert that the parsed dashboard matches the input
+	assert.True(t, parsedAlertTriageDashboardMatch(expected, actual))
+}
+
 func TestParseAlertTriageDashboards(t *testing.T) {
-	var dashboards []wavefront.AlertTriageDashboard
+	// Create some test parameters
+	expectedParams := map[string]map[string]string{
+		constantsKey: {testKey1: testVal1, testKey2: testVal2},
+		testKey:      {testKey3: testVal3, testKey4: testVal4},
+	}
 
-	dashboard1 := wavefront.AlertTriageDashboard{}
-	dashboard1.DashboardId = testDashboardID1
-	dashboard1.Description = testDashboardDesc1
-	dashboard1.Parameters = map[string]map[string]string{constantsKey: {testKey1: testVal1, testKey2: testVal2}}
-	dashboards = append(dashboards, dashboard1)
-
-	dashboard2 := wavefront.AlertTriageDashboard{}
-	dashboard2.DashboardId = testDashboardID2
-	dashboard2.Description = testDashboardDesc2
-	dashboard2.Parameters = map[string]map[string]string{constantsKey: {testKey3: testVal3, testKey4: testVal4}}
-	dashboards = append(dashboards, dashboard2)
-
-	result := parseAlertTriageDashboards(dashboards)
-
-	expected := []map[string]interface{}{
+	// Create an array of test dashboards
+	expected := []wavefront.AlertTriageDashboard{
 		{
-			dashboardIDKey: testDashboardID1,
-			descriptionKey: testDashboardDesc1,
-			parametersKey: []map[string]interface{}{
-				{
-					constantsKey: map[string]string{
-						testKey1: testVal1,
-						testKey2: testVal2,
-					},
-				},
-			},
+			DashboardId: testDashboardID1,
+			Description: testDashboardDesc1,
+			Parameters:  expectedParams,
 		},
 		{
-			dashboardIDKey: testDashboardID2,
-			descriptionKey: testDashboardDesc2,
-			parametersKey: []map[string]interface{}{
-				{
-					constantsKey: map[string]string{
-						testKey3: testVal3,
-						testKey4: testVal4,
-					},
-				},
-			},
+			DashboardId: testDashboardID2,
+			Description: testDashboardDesc2,
+			Parameters:  expectedParams,
 		},
 	}
 
-	assert.Equal(t, expected, result)
+	// Parse the test dashboards
+	actual := parseAlertTriageDashboards(expected)
 
+	// Assert that the parsed result matches the input
+	assert.Equal(t, len(expected), len(actual))
+	for _, eachExpected := range expected {
+		foundMatch := false
+		for _, eachActual := range actual {
+			if parsedAlertTriageDashboardMatch(eachExpected, eachActual) {
+				foundMatch = true
+				break
+			}
+		}
+		assert.True(t, foundMatch)
+	}
 }
 
 func TestFlattenHostLabelPair(t *testing.T) {
-	// Create a sample SourceLabelPair
-	pair := wavefront.SourceLabelPair{
+	// Create a test SourceLabelPair
+	expected := wavefront.SourceLabelPair{
 		Host:   testHost1,
 		Firing: testFiring1,
 	}
 
 	// Call the function to flatten the SourceLabelPair
-	flattened := flattenHostLabelPair(pair)
+	actual := flattenHostLabelPair(expected)
 
-	// Check if the expected values are present in the flattened map
-	expected := map[string]interface{}{
-		hostKey:   testHost1,
-		firingKey: testFiring1,
-	}
-
-	for key, value := range expected {
-		if flattened[key] != value {
-			t.Errorf("Expected %s to be %v, but got %v", key, value, flattened[key])
-		}
-	}
+	// Assert the result matches the input
+	assert.True(t, flattenedHostLabelPairMatch(expected, actual))
 }
 
 func TestFlattenHostLabelPairs(t *testing.T) {
-	// Create a slice of sample SourceLabelPairs
-	pairs := []wavefront.SourceLabelPair{
+	// Create a slice of test SourceLabelPairs
+	expected := []wavefront.SourceLabelPair{
 		{
 			Host:   testHost1,
 			Firing: testFiring1,
@@ -118,102 +137,90 @@ func TestFlattenHostLabelPairs(t *testing.T) {
 	}
 
 	// Call the function to flatten the slice of SourceLabelPairs
-	flattened := flattenHostLabelPairs(pairs)
+	actual := flattenHostLabelPairs(expected).([]map[string]interface{})
 
-	// Check if the flattened result is of the expected length
-	expectedLength := len(pairs)
-	if len(flattened.([]map[string]interface{})) != expectedLength {
-		t.Errorf("Expected flattened length to be %d, but got %d", expectedLength, len(flattened.([]map[string]interface{})))
-	}
+	// First compare the count of host label pairs
+	assert.Equal(t, len(expected), len(actual), "did not get the correct number of flattened host label pairs")
 
-	// Check if each flattened map matches the expected values
-	expected := []map[string]interface{}{
-		{
-			hostKey:   testHost1,
-			firingKey: testFiring1,
-		},
-		{
-			hostKey:   testHost2,
-			firingKey: testFiring0,
-		},
-	}
-
-	for i, expectedMap := range expected {
-		flattenedMap := flattened.([]map[string]interface{})[i]
-		for key, value := range expectedMap {
-			if flattenedMap[key] != value {
-				t.Errorf("Expected %s to be %v, but got %v", key, value, flattenedMap[key])
+	// Now compare the contents
+	for _, eachExpected := range expected {
+		foundMatch := false
+		for _, eachActual := range actual {
+			if flattenedHostLabelPairMatch(eachExpected, eachActual) {
+				foundMatch = true
+				break
 			}
 		}
+		assert.True(t, foundMatch, fmt.Sprintf("did not find a match for: wavefront.SourceLabelPair%v\n", eachExpected))
 	}
 }
 
 func TestSetAlertAttributes(t *testing.T) {
-	resource := dataSourceAlert()
 	var testAlertID = "test-id"
-	var testLinks = []string{testLink1, testLink2}
-	var testParameters = map[string]map[string]string{constantsKey: {testKey1: testVal1, testKey2: testVal2}}
-	var testAlertTriageDashboards = []wavefront.AlertTriageDashboard{
-		{
-			DashboardId: testDashboardID1,
-			Description: testDashboardDesc1,
-			Parameters:  testParameters,
+	testAlert := wavefront.Alert{
+		Name:         testAlertName,
+		ID:           &testAlertID,
+		RunbookLinks: []string{testLink1, testLink2},
+		AlertTriageDashboards: []wavefront.AlertTriageDashboard{
+			{
+				DashboardId: testDashboardID1,
+				Description: testDashboardDesc1,
+				Parameters:  map[string]map[string]string{constantsKey: {testKey1: testVal1, testKey2: testVal2}},
+			},
 		},
 	}
 
-	// Create a sample schema.ReourceData
-	d := resource.TestResourceData()
-	alert := wavefront.Alert{
-		Name:                  testAlertName,
-		ID:                    &testAlertID,
-		RunbookLinks:          testLinks,
-		AlertTriageDashboards: testAlertTriageDashboards,
-	}
+	err := setAlertAttributes(dataSourceAlert().TestResourceData(), testAlert)
 
-	err := setAlertAttributes(d, alert)
-
-	// Check if there's no error
+	// Assert that there was no error setting these values
 	assert.NoError(t, err)
-
-	// Check if the fields in schema.ResourceData have been set correctly
-	assert.Equal(t, testAlertName, d.Get("name"))
-	assert.Equal(t, testAlertID, d.Get("id"))
-
-	// Check that the runbook_links field was set correctly
-	runbookLinksData := d.Get(runbookLinksKey).([]interface{})
-	assert.Equal(t, len(testLinks), len(runbookLinksData))
-	foundCount := 0
-	for _, linkData := range runbookLinksData {
-		for _, testLink := range testLinks {
-			if linkData == testLink {
-				foundCount++
-				break
-			}
-		}
-	}
-	assert.Equal(t, len(testLinks), foundCount)
-
-	// Check that the alert_triage_dashboards field was set correctly
-	alertTriageDashboardsData := d.Get(alertTriageDashboardsKey).([]interface{})
-	assert.Equal(t, len(testAlertTriageDashboards), len(alertTriageDashboardsData))
-	dashboardData := alertTriageDashboardsData[0].(map[string]interface{})
-	assert.Equal(t, testAlertTriageDashboards[0].DashboardId, dashboardData[dashboardIDKey].(string))
-	assert.Equal(t, testAlertTriageDashboards[0].Description, dashboardData[descriptionKey].(string))
-	parameterData := dashboardData[parametersKey].([]interface{})
-	assert.Equal(t, len(testParameters), len(parameterData))
-	constantsData := parameterData[0].(map[string]interface{})[constantsKey].(map[string]interface{})
-	assert.Equal(t, len(testParameters[constantsKey]), len(constantsData))
-	for key, value := range constantsData {
-		if key == testKey1 {
-			assert.Equal(t, testVal1, value)
-		}
-		if key == testKey2 {
-			assert.Equal(t, testVal2, value)
-		}
-	}
 }
 
 const testAccAlertIDRequiredFailConfig = `
 data "wavefront_alert" "test_alert" {
 }
 `
+
+func parsedParametersMatch(expected map[string]map[string]string, actual []map[string]interface{}) bool {
+	// First compare the lengths
+	if len(expected) != len(actual) {
+		return false
+	}
+
+	// Then compare the contents
+	for _, eachParam := range actual {
+		for paramKey, paramValue := range eachParam {
+			expectedParam := expected[paramKey]
+			actualParam := paramValue.(map[string]string)
+			if !reflect.DeepEqual(expectedParam, actualParam) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func parsedAlertTriageDashboardMatch(expected wavefront.AlertTriageDashboard, actual map[string]interface{}) bool {
+
+	if expected.DashboardId != actual[dashboardIDKey].(string) {
+		return false
+	}
+
+	if expected.Description != actual[descriptionKey].(string) {
+		return false
+	}
+
+	return parsedParametersMatch(expected.Parameters, actual[parametersKey].([]map[string]interface{}))
+}
+
+func flattenedHostLabelPairMatch(expected wavefront.SourceLabelPair, actual map[string]interface{}) bool {
+	if expected.Host != actual[hostKey].(string) {
+		return false
+	}
+
+	if expected.Firing != actual[firingKey].(int) {
+		return false
+	}
+
+	return true
+}

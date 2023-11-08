@@ -310,24 +310,25 @@ func flattenHostLabelPair(pair wavefront.SourceLabelPair) map[string]interface{}
 	return tfMap
 }
 
-func parseAlertTriageDashboards(alertTriageDashboards []wavefront.AlertTriageDashboard) []map[string]interface{} {
-	triageDashboards := make([]map[string]interface{}, len(alertTriageDashboards))
-
-	for i, alertTriageDashboard := range alertTriageDashboards {
-		dashboardData := map[string]interface{}{
-			dashboardIDKey: alertTriageDashboard.DashboardId,
-			descriptionKey: alertTriageDashboard.Description,
-		}
-
-		parameters := make([]map[string]interface{}, 1)
-
-		for key, value := range alertTriageDashboard.Parameters {
-			parameters[0] = map[string]interface{}{key: value}
-		}
-
-		dashboardData[parametersKey] = parameters
-		triageDashboards[i] = dashboardData
+func parseAlertTriageDashboards(alertTriageDashboards []wavefront.AlertTriageDashboard) (dashboards []map[string]interface{}) {
+	for _, alertTriageDashboard := range alertTriageDashboards {
+		dashboards = append(dashboards, parseAlertTriageDashboard(alertTriageDashboard))
 	}
+	return dashboards
+}
 
-	return triageDashboards
+func parseAlertTriageDashboard(alertTriageDashboard wavefront.AlertTriageDashboard) (dashboard map[string]interface{}) {
+	dashboard = map[string]interface{}{
+		dashboardIDKey: alertTriageDashboard.DashboardId,
+		descriptionKey: alertTriageDashboard.Description,
+		parametersKey:  parseAlertTriageDashboardParameters(alertTriageDashboard.Parameters),
+	}
+	return dashboard
+}
+
+func parseAlertTriageDashboardParameters(alertTriageDashboardParameters map[string]map[string]string) (parameters []map[string]interface{}) {
+	for key, value := range alertTriageDashboardParameters {
+		parameters = append(parameters, map[string]interface{}{key: value})
+	}
+	return parameters
 }

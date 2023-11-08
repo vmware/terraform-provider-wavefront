@@ -155,8 +155,8 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	tags := decodeTags(d)
-	runbookLinks := decodeRunbookLinks(d)
-	alertTriageDashboards := decodeAlertTriageDashboards(d)
+	runbookLinks := decodeRunbookLinks(d.Get(runbookLinksKey).([]interface{}))
+	alertTriageDashboards := decodeAlertTriageDashboards(d.Get(alertTriageDashboardsKey).([]interface{}))
 
 	a := &wavefront.Alert{
 		Name:                               d.Get("name").(string),
@@ -249,8 +249,8 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	tags := decodeTags(d)
-	runbookLinks := decodeRunbookLinks(d)
-	alertTriageDashboards := decodeAlertTriageDashboards(d)
+	runbookLinks := decodeRunbookLinks(d.Get(runbookLinksKey).([]interface{}))
+	alertTriageDashboards := decodeAlertTriageDashboards(d.Get(alertTriageDashboardsKey).([]interface{}))
 	canView, canModify := decodeAccessControlList(d)
 
 	a := tmpAlert
@@ -367,41 +367,40 @@ func validateThresholdLevels(m map[string]string) error {
 	return nil
 }
 
-// Decodes the runbook links from the state and returns a []string of links
-func decodeRunbookLinks(d *schema.ResourceData) (links []string) {
-	for _, link := range d.Get(runbookLinksKey).([]interface{}) {
+func decodeRunbookLinks(rawRunbookLinks []interface{}) (links []string) {
+	for _, link := range rawRunbookLinks {
 		links = append(links, link.(string))
 	}
 	return links
 }
 
-func decodeAlertTriageDashboards(d *schema.ResourceData) []wavefront.AlertTriageDashboard {
-	alertTriageDashboards := []wavefront.AlertTriageDashboard{}
+func decodeAlertTriageDashboards(rawDashboards []interface{}) (alertTriageDashboards []wavefront.AlertTriageDashboard) {
+	for _, rawDashboard := range rawDashboards {
+		dashboardData := rawDashboard.(map[string]interface{})
 
-	if dashboards, ok := d.Get(alertTriageDashboardsKey).([]interface{}); ok {
-		for _, dashboard := range dashboards {
-			dashboardData := dashboard.(map[string]interface{})
-			alertTriageDashboard := wavefront.AlertTriageDashboard{
-				DashboardId: dashboardData[dashboardIDKey].(string),
-				Description: dashboardData[descriptionKey].(string),
-				Parameters:  make(map[string]map[string]string),
-			}
-
-			if parameters, ok := dashboardData[parametersKey].([]interface{}); ok && len(parameters) > 0 {
-				// Assuming there should be only one parameters block
-				parametersData := parameters[0].(map[string]interface{})
-
-				if constants, ok := parametersData[constantsKey].(map[string]interface{}); ok {
-					alertTriageDashboard.Parameters[constantsKey] = make(map[string]string)
-					for key, value := range constants {
-						alertTriageDashboard.Parameters[constantsKey][key] = value.(string)
-					}
-				}
-			}
-
-			alertTriageDashboards = append(alertTriageDashboards, alertTriageDashboard)
+		alertTriageDashboard := wavefront.AlertTriageDashboard{
+			DashboardId: dashboardData[dashboardIDKey].(string),
+			Description: dashboardData[descriptionKey].(string),
+			Parameters:  decodeAlertTriageDashboardParameters(dashboardData[parametersKey].([]interface{})),
 		}
+
+		alertTriageDashboards = append(alertTriageDashboards, alertTriageDashboard)
 	}
 
 	return alertTriageDashboards
+}
+
+func decodeAlertTriageDashboardParameters(parameterData []interface{}) map[string]map[string]string {
+	parameters := make(map[string]map[string]string)
+	if len(parameterData) > 0 {
+		for _, parameterBlocks := range parameterData {
+			for parameterBlockType, parameterBlockValue := range parameterBlocks.(map[string]interface{}) {
+				parameters[parameterBlockType] = make(map[string]string)
+				for parameterKey, parameterValue := range parameterBlockValue.(map[string]interface{}) {
+					parameters[parameterBlockType][parameterKey] = parameterValue.(string)
+				}
+			}
+		}
+	}
+	return parameters
 }

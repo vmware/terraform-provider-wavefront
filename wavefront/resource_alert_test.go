@@ -27,23 +27,15 @@ const (
 )
 
 func TestDecodeRunbookLinks(t *testing.T) {
-	resource := dataSourceAlert()
-	var testAlertID = "test-id"
-	var expectedLink = []string{testLink1, testLink2}
+	expected := []string{testLink1, testLink2}
 
-	// Create a sample schema.ReourceData
-	d := resource.TestResourceData()
-	alert := wavefront.Alert{
-		Name:         testAlertName,
-		ID:           &testAlertID,
-		RunbookLinks: expectedLink,
+	interfaceSlice := make([]interface{}, len(expected))
+	for i, v := range expected {
+		interfaceSlice[i] = v
 	}
 
-	err := setAlertAttributes(d, alert)
-	assert.Nil(t, err)
-
-	actualLinks := decodeRunbookLinks(d)
-	assert.Equal(t, expectedLink, actualLinks)
+	actual := decodeRunbookLinks(interfaceSlice)
+	assert.Equal(t, expected, actual)
 }
 
 func TestDecodeAlertTriageDashboards(t *testing.T) {
@@ -69,7 +61,7 @@ func TestDecodeAlertTriageDashboards(t *testing.T) {
 	err := setAlertAttributes(d, alert)
 	assert.Nil(t, err)
 
-	actualAlertTriageDashboards := decodeAlertTriageDashboards(d)
+	actualAlertTriageDashboards := decodeAlertTriageDashboards(d.Get(alertTriageDashboardsKey).([]interface{}))
 	assert.Equal(t, expectedAlertTriageDashboards, actualAlertTriageDashboards)
 }
 
@@ -90,7 +82,6 @@ func TestSuppressAlertConditionOnType(t *testing.T) {
 	assert.True(t, suppressAlertConditionOnType("foo", "bar", "foobar", d))
 
 	// Create an alert of type CLASSIC
-	// d := resource.TestResourceData()
 	alertClassic := wavefront.Alert{
 		Name:      testAlertName,
 		ID:        &testAlertID,
