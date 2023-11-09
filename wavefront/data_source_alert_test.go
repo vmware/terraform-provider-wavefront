@@ -50,7 +50,7 @@ func TestParseAlertTriageDashboardParameters(t *testing.T) {
 	assert.True(t, parsedParametersMatch(expected, actual))
 }
 
-func TestParseAlertTriageDashboard(t *testing.T) {
+func TestParseAlertTriageDashboardWithParameters(t *testing.T) {
 	// Create some test parameters
 	expectedParams := map[string]map[string]string{
 		constantsKey: {testKey1: testVal1, testKey2: testVal2},
@@ -62,6 +62,21 @@ func TestParseAlertTriageDashboard(t *testing.T) {
 		DashboardId: testDashboardID1,
 		Description: testDashboardDesc1,
 		Parameters:  expectedParams,
+	}
+
+	// Parse the test dashboard
+	actual := parseAlertTriageDashboard(expected)
+
+	// Assert that the parsed dashboard matches the input
+	assert.True(t, parsedAlertTriageDashboardMatch(expected, actual))
+}
+
+func TestParseAlertTriageDashboardWithoutParameters(t *testing.T) {
+	// Create a test dashboard
+	expected := wavefront.AlertTriageDashboard{
+		DashboardId: testDashboardID1,
+		Description: testDashboardDesc1,
+		Parameters:  map[string]map[string]string{},
 	}
 
 	// Parse the test dashboard
