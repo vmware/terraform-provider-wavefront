@@ -174,7 +174,7 @@ func alertTriageDashboardSchema() map[string]*schema.Schema {
 			Optional: true,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
-					constantsKey: {
+					constantsKey: { // Currently, only "constants" are supported
 						Type:     schema.TypeMap,
 						Optional: true,
 						Elem:     schema.TypeString,
