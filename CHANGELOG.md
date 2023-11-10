@@ -1,3 +1,9 @@
+## 5.1.0 (Nov 10, 2023)
+
+* Add missing parameters to the `alert` resource:
+  * `runbookLinks`
+  * `alertTriageDashboards`
+
 ## 5.0.5 (Oct 18, 2023)
 
 * Remove some broken Makefile commands.
