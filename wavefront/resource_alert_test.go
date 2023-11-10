@@ -8,7 +8,115 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/stretchr/testify/assert"
 )
+
+const (
+	testDashboardID1   = "id-1"
+	testDashboardID2   = "id-2"
+	testDashboardDesc1 = "desc-1"
+	testDashboardDesc2 = "desc-2"
+	testKey1           = "key-1"
+	testKey2           = "key-2"
+	testKey3           = "key-3"
+	testKey4           = "key-4"
+	testVal1           = "val-1"
+	testVal2           = "val-2"
+	testVal3           = "val-3"
+	testVal4           = "val-4"
+)
+
+func TestDecodeRunbookLinks(t *testing.T) {
+	expected := []string{testLink1, testLink2}
+
+	interfaceSlice := make([]interface{}, len(expected))
+	for i, v := range expected {
+		interfaceSlice[i] = v
+	}
+
+	actual := decodeRunbookLinks(interfaceSlice)
+	assert.Equal(t, expected, actual)
+}
+
+func TestDecodeAlertTriageDashboardsWithParameters(t *testing.T) {
+	// Create a test AlertTriageDashboad with parameters
+	var expectedAlertTriageDashboards = []wavefront.AlertTriageDashboard{
+		{
+			DashboardId: testDashboardID1,
+			Description: testDashboardDesc1,
+			Parameters:  map[string]map[string]string{constantsKey: {testKey1: testVal1, testKey2: testVal2}},
+		},
+	}
+
+	// Convert the AlertTriageDashboard to an interface{} and add it to a slice
+	var alertTriageDashboardsInterface []interface{}
+	for _, dashboard := range expectedAlertTriageDashboards {
+		alertMap := map[string]interface{}{
+			dashboardIDKey: dashboard.DashboardId,
+			descriptionKey: dashboard.Description,
+			parametersKey:  convertParametersToInterface(dashboard.Parameters),
+		}
+		alertTriageDashboardsInterface = append(alertTriageDashboardsInterface, alertMap)
+	}
+
+	// Decode the []AlertTriageDashboards and assert that it matches the original AlertTriageDashboad
+	actualAlertTriageDashboards := decodeAlertTriageDashboards(alertTriageDashboardsInterface)
+	assert.Equal(t, expectedAlertTriageDashboards, actualAlertTriageDashboards)
+}
+
+func TestDecodeAlertTriageDashboardsWithoutParameters(t *testing.T) {
+	// Create a test AlertTriageDashboad without parameters
+	var expectedAlertTriageDashboards = []wavefront.AlertTriageDashboard{
+		{
+			DashboardId: testDashboardID1,
+			Description: testDashboardDesc1,
+			Parameters:  map[string]map[string]string{},
+		},
+	}
+
+	// Convert the AlertTriageDashboard to an interface{} and add it to a slice
+	var alertTriageDashboardsInterface []interface{}
+	for _, dashboard := range expectedAlertTriageDashboards {
+		alertMap := map[string]interface{}{
+			dashboardIDKey: dashboard.DashboardId,
+			descriptionKey: dashboard.Description,
+			parametersKey:  convertParametersToInterface(dashboard.Parameters),
+		}
+		alertTriageDashboardsInterface = append(alertTriageDashboardsInterface, alertMap)
+	}
+
+	// Decode the []AlertTriageDashboards and assert that it matches the original AlertTriageDashboad
+	actualAlertTriageDashboards := decodeAlertTriageDashboards(alertTriageDashboardsInterface)
+	assert.Equal(t, expectedAlertTriageDashboards, actualAlertTriageDashboards)
+}
+
+func TestSuppressAlertConditionOnType(t *testing.T) {
+	resource := dataSourceAlert()
+	var testAlertID = "test-id"
+
+	// Create an alert of type THRESHOLD
+	d := resource.TestResourceData()
+	alertThreshold := wavefront.Alert{
+		Name:      testAlertName,
+		ID:        &testAlertID,
+		AlertType: wavefront.AlertTypeThreshold,
+	}
+
+	err := setAlertAttributes(d, alertThreshold)
+	assert.Nil(t, err)
+	assert.True(t, suppressAlertConditionOnType("foo", "bar", "foobar", d))
+
+	// Create an alert of type CLASSIC
+	alertClassic := wavefront.Alert{
+		Name:      testAlertName,
+		ID:        &testAlertID,
+		AlertType: wavefront.AlertTypeClassic,
+	}
+
+	err = setAlertAttributes(d, alertClassic)
+	assert.Nil(t, err)
+	assert.False(t, suppressAlertConditionOnType("foo", "bar", "foobar", d))
+}
 
 func TestValidateAlertTarget(t *testing.T) {
 	email := "example@wavefront.com"
@@ -634,4 +742,18 @@ resource "wavefront_alert" "test_threshold_alert_change_condition" {
   ]
 }
 `
+}
+
+func convertParametersToInterface(parameters map[string]map[string]string) []interface{} {
+	var result []interface{}
+	for key, val := range parameters {
+		param := make(map[string]interface{})
+		paramBlock := make(map[string]interface{})
+		for pKey, pVal := range val {
+			param[pKey] = pVal
+		}
+		paramBlock[key] = param
+		result = append(result, paramBlock)
+	}
+	return result
 }

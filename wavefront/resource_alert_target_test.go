@@ -29,7 +29,7 @@ func TestAccWavefrontTarget_BasicWebhook(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "name", "Terraform Test Target"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert_target.test_target", "description", "Test target"),
+						"wavefront_alert_target.test_target", descriptionKey, "Test target"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "method", "WEBHOOK"),
 					resource.TestCheckResourceAttr(
@@ -103,7 +103,7 @@ func TestAccWavefrontTarget_BasicEmail(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "name", "Terraform Test Target"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert_target.test_target", "description", "Test target"),
+						"wavefront_alert_target.test_target", descriptionKey, "Test target"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "method", "EMAIL"),
 					resource.TestCheckResourceAttr(
@@ -144,7 +144,7 @@ func TestAccWavefrontTarget_BasicPagerduty(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "name", "Terraform Test Target"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert_target.test_target", "description", "Test target"),
+						"wavefront_alert_target.test_target", descriptionKey, "Test target"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "method", "PAGERDUTY"),
 					resource.TestCheckResourceAttr(
@@ -181,7 +181,7 @@ func TestAccWavefrontTarget_AlertTargetId(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "name", "Terraform Test Target"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert_target.test_target", "description", "Test target"),
+						"wavefront_alert_target.test_target", descriptionKey, "Test target"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert_target.test_target", "method", "PAGERDUTY"),
 					resource.TestCheckResourceAttr(

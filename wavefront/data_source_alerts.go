@@ -40,19 +40,6 @@ func dataSourceAlertsSchema() map[string]*schema.Schema {
 
 }
 
-func sourceLabelSchema() map[string]*schema.Schema {
-	return map[string]*schema.Schema{
-		"host": {
-			Type:     schema.TypeString,
-			Computed: true,
-		},
-		"firing": {
-			Type:     schema.TypeInt,
-			Computed: true,
-		},
-	}
-}
-
 func dataSourceAlertsRead(d *schema.ResourceData, m interface{}) error {
 
 	var allAlerts []*wavefront.Alert
@@ -103,6 +90,8 @@ func flattenAlert(alert *wavefront.Alert) map[string]interface{} {
 	tfMap["failing_host_label_pairs"] = flattenHostLabelPairs(alert.FailingHostLabelPairs)
 	tfMap["in_maintenance_host_label_pairs"] = flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)
 	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes
+	tfMap[runbookLinksKey] = alert.RunbookLinks
+	tfMap[alertTriageDashboardsKey] = alert.AlertTriageDashboards
 
 	return tfMap
 }

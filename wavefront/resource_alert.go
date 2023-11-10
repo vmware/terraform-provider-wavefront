@@ -100,6 +100,18 @@ func resourceAlert() *schema.Resource {
 				Optional: true,
 				Default:  5,
 			},
+			runbookLinksKey: {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			alertTriageDashboardsKey: {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: alertTriageDashboardSchema(),
+				},
+			},
 		},
 	}
 }
@@ -143,6 +155,8 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 	alerts := meta.(*wavefrontClient).client.Alerts()
 
 	tags := decodeTags(d)
+	runbookLinks := decodeRunbookLinks(d.Get(runbookLinksKey).([]interface{}))
+	alertTriageDashboards := decodeAlertTriageDashboards(d.Get(alertTriageDashboardsKey).([]interface{}))
 
 	a := &wavefront.Alert{
 		Name:                               d.Get("name").(string),
@@ -153,6 +167,8 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 		NotificationResendFrequencyMinutes: d.Get("notification_resend_frequency_minutes").(int),
 		Tags:                               tags,
 		CheckingFrequencyInMinutes:         d.Get("process_rate_minutes").(int),
+		RunbookLinks:                       runbookLinks,
+		AlertTriageDashboards:              alertTriageDashboards,
 	}
 
 	err := validateAlertConditions(a, d)
@@ -214,6 +230,8 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("can_view", tmpAlert.ACL.CanView)
 	d.Set("can_modify", tmpAlert.ACL.CanModify)
 	d.Set("process_rate_minutes", tmpAlert.CheckingFrequencyInMinutes)
+	d.Set(runbookLinksKey, tmpAlert.RunbookLinks)
+	d.Set(alertTriageDashboardsKey, parseAlertTriageDashboards(tmpAlert.AlertTriageDashboards))
 
 	return nil
 }
@@ -231,6 +249,8 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	tags := decodeTags(d)
+	runbookLinks := decodeRunbookLinks(d.Get(runbookLinksKey).([]interface{}))
+	alertTriageDashboards := decodeAlertTriageDashboards(d.Get(alertTriageDashboardsKey).([]interface{}))
 	canView, canModify := decodeAccessControlList(d)
 
 	a := tmpAlert
@@ -241,6 +261,8 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	a.ResolveAfterMinutes = d.Get("resolve_after_minutes").(int)
 	a.NotificationResendFrequencyMinutes = d.Get("notification_resend_frequency_minutes").(int)
 	a.Tags = tags
+	a.RunbookLinks = runbookLinks
+	a.AlertTriageDashboards = alertTriageDashboards
 	a.CheckingFrequencyInMinutes = d.Get("process_rate_minutes").(int)
 
 	err = validateAlertConditions(&a, d)
@@ -343,4 +365,42 @@ func validateThresholdLevels(m map[string]string) error {
 		}
 	}
 	return nil
+}
+
+func decodeRunbookLinks(rawRunbookLinks []interface{}) (links []string) {
+	for _, link := range rawRunbookLinks {
+		links = append(links, link.(string))
+	}
+	return links
+}
+
+func decodeAlertTriageDashboards(rawDashboards []interface{}) (alertTriageDashboards []wavefront.AlertTriageDashboard) {
+	for _, rawDashboard := range rawDashboards {
+		dashboardData := rawDashboard.(map[string]interface{})
+
+		alertTriageDashboard := wavefront.AlertTriageDashboard{
+			DashboardId: dashboardData[dashboardIDKey].(string),
+			Description: dashboardData[descriptionKey].(string),
+			Parameters:  decodeAlertTriageDashboardParameters(dashboardData[parametersKey].([]interface{})),
+		}
+
+		alertTriageDashboards = append(alertTriageDashboards, alertTriageDashboard)
+	}
+
+	return alertTriageDashboards
+}
+
+func decodeAlertTriageDashboardParameters(parameterData []interface{}) map[string]map[string]string {
+	parameters := make(map[string]map[string]string)
+	if len(parameterData) > 0 {
+		for _, parameterBlocks := range parameterData {
+			for parameterBlockType, parameterBlockValue := range parameterBlocks.(map[string]interface{}) {
+				parameters[parameterBlockType] = make(map[string]string)
+				for parameterKey, parameterValue := range parameterBlockValue.(map[string]interface{}) {
+					parameters[parameterBlockType][parameterKey] = parameterValue.(string)
+				}
+			}
+		}
+	}
+	return parameters
 }
