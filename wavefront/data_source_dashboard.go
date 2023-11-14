@@ -118,8 +118,6 @@ const (
 	dynamicFieldTypeKey        = "dynamic_field_type"
 	sectionsKey                = "sections"
 	parameterDetailsKey        = "parameter_details"
-	canViewKey                 = "can_view"
-	canModifyKey               = "can_modify"
 )
 
 func dataSourceDashboard() *schema.Resource {

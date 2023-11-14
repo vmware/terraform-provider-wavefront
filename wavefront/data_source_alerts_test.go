@@ -13,7 +13,7 @@ func TestFlattenAlert(t *testing.T) {
 	expected := &wavefront.Alert{
 		Name:           testAlertName,
 		ID:             &testAlertID,
-		AlertType:      "CLASSIC",
+		AlertType:      wavefront.AlertTypeClassic,
 		AdditionalInfo: "Additional information about the alert",
 		Target:         "example.target",
 		Targets: map[string]string{
@@ -79,29 +79,29 @@ func TestFlattenAlert(t *testing.T) {
 	actual := flattenAlerts([]*wavefront.Alert{expected})[0]
 
 	// Check if the flattened map matches the expected values
-	assert.Equal(t, expected.Name, actual["name"])
-	assert.Equal(t, *expected.ID, actual["id"])
-	assert.Equal(t, expected.AlertType, actual["alert_type"])
-	assert.Equal(t, expected.AdditionalInfo, actual["additional_information"])
-	assert.Equal(t, expected.Target, actual["target"])
-	assert.Equal(t, expected.Targets, actual["targets"])
-	assert.Equal(t, expected.Condition, actual["condition"])
-	assert.Equal(t, expected.Conditions, actual["conditions"])
-	assert.Equal(t, expected.DisplayExpression, actual["display_expression"])
-	assert.Equal(t, expected.Minutes, actual["minutes"])
-	assert.Equal(t, expected.ResolveAfterMinutes, actual["resolve_after_minutes"])
-	assert.Equal(t, expected.NotificationResendFrequencyMinutes, actual["notification_resend_frequency_minutes"])
-	assert.Equal(t, expected.Severity, actual["severity"])
-	assert.Equal(t, expected.SeverityList, actual["severity_list"])
-	assert.Equal(t, expected.Status, actual["status"])
-	assert.Equal(t, expected.Tags, actual["tags"])
-	assert.Equal(t, expected.ACL.CanView, actual["can_view"])
-	assert.Equal(t, expected.ACL.CanModify, actual["can_modify"])
-	assert.Equal(t, expected.CheckingFrequencyInMinutes, actual["process_rate_minutes"])
-	assert.Equal(t, expected.EvaluateRealtimeData, actual["evaluate_realtime_data"])
-	assert.Equal(t, expected.IncludeObsoleteMetrics, actual["include_obsolete_metrics"])
-	assert.Equal(t, len(expected.InMaintenanceHostLabelPairs), len(actual["failing_host_label_pairs"].([]map[string]interface{})))
-	assert.Equal(t, len(expected.InMaintenanceHostLabelPairs), len(actual["in_maintenance_host_label_pairs"].([]map[string]interface{})))
+	assert.Equal(t, expected.Name, actual[nameKey])
+	assert.Equal(t, *expected.ID, actual[idKey])
+	assert.Equal(t, expected.AlertType, actual[alertTypeKey])
+	assert.Equal(t, expected.AdditionalInfo, actual[additionalInformationKey])
+	assert.Equal(t, expected.Target, actual[targetKey])
+	assert.Equal(t, expected.Targets, actual[targetsKey])
+	assert.Equal(t, expected.Condition, actual[conditionKey])
+	assert.Equal(t, expected.Conditions, actual[conditionsKey])
+	assert.Equal(t, expected.DisplayExpression, actual[displayExpressionKey])
+	assert.Equal(t, expected.Minutes, actual[minutesKey])
+	assert.Equal(t, expected.ResolveAfterMinutes, actual[resolveAfterMinutesKey])
+	assert.Equal(t, expected.NotificationResendFrequencyMinutes, actual[notificationResendFrequencyMinutesKey])
+	assert.Equal(t, expected.Severity, actual[severityKey])
+	assert.Equal(t, expected.SeverityList, actual[severityListKey])
+	assert.Equal(t, expected.Status, actual[statusKey])
+	assert.Equal(t, expected.Tags, actual[tagsKey])
+	assert.Equal(t, expected.ACL.CanView, actual[canViewKey])
+	assert.Equal(t, expected.ACL.CanModify, actual[canModifyKey])
+	assert.Equal(t, expected.CheckingFrequencyInMinutes, actual[processRateMinutesKey])
+	assert.Equal(t, expected.EvaluateRealtimeData, actual[evaluateRealtimeDataKey])
+	assert.Equal(t, expected.IncludeObsoleteMetrics, actual[includeObsoleteMetricsKey])
+	assert.Equal(t, len(expected.InMaintenanceHostLabelPairs), len(actual[failingHostLabelPairsKey].([]map[string]interface{})))
+	assert.Equal(t, len(expected.InMaintenanceHostLabelPairs), len(actual[inMaintenanceHostLabelPairsKey].([]map[string]interface{})))
 	assert.Equal(t, expected.RunbookLinks, actual[runbookLinksKey])
 	assert.Equal(t, expected.AlertTriageDashboards, actual[alertTriageDashboardsKey].([]wavefront.AlertTriageDashboard))
 }

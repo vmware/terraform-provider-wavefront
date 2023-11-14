@@ -19,7 +19,7 @@ func dataSourceAlerts() *schema.Resource {
 func dataSourceAlertsSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		// Computed Values
-		"alerts": {
+		alertsKey: {
 			Type:     schema.TypeSet,
 			Computed: true,
 			Elem: &schema.Resource{
@@ -53,7 +53,7 @@ func dataSourceAlertsRead(d *schema.ResourceData, m interface{}) error {
 	// Data Source ID is set to current time to always refresh
 	d.SetId(time.Now().UTC().String())
 
-	return d.Set("alerts", flattenAlerts(allAlerts))
+	return d.Set(alertsKey, flattenAlerts(allAlerts))
 }
 
 func flattenAlerts(alerts []*wavefront.Alert) []map[string]interface{} {
@@ -66,30 +66,29 @@ func flattenAlerts(alerts []*wavefront.Alert) []map[string]interface{} {
 
 func flattenAlert(alert *wavefront.Alert) map[string]interface{} {
 	tfMap := make(map[string]interface{})
-	tfMap["id"] = *alert.ID
-	tfMap["name"] = alert.Name
-	tfMap["alert_type"] = alert.AlertType
-	tfMap["additional_information"] = alert.AdditionalInfo
-	tfMap["target"] = alert.Target
-	tfMap["targets"] = alert.Targets
-	tfMap["condition"] = alert.Condition
-	tfMap["conditions"] = alert.Conditions
-	tfMap["display_expression"] = alert.DisplayExpression
-	tfMap["minutes"] = alert.Minutes
-	tfMap["resolve_after_minutes"] = alert.ResolveAfterMinutes
-	tfMap["notification_resend_frequency_minutes"] = alert.NotificationResendFrequencyMinutes
-	tfMap["severity"] = alert.Severity
-	tfMap["severity_list"] = alert.SeverityList
-	tfMap["status"] = alert.Status
-	tfMap["tags"] = alert.Tags
-	tfMap["can_view"] = alert.ACL.CanView
-	tfMap["can_modify"] = alert.ACL.CanModify
-	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes
-	tfMap["evaluate_realtime_data"] = alert.EvaluateRealtimeData
-	tfMap["include_obsolete_metrics"] = alert.IncludeObsoleteMetrics
-	tfMap["failing_host_label_pairs"] = flattenHostLabelPairs(alert.FailingHostLabelPairs)
-	tfMap["in_maintenance_host_label_pairs"] = flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)
-	tfMap["process_rate_minutes"] = alert.CheckingFrequencyInMinutes
+	tfMap[idKey] = *alert.ID
+	tfMap[nameKey] = alert.Name
+	tfMap[alertTypeKey] = alert.AlertType
+	tfMap[additionalInformationKey] = alert.AdditionalInfo
+	tfMap[targetKey] = alert.Target
+	tfMap[targetsKey] = alert.Targets
+	tfMap[conditionKey] = alert.Condition
+	tfMap[conditionsKey] = alert.Conditions
+	tfMap[displayExpressionKey] = alert.DisplayExpression
+	tfMap[minutesKey] = alert.Minutes
+	tfMap[resolveAfterMinutesKey] = alert.ResolveAfterMinutes
+	tfMap[notificationResendFrequencyMinutesKey] = alert.NotificationResendFrequencyMinutes
+	tfMap[severityKey] = alert.Severity
+	tfMap[severityListKey] = alert.SeverityList
+	tfMap[statusKey] = alert.Status
+	tfMap[tagsKey] = alert.Tags
+	tfMap[canViewKey] = alert.ACL.CanView
+	tfMap[canModifyKey] = alert.ACL.CanModify
+	tfMap[processRateMinutesKey] = alert.CheckingFrequencyInMinutes
+	tfMap[evaluateRealtimeDataKey] = alert.EvaluateRealtimeData
+	tfMap[includeObsoleteMetricsKey] = alert.IncludeObsoleteMetrics
+	tfMap[failingHostLabelPairsKey] = flattenHostLabelPairs(alert.FailingHostLabelPairs)
+	tfMap[inMaintenanceHostLabelPairsKey] = flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)
 	tfMap[runbookLinksKey] = alert.RunbookLinks
 	tfMap[alertTriageDashboardsKey] = alert.AlertTriageDashboards
 

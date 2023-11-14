@@ -122,23 +122,23 @@ func TestValidateAlertTarget(t *testing.T) {
 	email := "example@wavefront.com"
 	pdKey := "pd:not-a-real-pagerduty-key"
 	targetID := "target:efKj3H9aF"
-	w, e := validateAlertTarget(email, "target")
+	w, e := validateAlertTarget(email, targetKey)
 	if len(w) != 0 || len(e) != 0 {
 		t.Fatal("expected no errors on email address validation")
 	}
-	w, e = validateAlertTarget(pdKey, "target")
+	w, e = validateAlertTarget(pdKey, targetKey)
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on pager-duty key target validation")
 	}
-	w, e = validateAlertTarget(targetID, "target")
+	w, e = validateAlertTarget(targetID, targetKey)
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on alert target validation")
 	}
-	_, e = validateAlertTarget("totally,invalid,target", "target")
+	_, e = validateAlertTarget("totally,invalid,target", targetKey)
 	if len(e) == 0 {
 		t.Fatal("expected error on invalid alert targets")
 	}
-	w, e = validateAlertTarget(fmt.Sprintf("%s,%s,%s", email, pdKey, targetID), "target")
+	w, e = validateAlertTarget(fmt.Sprintf("%s,%s,%s", email, pdKey, targetID), targetKey)
 	if len(w) != 0 && len(e) != 0 {
 		t.Fatal("expected no errors on multiple alert target validation")
 	}
@@ -158,25 +158,25 @@ func TestAccWavefrontAlert_Basic(t *testing.T) {
 					testAccCheckWavefrontAlertAttributes(&record),
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "name", "Terraform Test Alert"),
+						"wavefront_alert.test_alert", nameKey, "Terraform Test Alert"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "target", "test@example.com"),
+						"wavefront_alert.test_alert", targetKey, "test@example.com"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "condition", "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"),
+						"wavefront_alert.test_alert", conditionKey, "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "additional_information", "This is a Terraform Test Alert"),
+						"wavefront_alert.test_alert", additionalInformationKey, "This is a Terraform Test Alert"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "display_expression", "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"),
+						"wavefront_alert.test_alert", displayExpressionKey, "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total )"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "minutes", "5"),
+						"wavefront_alert.test_alert", minutesKey, "5"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "resolve_after_minutes", "5"),
+						"wavefront_alert.test_alert", resolveAfterMinutesKey, "5"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "severity", "WARN"),
+						"wavefront_alert.test_alert", severityKey, "WARN"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_alert", "tags.#", "5"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "process_rate_minutes", "2"),
+						"wavefront_alert.test_alert", processRateMinutesKey, "2"),
 				),
 			},
 		},
@@ -196,17 +196,17 @@ func TestAccWavefrontAlert_RequiredAttributes(t *testing.T) {
 					testAccCheckWavefrontAlertAttributes(&record),
 					// Check against state that the attributes are as we expect
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "name", "Terraform Test Alert Required Attributes Only"),
+						"wavefront_alert.test_alert_required", nameKey, "Terraform Test Alert Required Attributes Only"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "target", "test@example.com"),
+						"wavefront_alert.test_alert_required", targetKey, "test@example.com"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "condition", "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"),
+						"wavefront_alert.test_alert_required", conditionKey, "100-ts(\"cpu.usage_idle\", environment=preprod and cpu=cpu-total ) > 80"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "additional_information", "This is a Terraform Test Alert Required"),
+						"wavefront_alert.test_alert_required", additionalInformationKey, "This is a Terraform Test Alert Required"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "minutes", "5"),
+						"wavefront_alert.test_alert_required", minutesKey, "5"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "severity", "WARN"),
+						"wavefront_alert.test_alert_required", severityKey, "WARN"),
 					resource.TestCheckResourceAttr(
 						"wavefront_alert.test_alert_required", "tags.#", "2"),
 				),
@@ -228,7 +228,7 @@ func TestAccWavefrontAlert_Updated(t *testing.T) {
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "target", "test@example.com"),
+						"wavefront_alert.test_alert", targetKey, "test@example.com"),
 				),
 			},
 			{
@@ -237,7 +237,7 @@ func TestAccWavefrontAlert_Updated(t *testing.T) {
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert", &record),
 					testAccCheckWavefrontAlertAttributesUpdated(&record),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert", "target", "terraform@example.com"),
+						"wavefront_alert.test_alert", targetKey, "terraform@example.com"),
 				),
 			},
 		},
@@ -256,7 +256,7 @@ func TestAccWavefrontAlert_RemoveOptionalAttribute(t *testing.T) {
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert_required", &record),
 					testAccCheckWavefrontAlertAttributesRemoved(&record),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "target", "test@example.com"),
+						"wavefront_alert.test_alert_required", targetKey, "test@example.com"),
 				),
 			},
 			{
@@ -265,7 +265,7 @@ func TestAccWavefrontAlert_RemoveOptionalAttribute(t *testing.T) {
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert_required", &record),
 					testAccCheckWavefrontAlertAttributesRemovedUpdated(&record),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert_required", "target", "terraform@example.com"),
+						"wavefront_alert.test_alert_required", targetKey, "terraform@example.com"),
 				),
 			},
 		},
@@ -284,11 +284,11 @@ func TestAccWavefrontAlert_Multiple(t *testing.T) {
 					testAccCheckWavefrontAlertExists("wavefront_alert.test_alert1", &record),
 					testAccCheckWavefrontAlertAttributes(&record),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert1", "name", "Terraform Test Alert 1"),
+						"wavefront_alert.test_alert1", nameKey, "Terraform Test Alert 1"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert2", "name", "Terraform Test Alert 2"),
+						"wavefront_alert.test_alert2", nameKey, "Terraform Test Alert 2"),
 					resource.TestCheckResourceAttr(
-						"wavefront_alert.test_alert3", "name", "Terraform Test Alert 3"),
+						"wavefront_alert.test_alert3", nameKey, "Terraform Test Alert 3"),
 				),
 			},
 		},
@@ -352,7 +352,7 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"invalid alert type",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "WRONG")
+				d.Set(alertTypeKey, "WRONG")
 				return d
 			}(),
 			"alert_type must be CLASSIC or THRESHOLD",
@@ -361,8 +361,8 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"classic alert missing condition",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "CLASSIC")
-				d.Set("severity", "severe")
+				d.Set(alertTypeKey, wavefront.AlertTypeClassic)
+				d.Set(severityKey, "severe")
 				return d
 			}(),
 			"condition must be supplied for classic alerts",
@@ -371,8 +371,8 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"classic alert missing severity",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "CLASSIC")
-				d.Set("condition", "ts()")
+				d.Set(alertTypeKey, wavefront.AlertTypeClassic)
+				d.Set(conditionKey, "ts()")
 				return d
 			}(),
 			"severity must be supplied for classic alerts",
@@ -381,9 +381,9 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"classic alert",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "CLASSIC")
-				d.Set("condition", "ts()")
-				d.Set("severity", "severe")
+				d.Set(alertTypeKey, wavefront.AlertTypeClassic)
+				d.Set(conditionKey, "ts()")
+				d.Set(severityKey, "severe")
 				return d
 			}(),
 			"",
@@ -392,7 +392,7 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"threshold alert missing conditions",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "THRESHOLD")
+				d.Set(alertTypeKey, wavefront.AlertTypeThreshold)
 				return d
 			}(),
 			"conditions must be supplied for threshold alerts",
@@ -401,8 +401,8 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"threshold alert",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "THRESHOLD")
-				d.Set("conditions", map[string]interface{}{"severe": "ts()"})
+				d.Set(alertTypeKey, wavefront.AlertTypeThreshold)
+				d.Set(conditionsKey, map[string]interface{}{"severe": "ts()"})
 				return d
 			}(),
 			"",
@@ -411,8 +411,8 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"threshold alert invalid condition",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "THRESHOLD")
-				d.Set("conditions", map[string]interface{}{"banana": "ts()"})
+				d.Set(alertTypeKey, wavefront.AlertTypeThreshold)
+				d.Set(conditionsKey, map[string]interface{}{"banana": "ts()"})
 				return d
 			}(),
 			"invalid severity: banana",
@@ -421,9 +421,9 @@ func TestResourceAlert_validateAlertConditions(t *testing.T) {
 			"threshold alert invalid target",
 			func() *schema.ResourceData {
 				d := resourceAlert().TestResourceData()
-				d.Set("alert_type", "THRESHOLD")
-				d.Set("conditions", map[string]interface{}{"severe": "ts()"})
-				d.Set("threshold_targets", map[string]interface{}{"banana": "ts()"})
+				d.Set(alertTypeKey, wavefront.AlertTypeThreshold)
+				d.Set(conditionsKey, map[string]interface{}{"severe": "ts()"})
+				d.Set(thresholdTargetsKey, map[string]interface{}{"banana": "ts()"})
 				return d
 			}(),
 			"invalid severity: banana",
