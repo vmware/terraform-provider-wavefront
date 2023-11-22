@@ -18,84 +18,84 @@ func resourceAlert() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
-			"name": {
+			nameKey: {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"alert_type": {
+			alertTypeKey: {
 				Type:             schema.TypeString,
 				Optional:         true,
 				Default:          wavefront.AlertTypeClassic,
 				DiffSuppressFunc: suppressCase,
 			},
-			"target": {
+			targetKey: {
 				Type:             schema.TypeString,
 				Optional:         true,
 				StateFunc:        trimSpaces,
 				DiffSuppressFunc: suppressSpaces,
 				ValidateFunc:     validateAlertTarget,
 			},
-			"condition": {
+			conditionKey: {
 				Type:             schema.TypeString,
 				Optional:         true,
 				StateFunc:        trimSpaces,
 				DiffSuppressFunc: suppressAlertConditionOnType,
 			},
-			"conditions": {
+			conditionsKey: {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"threshold_targets": {
+			thresholdTargetsKey: {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"additional_information": {
+			additionalInformationKey: {
 				Type:             schema.TypeString,
 				Optional:         true,
 				DiffSuppressFunc: suppressSpaces,
 			},
-			"display_expression": {
+			displayExpressionKey: {
 				Type:             schema.TypeString,
 				Optional:         true,
 				StateFunc:        trimSpaces,
 				DiffSuppressFunc: suppressSpaces,
 			},
-			"minutes": {
+			minutesKey: {
 				Type:     schema.TypeInt,
 				Required: true,
 			},
-			"resolve_after_minutes": {
+			resolveAfterMinutesKey: {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"notification_resend_frequency_minutes": {
+			notificationResendFrequencyMinutesKey: {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"severity": {
+			severityKey: {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"tags": {
+			tagsKey: {
 				Type:     schema.TypeSet,
 				Required: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"can_view": {
+			canViewKey: {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
-			"can_modify": {
+			canModifyKey: {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Computed: true,
 			},
-			"process_rate_minutes": {
+			processRateMinutesKey: {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Default:  5,
@@ -138,7 +138,7 @@ func validateAlertTarget(val interface{}, _ string) (warnings []string, errors [
 }
 
 func suppressAlertConditionOnType(k, old, new string, d *schema.ResourceData) bool {
-	alertType := strings.ToUpper(d.Get("alert_type").(string))
+	alertType := strings.ToUpper(d.Get(alertTypeKey).(string))
 
 	// after v2 alerts, `condition` has been force sync with `display_expression`
 	// in multi-threshold alert
@@ -159,14 +159,14 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 	alertTriageDashboards := decodeAlertTriageDashboards(d.Get(alertTriageDashboardsKey).([]interface{}))
 
 	a := &wavefront.Alert{
-		Name:                               d.Get("name").(string),
-		AdditionalInfo:                     trimSpaces(d.Get("additional_information")),
-		DisplayExpression:                  trimSpaces(d.Get("display_expression")),
-		Minutes:                            d.Get("minutes").(int),
-		ResolveAfterMinutes:                d.Get("resolve_after_minutes").(int),
-		NotificationResendFrequencyMinutes: d.Get("notification_resend_frequency_minutes").(int),
+		Name:                               d.Get(nameKey).(string),
+		AdditionalInfo:                     trimSpaces(d.Get(additionalInformationKey)),
+		DisplayExpression:                  trimSpaces(d.Get(displayExpressionKey)),
+		Minutes:                            d.Get(minutesKey).(int),
+		ResolveAfterMinutes:                d.Get(resolveAfterMinutesKey).(int),
+		NotificationResendFrequencyMinutes: d.Get(notificationResendFrequencyMinutesKey).(int),
 		Tags:                               tags,
-		CheckingFrequencyInMinutes:         d.Get("process_rate_minutes").(int),
+		CheckingFrequencyInMinutes:         d.Get(processRateMinutesKey).(int),
 		RunbookLinks:                       runbookLinks,
 		AlertTriageDashboards:              alertTriageDashboards,
 	}
@@ -179,16 +179,16 @@ func resourceAlertCreate(d *schema.ResourceData, meta interface{}) error {
 	// Create the alert on Wavefront
 	err = alerts.Create(a)
 	if err != nil {
-		return fmt.Errorf("error creating Alert %s. %s", d.Get("name"), err)
+		return fmt.Errorf("error creating Alert %s. %s", d.Get(nameKey), err)
 	}
 
 	d.SetId(*a.ID)
 
 	canView, canModify := decodeAccessControlList(d)
-	if d.HasChanges("can_view", "can_modify") {
+	if d.HasChanges(canViewKey, canModifyKey) {
 		err = alerts.SetACL(*a.ID, canView, canModify)
 		if err != nil {
-			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get("name"), err)
+			return fmt.Errorf("error setting ACL on Alert %s. %s", d.Get(nameKey), err)
 		}
 	}
 	return nil
@@ -210,26 +210,26 @@ func resourceAlertRead(d *schema.ResourceData, meta interface{}) error {
 
 	// Use the Wavefront ID as the Terraform ID
 	d.SetId(*tmpAlert.ID)
-	d.Set("name", tmpAlert.Name)
+	d.Set(nameKey, tmpAlert.Name)
 	if tmpAlert.Target != "" && tmpAlert.AlertType == wavefront.AlertTypeClassic {
-		d.Set("target", tmpAlert.Target)
+		d.Set(targetKey, tmpAlert.Target)
 	}
 	if tmpAlert.Severity != "" && tmpAlert.AlertType == wavefront.AlertTypeClassic {
-		d.Set("severity", tmpAlert.Severity)
+		d.Set(severityKey, tmpAlert.Severity)
 	}
-	d.Set("condition", trimSpaces(tmpAlert.Condition))
-	d.Set("additional_information", trimSpaces(tmpAlert.AdditionalInfo))
-	d.Set("display_expression", trimSpaces(tmpAlert.DisplayExpression))
-	d.Set("minutes", tmpAlert.Minutes)
-	d.Set("resolve_after_minutes", tmpAlert.ResolveAfterMinutes)
-	d.Set("notification_resend_frequency_minutes", tmpAlert.NotificationResendFrequencyMinutes)
-	d.Set("tags", tmpAlert.Tags)
-	d.Set("alert_type", tmpAlert.AlertType)
-	d.Set("conditions", tmpAlert.Conditions)
-	d.Set("threshold_targets", tmpAlert.Targets)
-	d.Set("can_view", tmpAlert.ACL.CanView)
-	d.Set("can_modify", tmpAlert.ACL.CanModify)
-	d.Set("process_rate_minutes", tmpAlert.CheckingFrequencyInMinutes)
+	d.Set(conditionKey, trimSpaces(tmpAlert.Condition))
+	d.Set(additionalInformationKey, trimSpaces(tmpAlert.AdditionalInfo))
+	d.Set(displayExpressionKey, trimSpaces(tmpAlert.DisplayExpression))
+	d.Set(minutesKey, tmpAlert.Minutes)
+	d.Set(resolveAfterMinutesKey, tmpAlert.ResolveAfterMinutes)
+	d.Set(notificationResendFrequencyMinutesKey, tmpAlert.NotificationResendFrequencyMinutes)
+	d.Set(tagsKey, tmpAlert.Tags)
+	d.Set(alertTypeKey, tmpAlert.AlertType)
+	d.Set(conditionsKey, tmpAlert.Conditions)
+	d.Set(thresholdTargetsKey, tmpAlert.Targets)
+	d.Set(canViewKey, tmpAlert.ACL.CanView)
+	d.Set(canModifyKey, tmpAlert.ACL.CanModify)
+	d.Set(processRateMinutesKey, tmpAlert.CheckingFrequencyInMinutes)
 	d.Set(runbookLinksKey, tmpAlert.RunbookLinks)
 	d.Set(alertTriageDashboardsKey, parseAlertTriageDashboards(tmpAlert.AlertTriageDashboards))
 
@@ -254,16 +254,16 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	canView, canModify := decodeAccessControlList(d)
 
 	a := tmpAlert
-	a.Name = d.Get("name").(string)
-	a.AdditionalInfo = trimSpaces(d.Get("additional_information").(string))
-	a.DisplayExpression = trimSpaces(d.Get("display_expression").(string))
-	a.Minutes = d.Get("minutes").(int)
-	a.ResolveAfterMinutes = d.Get("resolve_after_minutes").(int)
-	a.NotificationResendFrequencyMinutes = d.Get("notification_resend_frequency_minutes").(int)
+	a.Name = d.Get(nameKey).(string)
+	a.AdditionalInfo = trimSpaces(d.Get(additionalInformationKey).(string))
+	a.DisplayExpression = trimSpaces(d.Get(displayExpressionKey).(string))
+	a.Minutes = d.Get(minutesKey).(int)
+	a.ResolveAfterMinutes = d.Get(resolveAfterMinutesKey).(int)
+	a.NotificationResendFrequencyMinutes = d.Get(notificationResendFrequencyMinutesKey).(int)
 	a.Tags = tags
 	a.RunbookLinks = runbookLinks
 	a.AlertTriageDashboards = alertTriageDashboards
-	a.CheckingFrequencyInMinutes = d.Get("process_rate_minutes").(int)
+	a.CheckingFrequencyInMinutes = d.Get(processRateMinutesKey).(int)
 
 	err = validateAlertConditions(&a, d)
 	if err != nil {
@@ -273,14 +273,14 @@ func resourceAlertUpdate(d *schema.ResourceData, meta interface{}) error {
 	// Update the alert on Wavefront
 	err = alerts.Update(&a)
 	if err != nil {
-		return fmt.Errorf("error Updating Alert %s. %s", d.Get("name"), err)
+		return fmt.Errorf("error Updating Alert %s. %s", d.Get(nameKey), err)
 	}
 
 	// Update the ACLs on the alert in Wavefront
-	if d.HasChanges("can_view", "can_modify") {
+	if d.HasChanges(canViewKey, canModifyKey) {
 		err = alerts.SetACL(*a.ID, canView, canModify)
 		if err != nil {
-			return fmt.Errorf("error updating ACLs on Alert %s. %s", d.Get("name"), err)
+			return fmt.Errorf("error updating ACLs on Alert %s. %s", d.Get(nameKey), err)
 		}
 	}
 
@@ -308,15 +308,15 @@ func resourceAlertDelete(d *schema.ResourceData, meta interface{}) error {
 }
 
 func validateAlertConditions(a *wavefront.Alert, d *schema.ResourceData) error {
-	alertType := strings.ToUpper(d.Get("alert_type").(string))
+	alertType := strings.ToUpper(d.Get(alertTypeKey).(string))
 	if alertType == wavefront.AlertTypeThreshold {
 		a.AlertType = wavefront.AlertTypeThreshold
 
 		// v2 alerts now force sync `condition` the same as `display_expression`
 		// for multi-threshold alerts
-		a.Condition = d.Get("display_expression").(string)
+		a.Condition = d.Get(displayExpressionKey).(string)
 
-		if conditions, ok := d.GetOk("conditions"); ok {
+		if conditions, ok := d.GetOk(conditionsKey); ok {
 			a.Conditions = trimSpacesMap(conditions.(map[string]interface{}))
 			err := validateThresholdLevels(a.Conditions)
 			if err != nil {
@@ -326,7 +326,7 @@ func validateAlertConditions(a *wavefront.Alert, d *schema.ResourceData) error {
 			return fmt.Errorf("conditions must be supplied for threshold alerts")
 		}
 
-		if targets, ok := d.GetOk("threshold_targets"); ok {
+		if targets, ok := d.GetOk(thresholdTargetsKey); ok {
 			a.Targets = trimSpacesMap(targets.(map[string]interface{}))
 			return validateThresholdLevels(a.Targets)
 		}
@@ -334,16 +334,16 @@ func validateAlertConditions(a *wavefront.Alert, d *schema.ResourceData) error {
 	} else if alertType == wavefront.AlertTypeClassic {
 		a.AlertType = wavefront.AlertTypeClassic
 
-		if d.Get("condition") == "" {
+		if d.Get(conditionKey) == "" {
 			return fmt.Errorf("condition must be supplied for classic alerts")
 		}
-		a.Condition = trimSpaces(d.Get("condition").(string))
+		a.Condition = trimSpaces(d.Get(conditionKey).(string))
 
-		if d.Get("severity") == "" {
+		if d.Get(severityKey) == "" {
 			return fmt.Errorf("severity must be supplied for classic alerts")
 		}
-		a.Severity = d.Get("severity").(string)
-		a.Target = d.Get("target").(string)
+		a.Severity = d.Get(severityKey).(string)
+		a.Target = d.Get(targetKey).(string)
 	} else {
 		return fmt.Errorf("alert_type must be CLASSIC or THRESHOLD")
 	}

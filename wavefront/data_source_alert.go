@@ -18,113 +18,113 @@ func dataSourceAlert() *schema.Resource {
 func dataSourceAlertSchema() map[string]*schema.Schema {
 
 	return map[string]*schema.Schema{
-		"name": {
+		nameKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		"id": {
+		idKey: {
 			Type:     schema.TypeString,
 			Required: true,
 		},
-		"alert_type": {
+		alertTypeKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		"additional_information": {
+		additionalInformationKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		"target": {
+		targetKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
-		"targets": {
+		targetsKey: {
 			Type:     schema.TypeMap,
 			Optional: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
-		"condition": {
+		conditionKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
 
-		"conditions": {
+		conditionsKey: {
 			Type:     schema.TypeMap,
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 
-		"display_expression": {
+		displayExpressionKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
 
-		"minutes": {
+		minutesKey: {
 			Type:     schema.TypeInt,
 			Computed: true,
 		},
 
-		"resolve_after_minutes": {
+		resolveAfterMinutesKey: {
 			Type:     schema.TypeInt,
 			Computed: true,
 		},
 
-		"notification_resend_frequency_minutes": {
+		notificationResendFrequencyMinutesKey: {
 			Type:     schema.TypeInt,
 			Computed: true,
 		},
 
-		"severity": {
+		severityKey: {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
 
-		"severity_list": {
+		severityListKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 
-		"status": {
+		statusKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 
-		"tags": {
+		tagsKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 
-		"can_view": {
+		canViewKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 
-		"can_modify": {
+		canModifyKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem:     &schema.Schema{Type: schema.TypeString},
 		},
 
-		"process_rate_minutes": {
+		processRateMinutesKey: {
 			Type:     schema.TypeInt,
 			Computed: true,
 		},
 
-		"evaluate_realtime_data": {
+		evaluateRealtimeDataKey: {
 			Type:     schema.TypeBool,
 			Computed: true,
 		},
 
-		"include_obsolete_metrics": {
+		includeObsoleteMetricsKey: {
 			Type:     schema.TypeBool,
 			Computed: true,
 		},
 
-		"failing_host_label_pairs": {
+		failingHostLabelPairsKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
@@ -132,7 +132,7 @@ func dataSourceAlertSchema() map[string]*schema.Schema {
 			},
 		},
 
-		"in_maintenance_host_label_pairs": {
+		inMaintenanceHostLabelPairsKey: {
 			Type:     schema.TypeList,
 			Computed: true,
 			Elem: &schema.Resource{
@@ -200,7 +200,7 @@ func sourceLabelSchema() map[string]*schema.Schema {
 
 func dataSourceAlertRead(d *schema.ResourceData, m interface{}) error {
 	alertClient := m.(*wavefrontClient).client.Alerts()
-	id, ok := d.GetOk("id")
+	id, ok := d.GetOk(idKey)
 	if !ok {
 		return fmt.Errorf("required parameter '%s' not set", idKey)
 	}
@@ -217,82 +217,82 @@ func dataSourceAlertRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func setAlertAttributes(d *schema.ResourceData, alert wavefront.Alert) error {
-	if err := d.Set("id", *alert.ID); err != nil {
+	if err := d.Set(idKey, *alert.ID); err != nil {
 		return err
 	}
-	if err := d.Set("name", alert.Name); err != nil {
+	if err := d.Set(nameKey, alert.Name); err != nil {
 		return err
 	}
-	if err := d.Set("alert_type", alert.AlertType); err != nil {
+	if err := d.Set(alertTypeKey, alert.AlertType); err != nil {
 		return err
 	}
-	if err := d.Set("additional_information", alert.AdditionalInfo); err != nil {
+	if err := d.Set(additionalInformationKey, alert.AdditionalInfo); err != nil {
 		return err
 	}
-	if err := d.Set("target", alert.Target); err != nil {
+	if err := d.Set(targetKey, alert.Target); err != nil {
 		return err
 	}
-	if err := d.Set("targets", alert.Targets); err != nil {
+	if err := d.Set(targetsKey, alert.Targets); err != nil {
 		return err
 	}
-	if err := d.Set("condition", alert.Condition); err != nil {
+	if err := d.Set(conditionKey, alert.Condition); err != nil {
 		return err
 	}
-	if err := d.Set("conditions", alert.Conditions); err != nil {
+	if err := d.Set(conditionsKey, alert.Conditions); err != nil {
 		return err
 	}
-	if err := d.Set("display_expression", alert.DisplayExpression); err != nil {
+	if err := d.Set(displayExpressionKey, alert.DisplayExpression); err != nil {
 		return err
 	}
-	if err := d.Set("minutes", alert.Minutes); err != nil {
+	if err := d.Set(minutesKey, alert.Minutes); err != nil {
 		return err
 	}
-	if err := d.Set("resolve_after_minutes", alert.ResolveAfterMinutes); err != nil {
+	if err := d.Set(resolveAfterMinutesKey, alert.ResolveAfterMinutes); err != nil {
 		return err
 	}
-	if err := d.Set("notification_resend_frequency_minutes", alert.NotificationResendFrequencyMinutes); err != nil {
+	if err := d.Set(notificationResendFrequencyMinutesKey, alert.NotificationResendFrequencyMinutes); err != nil {
 		return err
 	}
-	if err := d.Set("severity", alert.Severity); err != nil {
+	if err := d.Set(severityKey, alert.Severity); err != nil {
 		return err
 	}
-	if err := d.Set("severity_list", alert.SeverityList); err != nil {
+	if err := d.Set(severityListKey, alert.SeverityList); err != nil {
 		return err
 	}
-	if err := d.Set("status", alert.Status); err != nil {
+	if err := d.Set(statusKey, alert.Status); err != nil {
 		return err
 	}
-	if err := d.Set("tags", alert.Tags); err != nil {
+	if err := d.Set(tagsKey, alert.Tags); err != nil {
 		return err
 	}
 	if err := d.Set(runbookLinksKey, alert.RunbookLinks); err != nil {
 		return err
 	}
-	if err := d.Set("can_view", alert.ACL.CanView); err != nil {
+	if err := d.Set(canViewKey, alert.ACL.CanView); err != nil {
 		return err
 	}
-	if err := d.Set("can_modify", alert.ACL.CanModify); err != nil {
+	if err := d.Set(canModifyKey, alert.ACL.CanModify); err != nil {
 		return err
 	}
-	if err := d.Set("process_rate_minutes", alert.CheckingFrequencyInMinutes); err != nil {
+	if err := d.Set(processRateMinutesKey, alert.CheckingFrequencyInMinutes); err != nil {
 		return err
 	}
-	if err := d.Set("evaluate_realtime_data", alert.EvaluateRealtimeData); err != nil {
+	if err := d.Set(evaluateRealtimeDataKey, alert.EvaluateRealtimeData); err != nil {
 		return err
 	}
-	if err := d.Set("include_obsolete_metrics", alert.IncludeObsoleteMetrics); err != nil {
+	if err := d.Set(includeObsoleteMetricsKey, alert.IncludeObsoleteMetrics); err != nil {
 		return err
 	}
-	if err := d.Set("failing_host_label_pairs", flattenHostLabelPairs(alert.FailingHostLabelPairs)); err != nil {
+	if err := d.Set(failingHostLabelPairsKey, flattenHostLabelPairs(alert.FailingHostLabelPairs)); err != nil {
 		return err
 	}
-	if err := d.Set("in_maintenance_host_label_pairs", flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)); err != nil {
+	if err := d.Set(inMaintenanceHostLabelPairsKey, flattenHostLabelPairs(alert.InMaintenanceHostLabelPairs)); err != nil {
 		return err
 	}
 	if err := d.Set(alertTriageDashboardsKey, parseAlertTriageDashboards(alert.AlertTriageDashboards)); err != nil {
 		return err
 	}
-	return d.Set("process_rate_minutes", alert.CheckingFrequencyInMinutes)
+	return nil
 }
 
 func flattenHostLabelPairs(pairs []wavefront.SourceLabelPair) interface{} {
