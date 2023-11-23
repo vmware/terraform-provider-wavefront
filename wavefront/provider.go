@@ -1,15 +1,8 @@
 package wavefront
 
 import (
-	"fmt"
-
-	"github.com/WavefrontHQ/go-wavefront-management-api/v2"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
-
-type wavefrontClient struct {
-	client wavefront.Client
-}
 
 func Provider() *schema.Provider {
 	return &schema.Provider{
@@ -27,6 +20,11 @@ func Provider() *schema.Provider {
 			"http_proxy": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"csp_address": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("CSP_ADDRESS", ""),
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
@@ -77,23 +75,33 @@ func Provider() *schema.Provider {
 			"wavefront_dashboard":              dataSourceDashboard(),
 			"wavefront_dashboards":             dataSourceDashboards(),
 		},
-		ConfigureFunc: providerConfigure,
+		ConfigureFunc: configureProvider,
 	}
 }
 
-func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	config := &wavefront.Config{
-		Address:   d.Get("address").(string),
-		Token:     d.Get("token").(string),
-		HttpProxy: d.Get("http_proxy").(string),
+func configureProvider(d *schema.ResourceData) (interface{}, error) {
+	address := ""
+	token := ""
+	proxy := ""
+	cspAddress := ""
+
+	if v, ok := d.GetOk("address"); ok {
+		address = v.(string)
 	}
-	wFClient, err := wavefront.NewClient(config)
-	if err != nil {
-		return nil, fmt.Errorf("failed to configure Wavefront Client %s", err)
+
+	if v, ok := d.GetOk("token"); ok {
+		token = v.(string)
 	}
-	return &wavefrontClient{
-		client: *wFClient,
-	}, nil
+
+	if v, ok := d.GetOk("proxy"); ok {
+		proxy = v.(string)
+	}
+
+	if v, ok := d.GetOk("csp_address"); ok {
+		cspAddress = v.(string)
+	}
+
+	return newWavefrontClient(address, token, proxy, cspAddress)
 }
 
 var wfMutexKV = NewMutexKV()
