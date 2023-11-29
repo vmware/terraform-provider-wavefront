@@ -23,6 +23,8 @@ func newWavefrontClient(address, token string, proxy string, cspAddress string) 
 		cspAddress = "console.cloud.vmware.com"
 	}
 
+	//TODO: Add details about the CSP staging environment:
+	//	https://console-stg.cloud.vmware.com/csp/gateway/discovery and the new Org there "Terraform Provider"
 	//token, err := auth.GetCspBearerToken(cspAddress, token, false)
 	//if err != nil {
 	//	return nil, fmt.Errorf("Could not get CSP bearer token: %v\n", err)
